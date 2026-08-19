@@ -13,41 +13,28 @@ const FAQS = [
   ["Por quanto tempo terei acesso?", "O acesso é entregue pela Hotmart conforme a condição configurada no produto no momento da compra, exibida na própria página de checkout."],
 ];
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.26em] text-[var(--graphite)]/60">
-      <span className="h-px w-6 bg-[var(--lime)]" />
-      {children}
-    </span>
-  );
-}
-
 export default function FAQSection() {
   return (
-    <section className="landia-cv-faq bg-[var(--ivory)] py-20 text-[var(--graphite)] md:py-28">
-      <div className="mx-auto max-w-3xl px-6 md:px-10">
-        <Reveal className="text-center">
-          <Eyebrow>Perguntas frequentes</Eyebrow>
-          <h2 className="mt-5 font-display text-[1.8rem] font-bold uppercase leading-tight tracking-tight md:text-[2.4rem]">
-            Ainda em dúvida?
-          </h2>
+    <section className="lv2-faq landia-cv-faq">
+      <div className="lv2-container">
+        <div className="lv2-kicker lv2-kicker-light">
+          <span>11</span><i /><strong>PERGUNTAS FREQUENTES</strong>
+        </div>
+
+        <Reveal className="lv2-faq-head">
+          <h2>AINDA EM DÚVIDA?<br /><span>ABRA SÓ O QUE IMPORTA.</span></h2>
+          <p>Respostas diretas para as dúvidas mais comuns antes de começar.</p>
         </Reveal>
 
-        <RevealGroup className="mt-10 space-y-3">
-          {FAQS.map(([q, a], i) => (
-            <details
-              key={q}
-              data-reveal=""
-              style={stepDelay(i)}
-              className="group rounded-xl border border-[var(--graphite)]/10 bg-white px-5 py-4"
-            >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-[15px] font-semibold">
-                {q}
-                <span className="text-[var(--action)] transition-transform group-open:rotate-45">
-                  +
-                </span>
+        <RevealGroup className="lv2-faq-list">
+          {FAQS.map(([question, answer], index) => (
+            <details key={question} data-reveal="" style={stepDelay(index)}>
+              <summary>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{question}</strong>
+                <i>+</i>
               </summary>
-              <p className="mt-3 text-[15px] leading-relaxed text-[var(--graphite)]/75">{a}</p>
+              <p>{answer}</p>
             </details>
           ))}
         </RevealGroup>
