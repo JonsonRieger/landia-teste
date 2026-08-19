@@ -218,7 +218,7 @@ export default function LandiaVSL() {
         maxWatchedRef.current = saved;
         setStarted(true);
         setLoading(true);
-        setShowOfferCta(saved >= 225);
+        setShowOfferCta(saved >= 285);
 
         for (const milestone of [25, 50, 75]) {
           // Os marcos já ultrapassados são marcados localmente para não
@@ -250,7 +250,7 @@ export default function LandiaVSL() {
         pendingResumeTimeRef.current = saved;
         maxWatchedRef.current = Math.max(maxWatchedRef.current, saved);
         setStarted(true);
-        setShowOfferCta(saved >= 225);
+        setShowOfferCta(saved >= 285);
         shouldResumePlaybackRef.current = true;
 
         if (!video.src) {
@@ -360,9 +360,9 @@ export default function LandiaVSL() {
 
     const percentage = Math.min(100, (video.currentTime / video.duration) * 100);
 
-    // 3min45s de reprodução real. Como usamos currentTime, pausas feitas
+    // 4min45s de reprodução real. Como usamos currentTime, pausas feitas
     // pelo usuário não contam para liberar o CTA.
-    if (video.currentTime >= 225 && !showOfferCta) {
+    if (video.currentTime >= 285 && !showOfferCta) {
       setShowOfferCta(true);
     }
 
@@ -436,6 +436,49 @@ export default function LandiaVSL() {
         @keyframes landia-vsl-play-pulse {
           0%, 100% { box-shadow: 0 0 0 0 rgba(199, 255, 61, 0.16), 0 16px 40px rgba(0,0,0,.38); }
           50% { box-shadow: 0 0 0 11px rgba(199, 255, 61, 0), 0 16px 40px rgba(0,0,0,.38); }
+        }
+
+        .landia-vsl-checkout-cta {
+          position: relative;
+          isolation: isolate;
+          min-height: 58px;
+          border: 1px solid rgba(199, 255, 61, .68);
+          border-radius: 2px;
+          background: #c7ff3d;
+          color: #0a0c0d;
+          box-shadow: 0 18px 50px -25px rgba(199, 255, 61, .88);
+          transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease;
+        }
+
+        .landia-vsl-checkout-cta::before {
+          content: "";
+          position: absolute;
+          inset: 5px;
+          z-index: -1;
+          border: 1px solid rgba(10, 12, 13, .15);
+          pointer-events: none;
+        }
+
+        .landia-vsl-checkout-cta:hover {
+          transform: translate3d(0, -2px, 0);
+          background: #d3ff68;
+          box-shadow: 0 22px 58px -25px rgba(199, 255, 61, .95);
+        }
+
+        .landia-vsl-checkout-cta-arrow {
+          display: grid;
+          width: 32px;
+          height: 32px;
+          flex: 0 0 32px;
+          place-items: center;
+          border-left: 1px solid rgba(10, 12, 13, .18);
+          font-size: 18px;
+          line-height: 1;
+          transition: transform .25s ease;
+        }
+
+        .landia-vsl-checkout-cta:hover .landia-vsl-checkout-cta-arrow {
+          transform: translate3d(3px, 0, 0);
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -628,11 +671,10 @@ export default function LandiaVSL() {
                 saveCurrentPosition(true);
                 sendCheckoutEvent();
               }}
-              className="inline-flex w-full max-w-md items-center justify-center gap-2 rounded-full bg-[var(--action)] px-9 py-4 text-center text-base font-semibold uppercase tracking-[0.02em] text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--action-hover)]"
-              style={{ boxShadow: "var(--shadow-action)" }}
+              className="landia-vsl-checkout-cta inline-flex w-full max-w-[520px] items-center justify-between gap-5 px-5 py-3.5 text-left font-display text-[12px] font-bold uppercase tracking-[0.09em] sm:px-6 sm:text-[13px]"
             >
               <span>QUERO CRIAR MINHA LANDING</span>
-              <span aria-hidden="true" className="text-lg leading-none">→</span>
+              <span aria-hidden="true" className="landia-vsl-checkout-cta-arrow">→</span>
             </a>
           </div>
         )}
