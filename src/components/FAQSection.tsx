@@ -15,26 +15,29 @@ const FAQS = [
 
 export default function FAQSection() {
   return (
-    <section className="lv2-faq landia-cv-faq">
-      <div className="lv2-container">
-        <div className="lv2-kicker lv2-kicker-light">
-          <span>11</span><i /><strong>PERGUNTAS FREQUENTES</strong>
-        </div>
-
-        <Reveal className="lv2-faq-head">
-          <h2>AINDA EM DÚVIDA?<br /><span>ABRA SÓ O QUE IMPORTA.</span></h2>
-          <p>Respostas diretas para as dúvidas mais comuns antes de começar.</p>
+    <section className="forge-faq landia-cv-faq">
+      <div className="forge-faq-shell">
+        <Reveal className="forge-faq-head">
+          <div className="forge-tag forge-tag-light">
+            <span>11</span><i /><strong>PERGUNTAS FREQUENTES</strong>
+          </div>
+          <h2>SE AINDA EXISTE UMA DÚVIDA, PROVAVELMENTE ELA ESTÁ AQUI.</h2>
         </Reveal>
 
-        <RevealGroup className="lv2-faq-list">
-          {FAQS.map(([question, answer], index) => (
-            <details key={question} data-reveal="" style={stepDelay(index)}>
+        <RevealGroup className="forge-faq-list">
+          {FAQS.map(([q, a], i) => (
+            <details
+              key={q}
+              data-reveal=""
+              style={stepDelay(i)}
+              className="forge-faq-item"
+            >
               <summary>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <strong>{question}</strong>
-                <i>+</i>
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                <strong>{q}</strong>
+                <span className="forge-faq-plus">+</span>
               </summary>
-              <p>{answer}</p>
+              <p className="forge-faq-answer">{a}</p>
             </details>
           ))}
         </RevealGroup>
