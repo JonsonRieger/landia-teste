@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles, X } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
@@ -77,7 +77,7 @@ export const Route = createFileRoute("/")({
 });
 
 /* ================================================================
-   TRACKING — mantido no mesmo fluxo da versão otimizada
+   TRACKING — preservado da raiz otimizada
    ================================================================ */
 async function sendFacebookEvent(eventName: string) {
   try {
@@ -95,7 +95,9 @@ async function sendFacebookEvent(eventName: string) {
 
     await fetch("https://metamove-capi.hebrithan.workers.dev", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
@@ -121,12 +123,12 @@ const CHECKOUT_URL =
 function CTAButton({
   children,
   href = CHECKOUT_URL,
-  kind = "primary",
+  variant = "orange",
   className = "",
 }: {
   children: ReactNode;
   href?: string;
-  kind?: "primary" | "ghost";
+  variant?: "orange" | "lime" | "ink";
   className?: string;
 }) {
   const isExternal = href.startsWith("http");
@@ -137,35 +139,24 @@ function CTAButton({
       href={href}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      onClick={(event) => {
+      onClick={(e) => {
         if (isCheckout) {
-          void sendFacebookEvent("InitiateCheckout");
+          sendFacebookEvent("InitiateCheckout");
           return;
         }
-
         if (href.startsWith("#")) {
           const target = document.getElementById(href.slice(1));
           if (target) {
-            event.preventDefault();
+            e.preventDefault();
             target.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
       }}
-      className={`lv2-btn ${kind === "ghost" ? "lv2-btn-ghost" : "lv2-btn-primary"} ${className}`}
+      className={`forge-btn forge-btn-${variant} ${className}`}
     >
       <span>{children}</span>
       <ArrowRight aria-hidden="true" />
     </a>
-  );
-}
-
-function Kicker({ number, children, light = false }: { number: string; children: ReactNode; light?: boolean }) {
-  return (
-    <div className={`lv2-kicker ${light ? "lv2-kicker-light" : ""}`}>
-      <span>{number}</span>
-      <i />
-      <strong>{children}</strong>
-    </div>
   );
 }
 
@@ -200,6 +191,16 @@ function Picture({
   );
 }
 
+function SectionTag({ index, children, light = false }: { index: string; children: ReactNode; light?: boolean }) {
+  return (
+    <div className={`forge-tag ${light ? "forge-tag-light" : ""}`}>
+      <span>{index}</span>
+      <i />
+      <strong>{children}</strong>
+    </div>
+  );
+}
+
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
 function DeferredFAQ() {
@@ -208,8 +209,8 @@ function DeferredFAQ() {
 
   useEffect(() => {
     if (shouldLoad) return;
-    const trigger = triggerRef.current;
 
+    const trigger = triggerRef.current;
     if (!trigger || typeof IntersectionObserver === "undefined") {
       setShouldLoad(true);
       return;
@@ -217,9 +218,10 @@ function DeferredFAQ() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setShouldLoad(true);
-        observer.disconnect();
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          observer.disconnect();
+        }
       },
       { rootMargin: "1800px 0px" },
     );
@@ -246,22 +248,23 @@ function Landing() {
   useEffect(() => {
     if (!pageViewSent) {
       pageViewSent = true;
-      void sendFacebookEvent("PageView");
+      sendFacebookEvent("PageView");
     }
 
     const timer = window.setTimeout(() => {
       if (timeOnPageSent) return;
       timeOnPageSent = true;
-      void sendFacebookEvent("TimeOnPage");
+      sendFacebookEvent("TimeOnPage");
     }, 30000);
 
     return () => window.clearTimeout(timer);
   }, []);
 
   return (
-    <main className="landia-v2">
+    <main className="forge-page min-h-screen bg-[var(--carbon)] text-white antialiased">
+      <OfferRail />
       <Hero />
-      <VslIntro />
+      <VslLeadIn />
       <LandiaVSL />
       <Reality />
       <Proofs />
@@ -279,123 +282,132 @@ function Landing() {
 }
 
 /* ================================================================
-   01 — HERO / PROMESSA
+   00 — TOP RAIL
    ================================================================ */
+function OfferRail() {
+  return (
+    <div className="forge-offer-rail">
+      <div className="forge-shell forge-offer-rail-inner">
+        <div className="forge-offer-brand">
+          <span className="forge-brand-mark">L//</span>
+          <strong>LAND-IA</strong>
+          <span>LANDING PAGES COM IA</span>
+        </div>
+        <div className="forge-offer-price">
+          <span>PAGAMENTO ÚNICO</span>
+          <strong>R$ 47</strong>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ================================================================
+   01 — HERO / BUILD STAGE
+   ================================================================ */
+const BUILD_STEPS = [
+  ["01", "DECIDIR", "Oferta + persona + promessa"],
+  ["02", "INSTRUIR", "Prompt Mestre"],
+  ["03", "EXECUTAR", "ChatGPT + Lovable"],
+  ["04", "PUBLICAR", "GitHub + Vercel + domínio"],
+];
+
+function HeroBuildVisual() {
+  return (
+    <div className="forge-build-visual" aria-hidden="true">
+      <div className="forge-build-caption">
+        <span>BUILD SEQUENCE</span>
+        <b>04 / 04</b>
+      </div>
+
+      <div className="forge-build-rail">
+        <div className="forge-build-beam" />
+        {BUILD_STEPS.map(([n, title, text], i) => (
+          <div key={title} className="forge-build-step" data-enter="" style={stepDelay(i + 1)}>
+            <span className="forge-build-number">{n}</span>
+            <div>
+              <strong>{title}</strong>
+              <p>{text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="forge-page-slab forge-page-slab-back" />
+      <div className="forge-page-slab forge-page-slab-main">
+        <div className="forge-slab-browser">
+          <span />
+          <span />
+          <span />
+          <b>seudominio.com.br</b>
+        </div>
+        <div className="forge-slab-content">
+          <small>ARQUITETURA DE CONVERSÃO</small>
+          <h3>UMA PÁGINA<br />COM FUNÇÃO.</h3>
+          <div className="forge-slab-line forge-slab-line-a" />
+          <div className="forge-slab-line forge-slab-line-b" />
+          <div className="forge-slab-button">CTA</div>
+        </div>
+      </div>
+      <div className="forge-prompt-chip">
+        <span>PROMPT MESTRE</span>
+        <strong>01 arquivo</strong>
+      </div>
+      <div className="forge-publish-chip">
+        <span>STATUS</span>
+        <strong>PUBLICADA ✓</strong>
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   return (
-    <section className="lv2-hero" id="inicio">
-      <div className="lv2-grid" aria-hidden="true" />
-      <div className="lv2-orb lv2-orb-a" aria-hidden="true" />
-      <div className="lv2-orb lv2-orb-b" aria-hidden="true" />
-
-      <header className="lv2-topbar" data-enter="">
-        <a className="lv2-brand" href="#inicio" aria-label="Land-IA">
-          <span className="lv2-brand-mark">L//</span>
-          <span>LAND-IA</span>
-        </a>
-        <nav aria-label="Navegação principal">
-          <a href="#provas">Provas</a>
-          <a href="#metodo">Método</a>
-          <CTAButton href="#oferta" kind="ghost">Ver oferta</CTAButton>
-        </nav>
-      </header>
-
-      <div className="lv2-hero-layout">
-        <div className="lv2-hero-copy">
-          <div className="lv2-eyebrow" data-enter="">
-            <span className="lv2-live-dot" />
-            LAND-IA™ / LANDING PAGES COM IA
+    <section className="forge-hero">
+      <div className="forge-hero-orbit" aria-hidden="true" />
+      <div className="forge-shell forge-hero-grid">
+        <div className="forge-hero-copy">
+          <div data-enter="" className="forge-hero-kicker">
+            <span /> LAND-IA / BUILD SYSTEM 01
           </div>
 
           <h1>
-            PARE DE <span className="lv2-strike">PEDIR</span> PÁGINAS PARA A IA.
-            <span>COMECE A PROJETAR <em>DECISÕES.</em></span>
+            <span>UMA LANDING</span>
+            <span className="forge-outline-word">QUE PARECE CARA.</span>
+            <span className="forge-lime-line">SEM ESCREVER</span>
+            <span className="forge-lime-line">UMA LINHA DE CÓDIGO.</span>
           </h1>
 
-          <p className="lv2-hero-lead" data-enter="" style={{ "--reveal-delay": "0.08s" } as CSSProperties}>
-            Transforme sua oferta em uma landing profissional usando <strong>ChatGPT + Lovable</strong>,
-            publique no seu próprio domínio e deixe tudo pronto para vender — <strong>sem precisar saber programar.</strong>
+          <p className="forge-hero-lead">
+            Transforme sua oferta em uma landing profissional com <strong>ChatGPT + Lovable</strong> e publique no seu próprio domínio — usando um processo que começa <strong>antes</strong> da IA.
           </p>
 
-          <div className="lv2-hero-actions" data-enter="" style={{ "--reveal-delay": "0.14s" } as CSSProperties}>
-            <CTAButton href="#vsl">Ver o processo em ação</CTAButton>
-            <div className="lv2-hero-price">
-              <strong>R$ 47</strong>
-              <span>pagamento único</span>
+          <div className="forge-hero-actions">
+            <CTAButton href="#vsl" variant="lime">VER O PROCESSO FUNCIONANDO</CTAButton>
+            <div className="forge-hero-note">
+              <span>SEM PROGRAMAÇÃO</span>
+              <span>SEM TEMPLATE ENGESSADO</span>
+              <span>SEM DEPENDER DE AGÊNCIA</span>
             </div>
           </div>
 
-          <div className="lv2-flowline" data-enter="" style={{ "--reveal-delay": "0.18s" } as CSSProperties}>
-            <span>ESTRATÉGIA</span><i />
-            <span>PROMPT MESTRE</span><i />
-            <span>LOVABLE</span><i />
-            <span>DOMÍNIO</span>
-          </div>
-
-          <div className="lv2-hero-note" data-enter="" style={{ "--reveal-delay": "0.22s" } as CSSProperties}>
-            <span>01</span>
-            <p>Arquitetura antes da IA. Direção antes da execução.</p>
+          <div className="forge-tool-line" aria-label="Fluxo de ferramentas">
+            {['CHATGPT', 'LOVABLE', 'GITHUB', 'VERCEL', 'SEU DOMÍNIO'].map((tool, i) => (
+              <span key={tool}>
+                <b>{String(i + 1).padStart(2, '0')}</b>{tool}
+              </span>
+            ))}
           </div>
         </div>
 
-        <div className="lv2-engine" data-enter="" style={{ "--reveal-delay": "0.08s" } as CSSProperties}>
-          <div className="lv2-engine-shell">
-            <div className="lv2-engine-top">
-              <div className="lv2-window-dots"><span /><span /><span /></div>
-              <span>DECISION ENGINE / LIVE</span>
-              <strong>READY</strong>
-            </div>
-
-            <div className="lv2-engine-body">
-              <aside>
-                <div className="lv2-engine-logo">L//</div>
-                <span className="active">01</span>
-                <span>02</span>
-                <span>03</span>
-                <span>04</span>
-              </aside>
-
-              <div className="lv2-engine-main">
-                <div className="lv2-engine-heading">
-                  <div>
-                    <small>MASTER PROMPT / ARCHITECTURE</small>
-                    <h3>A IA executa.<br />Você dirige.</h3>
-                  </div>
-                  <div className="lv2-engine-score">
-                    <small>DECISÕES</small>
-                    <strong>6/6</strong>
-                    <span>mapeadas</span>
-                  </div>
-                </div>
-
-                <div className="lv2-engine-rows">
-                  {["Oferta", "Persona", "Promessa", "Mecanismo", "Prova", "Decisão"].map((item, index) => (
-                    <div key={item}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <strong>{item}</strong>
-                      <em>{index < 5 ? "DEFINED" : "READY"}</em>
-                      <i style={{ "--fill": `${72 + index * 4}%` } as CSSProperties}><b /></i>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="lv2-float-card lv2-float-prompt">
-            <small>PROMPT MESTRE</small>
-            <strong>Estratégia concentrada.</strong>
-            <span>menos tentativa → mais direção</span>
-          </div>
-          <div className="lv2-float-card lv2-float-domain">
-            <span className="lv2-live-dot" />
-            <strong>seudominio.com.br</strong>
-            <small>PUBLICADO</small>
-          </div>
-        </div>
+        <HeroBuildVisual />
       </div>
 
-      <div className="lv2-scroll-cue" aria-hidden="true"><span>SCROLL / ASSISTA</span><i /></div>
+      <div className="forge-hero-footer">
+        <span>ARQUITETURA ANTES DA IA.</span>
+        <i />
+        <span>DECISÃO → INSTRUÇÃO → EXECUÇÃO → PUBLICAÇÃO</span>
+      </div>
     </section>
   );
 }
@@ -403,14 +415,17 @@ function Hero() {
 /* ================================================================
    02 — VSL
    ================================================================ */
-function VslIntro() {
+function VslLeadIn() {
   return (
-    <section className="lv2-vsl-intro" id="vsl">
-      <div className="lv2-container">
-        <Kicker number="02">VEJA ANTES DE ACREDITAR</Kicker>
-        <Reveal className="lv2-vsl-head">
-          <h2>5 minutos para ver o processo inteiro <span>saindo da ideia e chegando na tela.</span></h2>
-          <p>Sem promessa abstrata. Assista como estratégia, Prompt Mestre, Lovable e publicação se conectam.</p>
+    <section id="vsl" className="forge-vsl-intro">
+      <div className="forge-shell">
+        <Reveal className="forge-vsl-title-row">
+          <SectionTag index="02">ANTES DE CONTINUAR</SectionTag>
+          <div>
+            <h2>Não vou pedir que você acredite.</h2>
+            <p>Vou te mostrar a lógica, a execução e o que acontece quando a IA recebe direção.</p>
+          </div>
+          <span className="forge-play-index">05:17</span>
         </Reveal>
       </div>
     </section>
@@ -420,54 +435,62 @@ function VslIntro() {
 /* ================================================================
    03 — REALIDADE DA PERSONA
    ================================================================ */
+const REALITY_ROWS = [
+  ["PROMPT GENÉRICO", "A IA precisa inventar estratégia, copy e design ao mesmo tempo."],
+  ["AJUSTE EM CIMA DE AJUSTE", "Cada correção resolve uma coisa e quebra outra. Os créditos evaporam."],
+  ["PÁGINA BONITA, SEM DIREÇÃO", "Visual existe. Jornada de decisão, não."],
+];
+
 function Reality() {
   return (
-    <section className="lv2-reality">
-      <div className="lv2-container">
-        <Kicker number="03" light>O PROBLEMA NÃO É A FERRAMENTA</Kicker>
-
-        <Reveal className="lv2-reality-head">
-          <p className="lv2-pretitle">SE VOCÊ COMEÇA PELO LOVABLE,</p>
-          <h2>VOCÊ COMEÇA <strong>TARDE DEMAIS.</strong></h2>
+    <section className="forge-reality">
+      <div className="forge-shell">
+        <Reveal className="forge-reality-head">
+          <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
+          <h2>
+            A IA NÃO É O PROBLEMA.
+            <span>O PROBLEMA É PEDIR PARA ELA DECIDIR POR VOCÊ.</span>
+          </h2>
           <p>
-            A página não deveria nascer quando a IA recebe um pedido. Ela deveria nascer quando você define
-            <b> o que o visitante precisa entender, acreditar e decidir.</b>
+            Quando a construção começa antes das decisões, o que deveria acelerar vira retrabalho. O Land-IA inverte essa ordem.
           </p>
         </Reveal>
 
-        <RevealGroup className="lv2-reality-grid">
-          <article data-reveal="" className="lv2-chaos-card">
-            <div className="lv2-card-label"><span>MODE / REACTIVE</span><i /></div>
-            <h3>PROMPT<br />SOLTO.</h3>
-            <div className="lv2-chaos-cloud" aria-hidden="true">
-              <span style={{ "--x": "6%", "--y": "10%", "--r": "-5deg" } as CSSProperties}>“deixa mais premium”</span>
-              <span style={{ "--x": "53%", "--y": "5%", "--r": "7deg" } as CSSProperties}>troca a headline</span>
-              <span style={{ "--x": "15%", "--y": "48%", "--r": "4deg" } as CSSProperties}>arruma mobile</span>
-              <span style={{ "--x": "60%", "--y": "44%", "--r": "-6deg" } as CSSProperties}>mais um crédito</span>
-              <span style={{ "--x": "32%", "--y": "73%", "--r": "8deg" } as CSSProperties}>tenta de novo</span>
-            </div>
-            <footer><span>resultado</span><strong>RETRABALHO</strong></footer>
-          </article>
-
-          <div className="lv2-logic-shift" aria-hidden="true">
-            <span>→</span><small>MUDANÇA<br />DE LÓGICA</small>
+        <RevealGroup className="forge-reality-board">
+          <div className="forge-reality-column forge-reality-column-wrong">
+            <div className="forge-reality-label"><span>SEM ARQUITETURA</span><b>RETRABALHO</b></div>
+            {REALITY_ROWS.map(([title, text], i) => (
+              <div data-reveal="" style={stepDelay(i)} className="forge-reality-row" key={title}>
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <div><strong>{title}</strong><p>{text}</p></div>
+                <X aria-hidden="true" />
+              </div>
+            ))}
           </div>
 
-          <article data-reveal="" style={stepDelay(1)} className="lv2-system-card">
-            <div className="lv2-card-label"><span>MODE / SYSTEM</span><i /></div>
-            <h3>PROMPT<br />MESTRE.</h3>
-            <div className="lv2-decision-stack">
-              {["Oferta", "Persona", "Promessa", "Mecanismo", "Objeções", "Prova"].map((item, index) => (
-                <div key={item}><span>{String(index + 1).padStart(2, "0")}</span><strong>{item}</strong><small>definido</small></div>
-              ))}
-            </div>
-            <footer><span>resultado</span><strong>DIREÇÃO</strong></footer>
-          </article>
+          <div className="forge-reality-turn" aria-hidden="true">
+            <span>INVERTER</span><ArrowRight />
+          </div>
+
+          <div className="forge-reality-column forge-reality-column-right">
+            <div className="forge-reality-label"><span>COM LAND-IA</span><b>DIREÇÃO</b></div>
+            {[
+              ["DECISÕES PRIMEIRO", "Oferta, persona, promessa, mecanismo e objeções saem do improviso."],
+              ["UM PROMPT MESTRE", "A IA recebe contexto suficiente para construir com intenção."],
+              ["AJUSTES CIRÚRGICOS", "Você corrige só o necessário e preserva o que já funciona."],
+            ].map(([title, text], i) => (
+              <div data-reveal="" style={stepDelay(i + 1)} className="forge-reality-row" key={title}>
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <div><strong>{title}</strong><p>{text}</p></div>
+                <Check aria-hidden="true" />
+              </div>
+            ))}
+          </div>
         </RevealGroup>
 
-        <Reveal className="lv2-reality-quote">
-          <span>“</span>
-          <p>O objetivo não é ter mais créditos.<br /><strong>É precisar de menos.</strong></p>
+        <Reveal className="forge-reality-mantra">
+          <span>O objetivo não é ter mais créditos.</span>
+          <strong>É precisar de menos.</strong>
         </Reveal>
       </div>
     </section>
@@ -475,109 +498,130 @@ function Reality() {
 }
 
 /* ================================================================
-   04 — PROVAS
+   04 — EVIDÊNCIA / PROCESSO REAL
    ================================================================ */
 function Proofs() {
   return (
-    <section className="lv2-proofs landia-cv-proof" id="provas">
-      <div className="lv2-proof-bg" aria-hidden="true">EXECUTE</div>
-      <div className="lv2-container">
-        <Kicker number="04">VEJA O PROCESSO ACONTECER</Kicker>
-        <Reveal className="lv2-proof-head">
-          <div>
-            <p className="lv2-pretitle">VOCÊ JÁ ENTENDEU A LÓGICA.</p>
-            <h2>AGORA VEJA ELA <strong>FUNCIONANDO.</strong></h2>
-          </div>
-          <p>Sem depoimento inventado e sem resultado emprestado. A prova aqui é o próprio processo saindo de decisões e virando páginas reais.</p>
+    <section className="forge-proofs landia-cv-proofs">
+      <div className="forge-shell">
+        <Reveal className="forge-proofs-head">
+          <SectionTag index="04">VEJA O PROCESSO ACONTECER</SectionTag>
+          <h2>DO RACIOCÍNIO À PÁGINA NO AR.</h2>
+          <p>
+            Sem depoimento inventado. Sem print de faturamento emprestado. Aqui a evidência é o próprio processo produzindo uma landing real.
+          </p>
         </Reveal>
 
-        <div className="lv2-proof-track">
-          <Reveal className="lv2-proof-stage lv2-proof-stage-strategy">
-            <div className="lv2-proof-copy">
-              <span>01 / INPUT</span>
-              <h3>DA ESTRATÉGIA AO PROMPT MESTRE</h3>
-              <p>Oferta, persona, promessa, mecanismo, copy e direção visual são definidos antes da construção.</p>
-            </div>
-            <div className="lv2-shot-pair">
-              <figure>
-                <Picture avif={briefingAvif} webp={briefingWebp} alt="Briefing estratégico usado antes da construção da landing" width={700} height={771} />
-                <figcaption><b>BRIEFING ESTRATÉGICO</b><span>Decisões antes do layout.</span></figcaption>
-              </figure>
-              <figure>
-                <Picture avif={promptAvif} webp={promptWebp} alt="Prompt Mestre estruturado para a criação da landing" width={700} height={781} />
-                <figcaption><b>PROMPT MESTRE</b><span>Estratégia concentrada em instrução.</span></figcaption>
-              </figure>
-            </div>
+        <div className="forge-proof-stage forge-proof-stage-strategy">
+          <Reveal className="forge-proof-copy">
+            <span className="forge-proof-index">01</span>
+            <h3>DA ESTRATÉGIA AO PROMPT MESTRE</h3>
+            <p>
+              Primeiro vêm as decisões: oferta, persona, problema, promessa, mecanismo, estrutura e direção visual. Depois tudo é condensado em uma instrução única.
+            </p>
           </Reveal>
-
-          <Reveal className="lv2-proof-stage lv2-proof-stage-build">
-            <div className="lv2-proof-copy">
-              <span>02 / EXECUTION</span>
-              <h3>DO PROMPT À CONSTRUÇÃO</h3>
-              <p>O Lovable não recebe “faça uma landing bonita”. Recebe direção suficiente para começar muito mais perto do resultado final.</p>
-            </div>
-            <div className="lv2-build-shots">
-              <figure>
-                <Picture avif={lovablePromptAvif} webp={lovablePromptWebp} alt="Prompt Mestre inserido no Lovable" width={760} height={544} />
-                <figcaption><b>INSTRUÇÃO</b><span>Prompt Mestre entrando no construtor.</span></figcaption>
-              </figure>
-              <div className="lv2-build-arrow" aria-hidden="true">→</div>
-              <figure>
-                <Picture avif={lovableBuildAvif} webp={lovableBuildWebp} alt="Lovable construindo a página a partir do Prompt Mestre" width={691} height={563} />
-                <figcaption><b>EXECUÇÃO</b><span>A página nascendo a partir das decisões.</span></figcaption>
-              </figure>
-            </div>
-          </Reveal>
-
-          <Reveal className="lv2-proof-stage lv2-proof-stage-result">
-            <div className="lv2-proof-copy">
-              <span>03 / OUTPUT</span>
-              <h3>DA CONSTRUÇÃO À LANDING</h3>
-              <p>Desktop, mobile e seções internas respondem à mesma arquitetura — sem parecer um template repetido.</p>
-            </div>
-            <div className="lv2-result-wall">
-              <figure className="lv2-result-main">
-                <Picture avif={heroDesktopAvif} webp={heroDesktopWebp} alt="Hero desktop da landing SOCIAL OS criada pelo processo" width={1280} height={610} />
-              </figure>
-              <figure className="lv2-result-mobile">
-                <Picture avif={heroMobileAvif} webp={heroMobileWebp} alt="Hero mobile da landing SOCIAL OS criada pelo processo" width={480} height={903} />
-              </figure>
-              <figure className="lv2-result-sub lv2-result-sub-a">
-                <Picture avif={sectionTwoAvif} webp={sectionTwoWebp} alt="Segunda seção da landing exemplo" width={1280} height={610} />
-              </figure>
-              <figure className="lv2-result-sub lv2-result-sub-b">
-                <Picture avif={sectionThreeAvif} webp={sectionThreeWebp} alt="Terceira seção da landing exemplo" width={1280} height={610} />
-              </figure>
-            </div>
-          </Reveal>
-
-          <Reveal className="lv2-proof-stage lv2-proof-stage-range">
-            <div className="lv2-proof-copy">
-              <span>04 / REPEATABILITY</span>
-              <h3>UM PROCESSO. VÁRIAS DIREÇÕES.</h3>
-              <p>O método não existe para reproduzir um estilo. Ele existe para transformar decisões diferentes em páginas diferentes.</p>
-            </div>
-            <div className="lv2-example-strip">
-              <figure><Picture avif={nouraAvif} webp={nouraWebp} alt="Landing exemplo NOURA em paleta vinho" width={1280} height={612} /><figcaption>NOURA / LIFESTYLE</figcaption></figure>
-              <figure><Picture avif={atlasAvif} webp={atlasWebp} alt="Landing exemplo ATLAS em paleta azul" width={1280} height={612} /><figcaption>ATLAS / FINANÇAS</figcaption></figure>
-              <figure><Picture avif={frameAvif} webp={frameWebp} alt="Landing exemplo FRAME24 em paleta escura" width={1280} height={611} /><figcaption>FRAME24 / CRIATIVO</figcaption></figure>
-            </div>
-
-            <div className="lv2-speed-proof">
-              <div>
-                <span>PUBLICADA. RESPONSIVA. OTIMIZADA.</span>
-                <strong>100</strong>
-                <p>Desempenho mobile registrado no PageSpeed em uma das páginas do processo.</p>
-              </div>
-              <Picture avif={pageSpeedAvif} webp={pageSpeedWebp} alt="Teste PageSpeed com desempenho 100 no mobile" width={900} height={698} />
-            </div>
-          </Reveal>
+          <RevealGroup className="forge-proof-twin">
+            <figure data-reveal="" className="forge-shot forge-shot-paper">
+              <Picture avif={briefingAvif} webp={briefingWebp} alt="Briefing estratégico usado antes da construção da landing" width={700} height={771} />
+              <figcaption><b>BRIEFING ESTRATÉGICO</b><span>As decisões que vêm antes da tela.</span></figcaption>
+            </figure>
+            <figure data-reveal="" style={stepDelay(1)} className="forge-shot forge-shot-paper forge-shot-offset">
+              <Picture avif={promptAvif} webp={promptWebp} alt="Prompt Mestre criado a partir do briefing estratégico" width={700} height={781} />
+              <figcaption><b>PROMPT MESTRE</b><span>Contexto suficiente para a IA executar.</span></figcaption>
+            </figure>
+          </RevealGroup>
         </div>
 
-        <Reveal className="lv2-proof-bridge">
-          <span>L// PRINCÍPIO</span>
-          <p>Não foi a IA que decidiu o que essas páginas deveriam ser. <strong>Ela recebeu decisões suficientes para construir.</strong></p>
-        </Reveal>
+        <div className="forge-proof-stage forge-proof-stage-build">
+          <Reveal className="forge-proof-copy forge-proof-copy-light">
+            <span className="forge-proof-index">02</span>
+            <h3>DO PROMPT À CONSTRUÇÃO</h3>
+            <p>
+              O Lovable deixa de receber um pedido vago e passa a receber uma arquitetura. A geração inicial começa muito mais perto do resultado desejado.
+            </p>
+          </Reveal>
+          <RevealGroup className="forge-build-collage">
+            <figure data-reveal="" className="forge-shot forge-shot-dark forge-build-shot-a">
+              <Picture avif={lovablePromptAvif} webp={lovablePromptWebp} alt="Prompt Mestre inserido no Lovable" width={760} height={544} />
+              <figcaption><b>01 / INSTRUÇÃO</b><span>O Prompt Mestre entra inteiro.</span></figcaption>
+            </figure>
+            <figure data-reveal="" style={stepDelay(1)} className="forge-shot forge-shot-dark forge-build-shot-b">
+              <Picture avif={lovableBuildAvif} webp={lovableBuildWebp} alt="Lovable construindo a landing após receber o Prompt Mestre" width={691} height={563} />
+              <figcaption><b>02 / EXECUÇÃO</b><span>A IA constrói a partir das decisões.</span></figcaption>
+            </figure>
+          </RevealGroup>
+        </div>
+
+        <div className="forge-proof-stage forge-proof-stage-result">
+          <Reveal className="forge-proof-copy">
+            <span className="forge-proof-index">03</span>
+            <h3>DA CONSTRUÇÃO À LANDING</h3>
+            <p>
+              Uma direção visual forte não precisa nascer de dezenas de tentativas. Desktop, mobile e narrativa continuam falando a mesma língua.
+            </p>
+          </Reveal>
+
+          <Reveal className="forge-result-canvas">
+            <div className="forge-result-browser">
+              <div className="forge-result-browser-top"><i/><i/><i/><span>social-os.example</span></div>
+              <Picture avif={heroDesktopAvif} webp={heroDesktopWebp} alt="Hero de uma landing exemplo criada com o processo Land-IA" width={1280} height={610} />
+            </div>
+            <div className="forge-result-phone">
+              <Picture avif={heroMobileAvif} webp={heroMobileWebp} alt="Versão mobile da landing exemplo" width={480} height={903} />
+            </div>
+            <div className="forge-result-stamp"><span>DESKTOP + MOBILE</span><strong>MESMA DIREÇÃO</strong></div>
+          </Reveal>
+
+          <RevealGroup className="forge-result-strip">
+            <figure data-reveal="" className="forge-mini-shot">
+              <Picture avif={sectionTwoAvif} webp={sectionTwoWebp} alt="Segunda seção da landing exemplo" width={1280} height={610} />
+              <figcaption>DIAGNÓSTICO</figcaption>
+            </figure>
+            <figure data-reveal="" style={stepDelay(1)} className="forge-mini-shot">
+              <Picture avif={sectionThreeAvif} webp={sectionThreeWebp} alt="Terceira seção da landing exemplo" width={1280} height={610} />
+              <figcaption>MECANISMO</figcaption>
+            </figure>
+          </RevealGroup>
+        </div>
+
+        <div className="forge-proof-stage forge-proof-stage-world">
+          <Reveal className="forge-proof-copy forge-proof-copy-light">
+            <span className="forge-proof-index">04</span>
+            <h3>DA LANDING AO MUNDO REAL</h3>
+            <p>
+              O processo não termina no construtor. A página vai para o domínio, precisa funcionar no celular e precisa continuar rápida.
+            </p>
+          </Reveal>
+
+          <div className="forge-world-grid">
+            <Reveal className="forge-speed-card">
+              <div className="forge-speed-copy">
+                <span>PERFORMANCE MOBILE</span>
+                <strong>100</strong>
+                <p>Uma das páginas demonstrativas, medida após publicação.</p>
+              </div>
+              <Picture avif={pageSpeedAvif} webp={pageSpeedWebp} alt="Teste PageSpeed da landing exemplo com desempenho 100" width={900} height={698} />
+            </Reveal>
+
+            <RevealGroup className="forge-repertoire">
+              {[
+                [nouraAvif, nouraWebp, "NOURA", "Lifestyle / nutrição"],
+                [atlasAvif, atlasWebp, "ATLAS", "Finanças / sistema"],
+                [frameAvif, frameWebp, "FRAME 24", "Filmmaking / criativo"],
+              ].map(([avif, webp, title, label], i) => (
+                <figure data-reveal="" style={stepDelay(i)} className="forge-repertoire-item" key={String(title)}>
+                  <Picture avif={String(avif)} webp={String(webp)} alt={`Landing exemplo ${title}`} width={1280} height={612} />
+                  <figcaption><strong>{title}</strong><span>{label}</span></figcaption>
+                </figure>
+              ))}
+            </RevealGroup>
+          </div>
+
+          <Reveal className="forge-proof-close">
+            <span>Não é um template.</span>
+            <strong>É um processo capaz de receber direções diferentes.</strong>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -586,48 +630,41 @@ function Proofs() {
 /* ================================================================
    05 — MECANISMO
    ================================================================ */
-const REVERSE_STEPS = [
-  ["06", "DECISÃO", "Qual ação precisa acontecer no fim?"],
-  ["05", "SEGURANÇA", "O que precisa reduzir o risco de agir?"],
-  ["04", "OFERTA", "O que torna o próximo passo claro?"],
-  ["03", "PROVA", "O que precisa ser visto para gerar crença?"],
-  ["02", "MECANISMO", "Por que esta solução faz sentido?"],
-  ["01", "PROMESSA", "O que precisa ser entendido primeiro?"],
-] as const;
+const REVERSE_CHAIN = [
+  ["06", "DECISÃO", "O que precisa acontecer no fim?"],
+  ["05", "SEGURANÇA", "O que precisa deixar de parecer arriscado?"],
+  ["04", "OFERTA", "O que precisa parecer valioso agora?"],
+  ["03", "EVIDÊNCIA", "O que precisa ser demonstrado?"],
+  ["02", "MECANISMO", "O que torna essa solução diferente?"],
+  ["01", "PROMESSA", "O que precisa prender a primeira atenção?"],
+];
 
 function Mechanism() {
   return (
-    <section className="lv2-mechanism" id="metodo">
-      <div className="lv2-mechanism-word" aria-hidden="true">DECISÃO</div>
-      <div className="lv2-container">
-        <Kicker number="05">O MECANISMO</Kicker>
-        <Reveal className="lv2-mechanism-head">
-          <div>
-            <p className="lv2-pretitle">ENGENHARIA REVERSA DA CONVERSÃO™</p>
-            <h2>CONSTRUA A DECISÃO.<br /><span>DEPOIS CONSTRUA A PÁGINA.</span></h2>
-          </div>
-          <p>Em vez de começar pela primeira dobra, você começa pela última decisão do visitante e constrói o caminho de volta.</p>
+    <section className="forge-mechanism landia-cv-mechanism">
+      <div className="forge-shell">
+        <Reveal className="forge-mechanism-head">
+          <SectionTag index="05" light>ENGENHARIA REVERSA DA CONVERSÃO™</SectionTag>
+          <h2>COMECE PELO FIM.<br /><span>CONSTRUA O CAMINHO DE VOLTA.</span></h2>
+          <p>
+            Em vez de abrir a IA e perguntar “o que eu coloco na página?”, você começa pela última decisão do visitante e trabalha de trás para frente.
+          </p>
         </Reveal>
 
-        <RevealGroup className="lv2-reverse-track">
-          <div className="lv2-reverse-line" aria-hidden="true"><span /></div>
-          {REVERSE_STEPS.map(([number, title, text], index) => (
-            <div className="lv2-reverse-step" data-reveal="" style={stepDelay(index)} key={title}>
-              <div className="lv2-orbit"><span>{number}</span></div>
-              <div className="lv2-reverse-copy">
-                <small>REVERSE / {title}</small>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-              <div className="lv2-reverse-code">{index === 0 ? "ACTION" : `${REVERSE_STEPS[index - 1]?.[1] ?? ""} ← ${title}`}</div>
+        <RevealGroup className="forge-reverse-chain">
+          {REVERSE_CHAIN.map(([n, title, text], i) => (
+            <div data-reveal="" style={stepDelay(i)} className={`forge-reverse-row forge-reverse-row-${i}`} key={title}>
+              <span className="forge-reverse-number">{n}</span>
+              <strong>{title}</strong>
+              <p>{text}</p>
+              <span className="forge-reverse-arrow">←</span>
             </div>
           ))}
         </RevealGroup>
 
-        <Reveal className="lv2-mechanism-footer">
-          <div className="lv2-method-seal"><span>L//</span><small>ARCHITECTURE FIRST</small></div>
-          <p><strong>Comece pela decisão.</strong> Construa o caminho de volta. Deixe a IA executar.</p>
-          <CTAButton href="#produto" kind="ghost">Ver o que você aprende</CTAButton>
+        <Reveal className="forge-mechanism-rule">
+          <span>ARQUITETURA ANTES DA IA.</span>
+          <strong>Você decide. A IA executa.</strong>
         </Reveal>
       </div>
     </section>
@@ -638,50 +675,64 @@ function Mechanism() {
    06 — PRODUTO
    ================================================================ */
 const LESSONS = [
-  ["01", "Antes de abrir a IA", "Entenda por que página bonita e página estratégica não são a mesma coisa."],
-  ["02", "Engenharia Reversa", "Construa a jornada começando pela decisão final."],
-  ["03", "O Prompt Mestre", "Concentre estratégia, copy, estrutura e direção visual em uma única instrução."],
-  ["04", "Construindo com IA", "Execute no Lovable e ajuste pontos específicos sem reconstruir tudo."],
-  ["05", "De bonita para pronta", "Audite hierarquia, mobile, clareza, performance e coerência."],
-  ["06", "Checkout e ajustes", "Conecte CTA, revise a experiência e deixe a página pronta para vender."],
-  ["07", "Seu próprio domínio", "Lovable → GitHub → Vercel → DNS → domínio próprio."],
-] as const;
+  ["01", "ANTES DE ABRIR A IA", "Por que páginas bonitas não são necessariamente páginas estrategicamente construídas."],
+  ["02", "ENGENHARIA REVERSA", "Construa a jornada começando pela decisão final."],
+  ["03", "O PROMPT MESTRE", "Transforme a arquitetura em uma instrução completa."],
+  ["04", "CONSTRUINDO COM IA", "Leve o Prompt Mestre ao Lovable e ajuste sem reconstruir o que já ficou bom."],
+  ["05", "DE BONITA PARA PRONTA", "Auditoria, ajustes e correções cirúrgicas."],
+  ["06", "CHECKOUT + MOBILE", "Links, CTA, responsividade e revisão final."],
+  ["07", "SEU PRÓPRIO DOMÍNIO", "Lovable → GitHub → Vercel → DNS → domínio."],
+];
 
 function Product() {
   return (
-    <section className="lv2-product landia-cv-product" id="produto">
-      <div className="lv2-container">
-        <Kicker number="06" light>O PRODUTO</Kicker>
-        <Reveal className="lv2-product-head">
+    <section className="forge-product landia-cv-product">
+      <div className="forge-shell">
+        <Reveal className="forge-product-head">
+          <SectionTag index="06">O PRODUTO</SectionTag>
           <div>
-            <p className="lv2-pretitle">LAND-IA / IMPLEMENTAÇÃO GUIADA</p>
-            <h2>VOCÊ NÃO COMPRA UM PROMPT.<br /><span>APRENDE A REPETIR O PROCESSO.</span></h2>
+            <h2>LAND-IA NÃO É UMA AULA SOBRE IA.</h2>
+            <p>É uma implementação guiada: abra, assista, execute e avance até a página publicada.</p>
           </div>
-          <p>Vídeo-aulas práticas, gravação de tela e execução real. Da oferta até uma landing publicada no seu próprio domínio.</p>
         </Reveal>
 
-        <RevealGroup className="lv2-lessons">
-          {LESSONS.map(([number, title, text], index) => (
-            <article data-reveal="" style={stepDelay(index)} key={number}>
-              <span>{number}</span>
-              <div><h3>{title}</h3><p>{text}</p></div>
-              <i aria-hidden="true">↗</i>
-            </article>
-          ))}
-        </RevealGroup>
+        <div className="forge-product-grid">
+          <Reveal className="forge-product-spine">
+            <span className="forge-product-vertical">LAND-IA / IMPLEMENTAÇÃO GUIADA</span>
+            <div className="forge-product-screen">
+              <div className="forge-product-screen-top"><span>LESSON 04</span><b>BUILD MODE</b></div>
+              <div className="forge-product-screen-body">
+                <small>DA ARQUITETURA PARA A TELA</small>
+                <h3>CONSTRUA.<br />REVISE.<br /><span>PUBLIQUE.</span></h3>
+                <div className="forge-product-progress"><i /></div>
+                <div className="forge-product-screen-meta"><span>GRAVAÇÃO DE TELA</span><span>EXECUÇÃO REAL</span></div>
+              </div>
+            </div>
+          </Reveal>
 
-        <RevealGroup className="lv2-bonus-grid">
-          <article data-reveal="" className="lv2-bonus-card">
-            <span>BÔNUS 01</span>
+          <RevealGroup className="forge-curriculum">
+            {LESSONS.map(([n, title, text], i) => (
+              <div data-reveal="" style={stepDelay(i)} className="forge-lesson" key={title}>
+                <span>{n}</span>
+                <div><strong>{title}</strong><p>{text}</p></div>
+                <i />
+              </div>
+            ))}
+          </RevealGroup>
+        </div>
+
+        <RevealGroup className="forge-bonus-grid">
+          <article data-reveal="" className="forge-bonus forge-bonus-light">
+            <span>BÔNUS 01 / PDF</span>
             <h3>BIBLIOTECA LAND-IA</h3>
-            <p>Prompts, estruturas e referências para acelerar decisões que você vai reutilizar em novos projetos.</p>
-            <footer>REUTILIZE / ADAPTE / EXECUTE</footer>
+            <p>Prompts operacionais para persona, oferta, mecanismo, hero, provas, objeções, FAQ, CTA, auditoria, mobile, CRO e correções cirúrgicas.</p>
+            <strong>Não comece cada página do zero.</strong>
           </article>
-          <article data-reveal="" style={stepDelay(1)} className="lv2-bonus-card lv2-bonus-card-dark">
-            <span>BÔNUS 02</span>
+          <article data-reveal="" style={stepDelay(1)} className="forge-bonus forge-bonus-dark">
+            <span>BÔNUS 02 / E-BOOK</span>
             <h3>LANDING INVISÍVEL</h3>
-            <p>Performance, tracking e infraestrutura: a camada que o visitante não vê, mas que separa uma página bonita de uma operação pronta.</p>
-            <footer>PERFORMANCE / TRACKING / INFRA</footer>
+            <p>Performance, WebP/AVIF, LCP, CLS, tracking, Pixel, CAPI, event_id, deduplicação, metadata, Vercel e troubleshooting.</p>
+            <strong>A parte que o visitante não vê — mas o navegador vê.</strong>
           </article>
         </RevealGroup>
       </div>
@@ -690,7 +741,7 @@ function Product() {
 }
 
 /* ================================================================
-   07 — OFERTA
+   07 — OFERTA / VIEWCONTENT
    ================================================================ */
 function Offer() {
   const offerRef = useRef<HTMLElement | null>(null);
@@ -698,6 +749,7 @@ function Offer() {
 
   useEffect(() => {
     const section = offerRef.current;
+
     if (!section) return;
 
     const observer = new IntersectionObserver(
@@ -709,58 +761,52 @@ function Offer() {
           typeof window.fbq === "function"
         ) {
           hasTrackedViewContent.current = true;
-          void sendFacebookEvent("ViewContent");
+          sendFacebookEvent("ViewContent");
         }
       },
-      { threshold: 0.5 },
+      {
+        threshold: 0.5,
+      },
     );
 
     observer.observe(section);
+
     return () => observer.disconnect();
   }, []);
 
-  const includes = [
-    "Treinamento completo — estratégia à publicação",
-    "Engenharia Reversa da Conversão™",
-    "Prompt Mestre e implementação no Lovable",
-    "GitHub → Vercel → DNS → domínio próprio",
-    "Bônus: Biblioteca Land-IA",
-    "Bônus: Landing Invisível",
-  ];
-
   return (
-    <section ref={offerRef} id="oferta" className="lv2-offer landia-cv-offer">
-      <div className="lv2-offer-grid" aria-hidden="true" />
-      <div className="lv2-container">
-        <Kicker number="07">A OFERTA</Kicker>
-        <Reveal className="lv2-offer-head">
-          <h2>DA IDEIA AO DOMÍNIO.<br /><span>SEM DEPENDER DE PROGRAMAÇÃO.</span></h2>
-          <p>Você entra com uma oferta. Sai entendendo como estruturar, instruir, construir, revisar e publicar.</p>
+    <section ref={offerRef} id="oferta" className="forge-offer landia-cv-offer">
+      <div className="forge-offer-signal" aria-hidden="true">47</div>
+      <div className="forge-shell forge-offer-grid">
+        <Reveal className="forge-offer-copy">
+          <SectionTag index="07">A OFERTA</SectionTag>
+          <h2>UM PROCESSO INTEIRO.<br /><span>POR MENOS QUE UM TEMPLATE.</span></h2>
+          <p>
+            Você leva a implementação guiada + os dois bônus para estruturar, construir, publicar e manter sua landing funcionando.
+          </p>
+
+          <div className="forge-stack-list">
+            {[
+              ["LAND-IA", "Treinamento prático completo", "R$ 147"],
+              ["BIBLIOTECA LAND-IA", "Prompts e estruturas reutilizáveis", "R$ 97"],
+              ["LANDING INVISÍVEL", "Performance, tracking e infraestrutura", "R$ 97"],
+            ].map(([name, desc, value]) => (
+              <div key={name}>
+                <Check aria-hidden="true" />
+                <span><strong>{name}</strong><small>{desc}</small></span>
+                <b>{value}</b>
+              </div>
+            ))}
+          </div>
         </Reveal>
 
-        <Reveal className="lv2-offer-card">
-          <div className="lv2-offer-price">
-            <div className="lv2-offer-status"><Sparkles /> LAND-IA + 2 BÔNUS</div>
-            <small>ACESSO IMEDIATO / PAGAMENTO ÚNICO</small>
-            <div className="lv2-price-row"><span>R$</span><strong>47</strong></div>
-            <p>Uma única compra. O processo inteiro.</p>
-            <CTAButton>Começar agora por R$ 47</CTAButton>
-            <div className="lv2-secure"><Lock /> Pagamento seguro processado pela Hotmart</div>
-          </div>
-
-          <div className="lv2-offer-includes">
-            <span>VOCÊ RECEBE</span>
-            <ul>
-              {includes.map((item) => (
-                <li key={item}><i><Check /></i><span>{item}</span></li>
-              ))}
-            </ul>
-            <div className="lv2-offer-ref">
-              <span>Composição de referência</span>
-              <b>R$ 341</b>
-              <strong>HOJE / R$ 47</strong>
-            </div>
-          </div>
+        <Reveal className="forge-price-block">
+          <div className="forge-price-top"><Sparkles aria-hidden="true" /><span>ACESSO IMEDIATO</span></div>
+          <div className="forge-price-reference"><span>VALOR DE REFERÊNCIA</span><s>R$ 341</s></div>
+          <div className="forge-price-main"><span>HOJE</span><strong><small>R$</small>47</strong></div>
+          <p>Pagamento único.</p>
+          <CTAButton className="w-full" variant="orange">COMEÇAR AGORA</CTAButton>
+          <div className="forge-price-safe"><Lock aria-hidden="true" /><span>Compra processada pela Hotmart</span></div>
         </Reveal>
       </div>
     </section>
@@ -770,28 +816,28 @@ function Offer() {
 /* ================================================================
    08 — COMPARAÇÃO
    ================================================================ */
-const WAYS = [
-  ["01", "FAZER TUDO SOZINHO", ["Pesquisar", "Testar", "Errar", "Refazer", "Descobrir infraestrutura"], "TEMPO ALTO"],
-  ["02", "CONTRATAR", ["Designer", "Copywriter", "Desenvolvedor", "Manutenção"], "DEPENDÊNCIA"],
-  ["03", "LAND-IA", ["Processo repetível", "IA como executora", "Publicação no seu domínio"], "AUTONOMIA"],
-] as const;
+const PATHS = [
+  ["01", "DESCOBRIR SOZINHO", "Pesquisar → testar → errar → refazer", "TEMPO ALTO"],
+  ["02", "TERCEIRIZAR TUDO", "Designer → copywriter → dev → manutenção", "CUSTO + DEPENDÊNCIA"],
+  ["03", "APRENDER O PROCESSO", "Estratégia → IA → domínio próprio", "AUTONOMIA", "active"],
+];
 
 function Comparison() {
   return (
-    <section className="lv2-comparison landia-cv-comparison">
-      <div className="lv2-container">
-        <Kicker number="08" light>COMPARAÇÃO LÓGICA</Kicker>
-        <Reveal className="lv2-comparison-head">
-          <h2>EXISTEM TRÊS FORMAS DE TER UMA LANDING.<br /><span>SÓ UMA DELAS TE ENSINA A REPETIR.</span></h2>
+    <section className="forge-comparison landia-cv-comparison">
+      <div className="forge-shell">
+        <Reveal className="forge-comparison-head">
+          <SectionTag index="08" light>TRÊS CAMINHOS</SectionTag>
+          <h2>A LANDING VAI EXISTIR DE UM JEITO OU DE OUTRO.<br /><span>A QUESTÃO É COMO VOCÊ CHEGA ATÉ ELA.</span></h2>
         </Reveal>
 
-        <RevealGroup className="lv2-way-grid">
-          {WAYS.map(([number, title, items, result], index) => (
-            <article key={title} data-reveal="" style={stepDelay(index)} className={index === 2 ? "featured" : ""}>
-              <span>{number}</span>
+        <RevealGroup className="forge-paths">
+          {PATHS.map(([n, title, flow, result, active], i) => (
+            <article data-reveal="" style={stepDelay(i)} className={`forge-path ${active ? 'forge-path-active' : ''}`} key={title}>
+              <span>{n}</span>
               <h3>{title}</h3>
-              <ul>{items.map((item) => <li key={item}>{item}</li>)}</ul>
-              <footer>{result}</footer>
+              <p>{flow}</p>
+              <strong>{result}</strong>
             </article>
           ))}
         </RevealGroup>
@@ -801,32 +847,31 @@ function Comparison() {
 }
 
 /* ================================================================
-   09 — QUEBRA DE OBJEÇÕES
+   09 — OBJEÇÕES
    ================================================================ */
 const OBJECTIONS = [
-  ["EU NÃO SEI PROGRAMAR.", "Ótimo. O processo foi desenhado justamente para quem quer transformar instrução em execução sem escrever código."],
-  ["EU NUNCA USEI LOVABLE.", "A implementação é mostrada do zero, com foco no que realmente importa para transformar o Prompt Mestre em uma landing."],
-  ["E OS CRÉDITOS GRATUITOS?", "Você estrutura a maior parte das decisões antes de abrir o Lovable. A meta é reduzir retrabalho e reservar créditos para ajustes que realmente importam."],
-  ["EU NÃO SOU DESIGNER.", "Você aprende hierarquia, estrutura e direção visual suficientes para orientar a IA — sem precisar virar designer."],
-  ["A IA FAZ TUDO?", "Não. E essa é a ideia: você pensa a estratégia, a IA acelera a execução."],
-] as const;
+  ["EU NÃO SEI PROGRAMAR.", "Ótimo. O processo foi desenhado para quem precisa dirigir a construção sem escrever código."],
+  ["EU NUNCA USEI LOVABLE.", "A implementação é acompanhada na prática, do Prompt Mestre até os ajustes e a publicação."],
+  ["VOU PRECISAR PAGAR FERRAMENTAS PARA SEMPRE?", "A proposta é aproveitar as opções gratuitas para começar e levar o projeto para GitHub, Vercel e seu próprio domínio."],
+  ["EU NÃO SOU DESIGNER.", "Você não precisa desenhar pixels. Precisa aprender a definir hierarquia, intenção e direção visual para a IA executar."],
+  ["ENTÃO A IA FAZ TUDO?", "Não. E esse é o ponto: você toma as decisões que importam. A IA acelera a execução."],
+];
 
 function Objections() {
   return (
-    <section className="lv2-objections landia-cv-objections">
-      <div className="lv2-container">
-        <Kicker number="09">SEM PROMESSA MÁGICA</Kicker>
-        <Reveal className="lv2-objection-head">
-          <div><h2>AS OBJEÇÕES CERTAS<br /><span>MERECEM RESPOSTAS DIRETAS.</span></h2></div>
-          <p>O Land-IA não promete que a IA pensa por você. Ele ensina o processo para você dar a ela direção.</p>
+    <section className="forge-objections landia-cv-objections">
+      <div className="forge-shell">
+        <Reveal className="forge-objections-head">
+          <SectionTag index="09">SEM RODAPÉ MIÚDO</SectionTag>
+          <h2>O QUE NORMALMENTE TRAVA ESSA DECISÃO.</h2>
         </Reveal>
 
-        <RevealGroup className="lv2-objection-list">
-          {OBJECTIONS.map(([question, answer], index) => (
-            <article key={question} data-reveal="" style={stepDelay(index)}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{question}</h3>
-              <p>{answer}</p>
+        <RevealGroup className="forge-objection-list">
+          {OBJECTIONS.map(([q, a], i) => (
+            <article data-reveal="" style={stepDelay(i)} key={q}>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <h3>{q}</h3>
+              <p>{a}</p>
             </article>
           ))}
         </RevealGroup>
@@ -840,25 +885,19 @@ function Objections() {
    ================================================================ */
 function Decision() {
   return (
-    <section className="lv2-decision landia-cv-decision">
-      <div className="lv2-container">
-        <Kicker number="10" light>A DECISÃO</Kicker>
-        <Reveal className="lv2-decision-stage">
-          <div className="lv2-decision-bad">
-            <small>CONTINUAR COMO ESTÁ</small>
-            <h3>ABRIR A IA.<br />TENTAR.<br />CORRIGIR.<br />REPETIR.</h3>
-            <span><X /> Cada nova página volta para o zero.</span>
-          </div>
-          <div className="lv2-decision-arrow" aria-hidden="true">→</div>
-          <div className="lv2-decision-good">
-            <small>MUDAR A ORDEM</small>
-            <h3>DECIDIR.<br />ESTRUTURAR.<br />INSTRUIR.<br />EXECUTAR.</h3>
-            <span><Check /> Cada nova página começa com um processo.</span>
-          </div>
+    <section className="forge-decision landia-cv-decision">
+      <div className="forge-shell forge-decision-grid">
+        <Reveal>
+          <SectionTag index="10" light>SUA PRÓXIMA PÁGINA</SectionTag>
+          <h2>VOCÊ PODE CONTINUAR PEDINDO PARA A IA “FAZER UMA LANDING”.</h2>
         </Reveal>
-        <Reveal className="lv2-decision-cta">
-          <p>Talvez você não precise de outra ferramenta.<br /><strong>Talvez precise aprender a dirigir as que já existem.</strong></p>
-          <CTAButton>Quero aprender o processo</CTAButton>
+        <Reveal delay={0.08} className="forge-decision-answer">
+          <span>OU</span>
+          <h3>PODE COMEÇAR A ENTREGAR PARA ELA DECISÕES QUE JÁ FORAM TOMADAS.</h3>
+          <p>
+            Essa é a diferença entre usar IA como roleta e usar IA como executora.
+          </p>
+          <CTAButton href="#oferta" variant="ink">QUERO APRENDER O PROCESSO</CTAButton>
         </Reveal>
       </div>
     </section>
@@ -866,19 +905,19 @@ function Decision() {
 }
 
 /* ================================================================
-   CTA FINAL / FOOTER
+   11 — CTA FINAL
    ================================================================ */
 function FinalCTA() {
   return (
-    <section className="lv2-final landia-cv-final">
-      <div className="lv2-final-grid" aria-hidden="true" />
-      <div className="lv2-container">
+    <section className="forge-final landia-cv-final">
+      <div className="forge-final-ring" aria-hidden="true" />
+      <div className="forge-shell forge-final-inner">
         <Reveal>
-          <span>L// FINAL COMMAND</span>
-          <h2>NÃO PEÇA UMA PÁGINA.<br /><strong>PROJETE UMA DECISÃO.</strong></h2>
-          <p>A IA já constrói. Agora é sobre dirigir a construção — da oferta ao domínio.</p>
-          <CTAButton>Começar agora por R$ 47</CTAButton>
-          <small>Pagamento único • acesso imediato</small>
+          <span className="forge-final-code">LAND-IA / READY TO BUILD</span>
+          <h2>DECIDA A PÁGINA.<br /><span>DEIXE A IA CONSTRUIR.</span></h2>
+          <p>Da estratégia ao seu próprio domínio. Sem programação.</p>
+          <CTAButton variant="orange">COMEÇAR COM O LAND-IA — R$ 47</CTAButton>
+          <small>Acesso imediato • pagamento único</small>
         </Reveal>
       </div>
     </section>
@@ -887,10 +926,11 @@ function FinalCTA() {
 
 function Footer() {
   return (
-    <footer className="lv2-footer landia-cv-footer">
-      <div className="lv2-container">
-        <div><strong>LAND-IA</strong><span>LANDING PAGES COM INTELIGÊNCIA ARTIFICIAL</span></div>
-        <p>© {new Date().getFullYear()} LAND-IA. Este produto é um treinamento educacional. Resultados dependem de aplicação, contexto e execução individual.</p>
+    <footer className="forge-footer landia-cv-footer">
+      <div className="forge-shell forge-footer-inner">
+        <div><span className="forge-brand-mark">L//</span><strong>LAND-IA</strong></div>
+        <p>Landing pages com IA • Arquitetura antes da IA.</p>
+        <span>© 2026</span>
       </div>
     </footer>
   );
