@@ -222,7 +222,7 @@ function SectionCTA({
         <span>{eyebrow}</span>
         <p>{children}</p>
       </div>
-      <CTAButton href="#oferta" variant={variant}>{button}</CTAButton>
+      <CTAButton variant={variant}>{button}</CTAButton>
     </Reveal>
   );
 }
@@ -350,8 +350,6 @@ function HeroBuildVisual() {
         <figure
           key={String(label)}
           className={`forge-phone-card forge-phone-card-${i + 1}`}
-          data-enter=""
-          style={stepDelay(i + 1)}
         >
           <img
             src={String(src)}
@@ -396,8 +394,7 @@ function Hero() {
           </p>
 
           <div className="forge-hero-actions">
-            <CTAButton href="#oferta" variant="lime">QUERO CRIAR MINHA LANDING</CTAButton>
-            <a className="forge-hero-video-link" href="#vsl">VER O PROCESSO EM 5 MINUTOS <ArrowRight aria-hidden="true" /></a>
+            <CTAButton variant="lime">QUERO CRIAR MINHA LANDING — R$ 47</CTAButton>
           </div>
           <div className="forge-hero-note">
               <span>USE NAS SUAS OFERTAS</span>
@@ -877,6 +874,10 @@ function Comparison() {
             </article>
           ))}
         </RevealGroup>
+
+        <SectionCTA eyebrow="ESCOLHA O TERCEIRO CAMINHO" button="QUERO DOMINAR O PROCESSO" variant="ink">
+          Tenha o método completo para construir, revisar e publicar suas próprias landing pages.
+        </SectionCTA>
       </div>
     </section>
   );
@@ -913,6 +914,10 @@ function Objections() {
             </article>
           ))}
         </RevealGroup>
+
+        <SectionCTA eyebrow="SEM PROGRAMAÇÃO. SEM MENSALIDADE." button="QUERO ACESSO IMEDIATO — R$ 47" variant="lime">
+          Comece com as ferramentas gratuitas e avance com o processo completo do LAND-IA.
+        </SectionCTA>
       </div>
     </section>
   );
@@ -935,7 +940,7 @@ function Decision() {
           <p>
             Use nas suas ofertas, economize terceirização ou transforme a habilidade em um serviço que você pode oferecer.
           </p>
-          <CTAButton href="#oferta" variant="ink">QUERO PARAR DE DEPENDER DE TERCEIROS</CTAButton>
+          <CTAButton variant="ink">QUERO PARAR DE DEPENDER DE TERCEIROS</CTAButton>
         </Reveal>
       </div>
     </section>
