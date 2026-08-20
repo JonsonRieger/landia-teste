@@ -1019,7 +1019,7 @@
 .forge-comparison { padding: 110px 0; background: var(--forge-ivory); color: var(--forge-carbon); }
 .forge-comparison-head { display: grid; grid-template-columns: .72fr 2.28fr; gap: 34px; align-items: start; }
 .forge-comparison-head h2 { font-size: clamp(2.1rem, 4vw, 4rem); font-weight: 800; line-height: .93; letter-spacing: -.057em; text-transform: uppercase; }
-.forge-comparison-head h2 span { color: rgba(11,13,16,.35); }
+.forge-comparison-head h2 span { color: var(--forge-orange); }
 .forge-paths { display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin-top: 58px; border: 1px solid rgba(11,13,16,.16); }
 .forge-path { position: relative; min-height: 320px; padding: 26px; border-right: 1px solid rgba(11,13,16,.14); background: #ece8de; }
 .forge-path:last-child { border-right: 0; }
@@ -1138,6 +1138,13 @@
   .forge-hero-lead { margin-top: 21px; font-size: 17px; line-height: 1.5; }
   .forge-hero-actions { display: grid; gap: 14px; margin-top: 21px; }
   .forge-btn { width: 100%; min-height: 62px; padding-inline: 20px; font-size: 14px; }
+  .forge-hero-actions .forge-btn { gap: 10px; padding-inline: 14px 10px; }
+  .forge-hero-actions .forge-btn > span {
+    white-space: nowrap;
+    font-size: clamp(11px, 3.2vw, 14px);
+    letter-spacing: 0;
+  }
+  .forge-hero-actions .forge-btn svg { flex: 0 0 34px; }
   .forge-hero-note { gap: 7px; margin-top: 13px; font-size: 10px; }
   .forge-hero-note span { padding: 6px 8px; }
   .forge-tool-line { display: none; }
@@ -1232,9 +1239,24 @@
   .forge-price-main strong { font-size: clamp(5rem, 24vw, 7rem); }
 
   .forge-paths { grid-template-columns: 1fr; }
-  .forge-path { min-height: 240px; border-right: 0; border-bottom: 1px solid rgba(11,13,16,.14); }
+  .forge-path {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 28px 24px 32px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(11,13,16,.14);
+  }
   .forge-path:last-child { border-bottom: 0; }
-  .forge-path h3 { margin-top: 46px; }
+  .forge-path h3 { margin-top: 42px; }
+  .forge-path p { margin-top: 22px; font-size: 16px; line-height: 1.55; }
+  .forge-path > strong {
+    position: static;
+    display: block;
+    margin-top: 20px;
+    font-size: 13px;
+    line-height: 1.25;
+  }
 
   .forge-objection-list article { grid-template-columns: 38px 1fr; gap: 12px; }
   .forge-objection-list p { grid-column: 2; }
