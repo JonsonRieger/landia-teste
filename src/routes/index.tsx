@@ -28,6 +28,10 @@ import atlasAvif from "@/assets/proof/example-atlas.avif";
 import atlasWebp from "@/assets/proof/example-atlas.webp";
 import frameAvif from "@/assets/proof/example-frame24.avif";
 import frameWebp from "@/assets/proof/example-frame24.webp";
+import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
+import phoneArchitectureWebp from "@/assets/hero/landia-phone-architecture.webp";
+import phoneEcommerceWebp from "@/assets/hero/landia-phone-ecommerce.webp";
+import phoneWellnessWebp from "@/assets/hero/landia-phone-wellness.webp";
 
 declare global {
   interface Window {
@@ -39,37 +43,37 @@ export const Route = createFileRoute("/")({
   component: Landing,
   head: () => ({
     meta: [
-      { title: "Land-IA | Landing Pages com IA — Zero Programação" },
+      { title: "Land-IA | Crie Landing Pages com IA" },
       {
         name: "description",
         content:
-          "Crie uma landing profissional com ChatGPT + Lovable, publique no seu próprio domínio e deixe tudo pronto para vender — sem precisar saber programar.",
+          "Crie landing pages profissionais com ChatGPT + Lovable, publique no seu próprio domínio e transforme o processo em autonomia ou serviço — sem programar.",
       },
       { name: "theme-color", content: "#0B0D10" },
-      { property: "og:title", content: "Land-IA | Landing Pages com IA" },
+      { property: "og:title", content: "Land-IA | Crie landing pages que parecem caras" },
       {
         property: "og:description",
         content:
-          "Da estratégia ao seu próprio domínio: estruture a página no ChatGPT, construa com Lovable e publique sem precisar saber programar.",
+          "Estratégia, copy, construção e domínio próprio com ChatGPT + Lovable — sem precisar programar.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://www.metamove.online/" },
       { property: "og:site_name", content: "Land-IA" },
       { property: "og:locale", content: "pt_BR" },
-      { property: "og:image", content: "https://www.metamove.online/og-landia.webp" },
-      { property: "og:image:secure_url", content: "https://www.metamove.online/og-landia.webp" },
-      { property: "og:image:type", content: "image/webp" },
+      { property: "og:image", content: "https://www.metamove.online/og-landia-v2.jpg" },
+      { property: "og:image:secure_url", content: "https://www.metamove.online/og-landia-v2.jpg" },
+      { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "Land-IA — Landing Pages com IA" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Land-IA | Landing Pages com IA" },
+      { name: "twitter:title", content: "Land-IA | Crie landing pages que parecem caras" },
       {
         name: "twitter:description",
         content:
-          "Da estratégia ao seu próprio domínio: estruture a página no ChatGPT, construa com Lovable e publique sem precisar saber programar.",
+          "Estratégia, copy, construção e domínio próprio com ChatGPT + Lovable — sem precisar programar.",
       },
-      { name: "twitter:image", content: "https://www.metamove.online/og-landia.webp" },
+      { name: "twitter:image", content: "https://www.metamove.online/og-landia-v2.jpg" },
       { name: "twitter:image:alt", content: "Land-IA — Landing Pages com IA" },
     ],
     links: [{ rel: "canonical", href: "https://www.metamove.online/" }],
@@ -201,6 +205,28 @@ function SectionTag({ index, children, light = false }: { index: string; childre
   );
 }
 
+function SectionCTA({
+  eyebrow,
+  children,
+  button,
+  variant = "lime",
+}: {
+  eyebrow: string;
+  children: ReactNode;
+  button: string;
+  variant?: "orange" | "lime" | "ink";
+}) {
+  return (
+    <Reveal className="forge-section-cta">
+      <div>
+        <span>{eyebrow}</span>
+        <p>{children}</p>
+      </div>
+      <CTAButton href="#oferta" variant={variant}>{button}</CTAButton>
+    </Reveal>
+  );
+}
+
 const FAQSection = lazy(() => import("@/components/FAQSection"));
 
 function DeferredFAQ() {
@@ -288,13 +314,13 @@ function OfferRail() {
   return (
     <div className="forge-offer-rail">
       <div className="forge-shell forge-offer-rail-inner">
-        <div className="forge-offer-brand">
-          <span className="forge-brand-mark">L//</span>
-          <strong>LAND-IA</strong>
-          <span>LANDING PAGES COM IA</span>
+        <div className="forge-urgency-message">
+          <span className="forge-urgency-pulse" aria-hidden="true" />
+          <strong>PARE DE ADIAR SUA PRÓXIMA LANDING</strong>
+          <span>ACESSO IMEDIATO</span>
         </div>
         <div className="forge-offer-price">
-          <span>PAGAMENTO ÚNICO</span>
+          <span>UMA ÚNICA VEZ</span>
           <strong>R$ 47</strong>
         </div>
       </div>
@@ -305,57 +331,44 @@ function OfferRail() {
 /* ================================================================
    01 — HERO / BUILD STAGE
    ================================================================ */
-const BUILD_STEPS = [
-  ["01", "DECIDIR", "Oferta + persona + promessa"],
-  ["02", "INSTRUIR", "Prompt Mestre"],
-  ["03", "EXECUTAR", "ChatGPT + Lovable"],
-  ["04", "PUBLICAR", "GitHub + Vercel + domínio"],
+const HERO_PAGES = [
+  [phoneAiWebp, "IA / SAAS", "Landing futurista para tecnologia"],
+  [phoneArchitectureWebp, "ARQUITETURA", "Landing editorial premium"],
+  [phoneEcommerceWebp, "E-COMMERCE", "Landing comercial para produto"],
+  [phoneWellnessWebp, "WELLNESS", "Landing clean de alta percepção"],
 ];
 
 function HeroBuildVisual() {
   return (
-    <div className="forge-build-visual" aria-hidden="true">
-      <div className="forge-build-caption">
-        <span>BUILD SEQUENCE</span>
-        <b>04 / 04</b>
+    <div className="forge-phone-showcase">
+      <div className="forge-phone-caption">
+        <span>UM PROCESSO</span>
+        <b>DIREÇÕES INFINITAS</b>
       </div>
 
-      <div className="forge-build-rail">
-        <div className="forge-build-beam" />
-        {BUILD_STEPS.map(([n, title, text], i) => (
-          <div key={title} className="forge-build-step" data-enter="" style={stepDelay(i + 1)}>
-            <span className="forge-build-number">{n}</span>
-            <div>
-              <strong>{title}</strong>
-              <p>{text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {HERO_PAGES.map(([src, label, alt], i) => (
+        <figure
+          key={String(label)}
+          className={`forge-phone-card forge-phone-card-${i + 1}`}
+          data-enter=""
+          style={stepDelay(i + 1)}
+        >
+          <img
+            src={String(src)}
+            alt={String(alt)}
+            width={512}
+            height={768}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            fetchPriority={i === 0 ? "high" : "low"}
+          />
+          <figcaption>{label}</figcaption>
+        </figure>
+      ))}
 
-      <div className="forge-page-slab forge-page-slab-back" />
-      <div className="forge-page-slab forge-page-slab-main">
-        <div className="forge-slab-browser">
-          <span />
-          <span />
-          <span />
-          <b>seudominio.com.br</b>
-        </div>
-        <div className="forge-slab-content">
-          <small>ARQUITETURA DE CONVERSÃO</small>
-          <h3>UMA PÁGINA<br />COM FUNÇÃO.</h3>
-          <div className="forge-slab-line forge-slab-line-a" />
-          <div className="forge-slab-line forge-slab-line-b" />
-          <div className="forge-slab-button">CTA</div>
-        </div>
-      </div>
-      <div className="forge-prompt-chip">
-        <span>PROMPT MESTRE</span>
-        <strong>01 arquivo</strong>
-      </div>
-      <div className="forge-publish-chip">
-        <span>STATUS</span>
-        <strong>PUBLICADA ✓</strong>
+      <div className="forge-phone-proof">
+        <strong>4 NICHOS. 4 DIREÇÕES.</strong>
+        <span>SEM TEMPLATE ENGESSADO.</span>
       </div>
     </div>
   );
@@ -368,7 +381,7 @@ function Hero() {
       <div className="forge-shell forge-hero-grid">
         <div className="forge-hero-copy">
           <div data-enter="" className="forge-hero-kicker">
-            <span /> LAND-IA / BUILD SYSTEM 01
+            <span /> PARA SUAS OFERTAS OU PARA VENDER COMO SERVIÇO
           </div>
 
           <h1>
@@ -379,16 +392,17 @@ function Hero() {
           </h1>
 
           <p className="forge-hero-lead">
-            Transforme sua oferta em uma landing profissional com <strong>ChatGPT + Lovable</strong> e publique no seu próprio domínio — usando um processo que começa <strong>antes</strong> da IA.
+            Crie uma landing page que <strong>CONVERTE</strong> com <strong>ChatGPT + Lovable</strong> e publique no seu próprio domínio — usando IA&apos;s gratuitas!
           </p>
 
           <div className="forge-hero-actions">
-            <CTAButton href="#vsl" variant="lime">VER O PROCESSO FUNCIONANDO</CTAButton>
-            <div className="forge-hero-note">
-              <span>SEM PROGRAMAÇÃO</span>
-              <span>SEM TEMPLATE ENGESSADO</span>
-              <span>SEM DEPENDER DE AGÊNCIA</span>
-            </div>
+            <CTAButton href="#oferta" variant="lime">QUERO CRIAR MINHA LANDING</CTAButton>
+            <a className="forge-hero-video-link" href="#vsl">VER O PROCESSO EM 5 MINUTOS <ArrowRight aria-hidden="true" /></a>
+          </div>
+          <div className="forge-hero-note">
+              <span>USE NAS SUAS OFERTAS</span>
+              <span>VENDA COMO SERVIÇO</span>
+              <span>SEM PROGRAMAR</span>
           </div>
 
           <div className="forge-tool-line" aria-label="Fluxo de ferramentas">
@@ -436,9 +450,9 @@ function VslLeadIn() {
    03 — REALIDADE DA PERSONA
    ================================================================ */
 const REALITY_ROWS = [
-  ["PROMPT GENÉRICO", "A IA precisa inventar estratégia, copy e design ao mesmo tempo."],
-  ["AJUSTE EM CIMA DE AJUSTE", "Cada correção resolve uma coisa e quebra outra. Os créditos evaporam."],
-  ["PÁGINA BONITA, SEM DIREÇÃO", "Visual existe. Jornada de decisão, não."],
+  ["PROMPT GENÉRICO", "A IA improvisa estratégia, copy e design ao mesmo tempo."],
+  ["AJUSTE EM CIMA DE AJUSTE", "Cada correção quebra outra coisa, consome créditos e atrasa a publicação."],
+  ["PÁGINA BONITA, SEM ARGUMENTO", "O visual chama atenção, mas não conduz a pessoa até a oferta."],
 ];
 
 function Reality() {
@@ -448,11 +462,11 @@ function Reality() {
         <Reveal className="forge-reality-head">
           <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
           <h2>
-            A IA NÃO É O PROBLEMA.
-            <span>O PROBLEMA É PEDIR PARA ELA DECIDIR POR VOCÊ.</span>
+            SEU ANÚNCIO FAZ O CLIQUE.
+            <span>SUA LANDING PRECISA FAZER A VENDA AVANÇAR.</span>
           </h2>
           <p>
-            Quando a construção começa antes das decisões, o que deveria acelerar vira retrabalho. O Land-IA inverte essa ordem.
+            Cada clique que chega e não entende sua oferta vira <mark className="forge-mark forge-mark-orange">dinheiro desperdiçado</mark>. O LAND-IA organiza a decisão antes de mandar a IA construir.
           </p>
         </Reveal>
 
@@ -475,9 +489,9 @@ function Reality() {
           <div className="forge-reality-column forge-reality-column-right">
             <div className="forge-reality-label"><span>COM LAND-IA</span><b>DIREÇÃO</b></div>
             {[
-              ["DECISÕES PRIMEIRO", "Oferta, persona, promessa, mecanismo e objeções saem do improviso."],
-              ["UM PROMPT MESTRE", "A IA recebe contexto suficiente para construir com intenção."],
-              ["AJUSTES CIRÚRGICOS", "Você corrige só o necessário e preserva o que já funciona."],
+              ["PROMESSA QUE PRENDE", "A pessoa entende rapidamente o que a oferta pode fazer por ela."],
+              ["ARGUMENTOS NA ORDEM", "Cada seção reduz uma dúvida e prepara a próxima decisão."],
+              ["CTA QUE CONDUZ", "A página mostra com clareza quando e por que avançar para a oferta."],
             ].map(([title, text], i) => (
               <div data-reveal="" style={stepDelay(i + 1)} className="forge-reality-row" key={title}>
                 <span>{String(i + 1).padStart(2, '0')}</span>
@@ -489,9 +503,13 @@ function Reality() {
         </RevealGroup>
 
         <Reveal className="forge-reality-mantra">
-          <span>O objetivo não é ter mais créditos.</span>
-          <strong>É precisar de menos.</strong>
+          <span>Você já pagou pelo clique.</span>
+          <strong>Não deixe a página devolver o lead para o feed.</strong>
         </Reveal>
+
+        <SectionCTA eyebrow="SE O GARGALO ESTÁ DEPOIS DO CLIQUE" button="QUERO PARAR DE PERDER CLIQUES" variant="ink">
+          Construa uma página que explica, prova e conduz — sem depender de improviso.
+        </SectionCTA>
       </div>
     </section>
   );
@@ -506,9 +524,9 @@ function Proofs() {
       <div className="forge-shell">
         <Reveal className="forge-proofs-head">
           <SectionTag index="04">VEJA O PROCESSO ACONTECER</SectionTag>
-          <h2>DO RACIOCÍNIO À PÁGINA NO AR.</h2>
+          <h2>VOCÊ NÃO PRECISA IMAGINAR O RESULTADO.</h2>
           <p>
-            Sem depoimento inventado. Sem print de faturamento emprestado. Aqui a evidência é o próprio processo produzindo uma landing real.
+            Veja a estratégia virar Prompt Mestre, o Prompt virar página e a página chegar ao domínio com <mark className="forge-mark forge-mark-lime">desempenho real</mark>.
           </p>
         </Reveal>
 
@@ -517,7 +535,7 @@ function Proofs() {
             <span className="forge-proof-index">01</span>
             <h3>DA ESTRATÉGIA AO PROMPT MESTRE</h3>
             <p>
-              Primeiro vêm as decisões: oferta, persona, problema, promessa, mecanismo, estrutura e direção visual. Depois tudo é condensado em uma instrução única.
+              Antes de gastar créditos, você define oferta, persona, promessa, mecanismo e direção. Depois transforma tudo em uma instrução que a IA consegue executar.
             </p>
           </Reveal>
           <RevealGroup className="forge-proof-twin">
@@ -537,7 +555,7 @@ function Proofs() {
             <span className="forge-proof-index">02</span>
             <h3>DO PROMPT À CONSTRUÇÃO</h3>
             <p>
-              O Lovable deixa de receber um pedido vago e passa a receber uma arquitetura. A geração inicial começa muito mais perto do resultado desejado.
+              O Lovable deixa de receber um pedido vago. Ele recebe uma arquitetura comercial completa — e a primeira geração começa muito mais perto da página pronta.
             </p>
           </Reveal>
           <RevealGroup className="forge-build-collage">
@@ -557,7 +575,7 @@ function Proofs() {
             <span className="forge-proof-index">03</span>
             <h3>DA CONSTRUÇÃO À LANDING</h3>
             <p>
-              Uma direção visual forte não precisa nascer de dezenas de tentativas. Desktop, mobile e narrativa continuam falando a mesma língua.
+              Uma direção visual forte não precisa consumir dezenas de tentativas. Desktop, mobile, copy e CTA continuam falando a mesma língua.
             </p>
           </Reveal>
 
@@ -589,21 +607,28 @@ function Proofs() {
             <span className="forge-proof-index">04</span>
             <h3>DA LANDING AO MUNDO REAL</h3>
             <p>
-              O processo não termina no construtor. A página vai para o domínio, precisa funcionar no celular e precisa continuar rápida.
+              Página presa no construtor não é ativo. Você aprende a publicar no próprio domínio, revisar o mobile e preservar a velocidade.
             </p>
           </Reveal>
 
-          <div className="forge-world-grid">
+          <div className="forge-speed-proof">
             <Reveal className="forge-speed-card">
               <div className="forge-speed-copy">
                 <span>PERFORMANCE MOBILE</span>
                 <strong>100</strong>
-                <p>Uma das páginas demonstrativas, medida após publicação.</p>
+                <p>Teste separado de uma página demonstrativa após a publicação.</p>
               </div>
               <Picture avif={pageSpeedAvif} webp={pageSpeedWebp} alt="Teste PageSpeed da landing exemplo com desempenho 100" width={900} height={698} />
             </Reveal>
+          </div>
 
-            <RevealGroup className="forge-repertoire">
+          <Reveal className="forge-gallery-head">
+            <span>GALERIA DE RESULTADOS</span>
+            <h4>UMA HABILIDADE. DIREÇÕES VISUAIS COMPLETAMENTE DIFERENTES.</h4>
+            <p>Crie para suas próprias ofertas ou construa um portfólio para oferecer landing pages como serviço.</p>
+          </Reveal>
+
+          <RevealGroup className="forge-repertoire">
               {[
                 [nouraAvif, nouraWebp, "NOURA", "Lifestyle / nutrição"],
                 [atlasAvif, atlasWebp, "ATLAS", "Finanças / sistema"],
@@ -614,13 +639,16 @@ function Proofs() {
                   <figcaption><strong>{title}</strong><span>{label}</span></figcaption>
                 </figure>
               ))}
-            </RevealGroup>
-          </div>
+          </RevealGroup>
 
           <Reveal className="forge-proof-close">
-            <span>Não é um template.</span>
-            <strong>É um processo capaz de receber direções diferentes.</strong>
+            <span>Não é um template engessado.</span>
+            <strong>É uma habilidade que pode economizar terceirização e abrir uma nova possibilidade de serviço.</strong>
           </Reveal>
+
+          <SectionCTA eyebrow="VOCÊ ACABOU DE VER O RESULTADO" button="QUERO CRIAR PÁGINAS ASSIM" variant="lime">
+            Agora aprenda o processo que transforma decisões em páginas profissionais.
+          </SectionCTA>
         </div>
       </div>
     </section>
@@ -647,7 +675,7 @@ function Mechanism() {
           <SectionTag index="05" light>ENGENHARIA REVERSA DA CONVERSÃO™</SectionTag>
           <h2>COMECE PELO FIM.<br /><span>CONSTRUA O CAMINHO DE VOLTA.</span></h2>
           <p>
-            Em vez de abrir a IA e perguntar “o que eu coloco na página?”, você começa pela última decisão do visitante e trabalha de trás para frente.
+            <mark className="forge-mark forge-mark-orange">Página bonita não salva argumento fraco.</mark> Você começa pela decisão final do visitante e trabalha de trás para frente até a promessa que prende a atenção.
           </p>
         </Reveal>
 
@@ -664,8 +692,12 @@ function Mechanism() {
 
         <Reveal className="forge-mechanism-rule">
           <span>ARQUITETURA ANTES DA IA.</span>
-          <strong>Você decide. A IA executa.</strong>
+          <strong>Você deixa de pedir ideias e começa a entregar direção.</strong>
         </Reveal>
+
+        <SectionCTA eyebrow="A IA NÃO PRECISA SER MAIS CARA" button="QUERO O PROCESSO COMPLETO" variant="ink">
+          Ela precisa receber uma instrução melhor — construída para a sua oferta.
+        </SectionCTA>
       </div>
     </section>
   );
@@ -691,8 +723,8 @@ function Product() {
         <Reveal className="forge-product-head">
           <SectionTag index="06">O PRODUTO</SectionTag>
           <div>
-            <h2>LAND-IA NÃO É UMA AULA SOBRE IA.</h2>
-            <p>É uma implementação guiada: abra, assista, execute e avance até a página publicada.</p>
+            <h2>APRENDA UMA HABILIDADE QUE ECONOMIZA DINHEIRO — E PODE VIRAR SERVIÇO.</h2>
+            <p>Crie para suas próprias ofertas, <mark className="forge-mark forge-mark-lime">deixe de depender de terceiros</mark> ou use o processo para entregar landing pages a clientes.</p>
           </div>
         </Reveal>
 
@@ -735,6 +767,10 @@ function Product() {
             <strong>A parte que o visitante não vê — mas o navegador vê.</strong>
           </article>
         </RevealGroup>
+
+        <SectionCTA eyebrow="TREINAMENTO + 2 BÔNUS" button="VER A OFERTA COMPLETA" variant="lime">
+          Abra, assista, execute e avance até a página publicada no seu domínio.
+        </SectionCTA>
       </div>
     </section>
   );
@@ -780,9 +816,9 @@ function Offer() {
       <div className="forge-shell forge-offer-grid">
         <Reveal className="forge-offer-copy">
           <SectionTag index="07">A OFERTA</SectionTag>
-          <h2>UM PROCESSO INTEIRO.<br /><span>POR MENOS QUE UM TEMPLATE.</span></h2>
+          <h2>PARE DE PAGAR POR CADA NOVA LANDING.<br /><span>DOMINE O PROCESSO POR R$ 47.</span></h2>
           <p>
-            Você leva a implementação guiada + os dois bônus para estruturar, construir, publicar e manter sua landing funcionando.
+            Você recebe o treinamento completo e os dois bônus para estruturar, construir e publicar páginas para suas ofertas — ou <mark className="forge-mark forge-mark-lime">transformar essa habilidade em serviço</mark>.
           </p>
 
           <div className="forge-stack-list">
@@ -801,11 +837,11 @@ function Offer() {
         </Reveal>
 
         <Reveal className="forge-price-block">
-          <div className="forge-price-top"><Sparkles aria-hidden="true" /><span>ACESSO IMEDIATO</span></div>
+          <div className="forge-price-top"><Sparkles aria-hidden="true" /><span>ACESSO IMEDIATO • SEM MENSALIDADE</span></div>
           <div className="forge-price-reference"><span>VALOR DE REFERÊNCIA</span><s>R$ 341</s></div>
           <div className="forge-price-main"><span>HOJE</span><strong><small>R$</small>47</strong></div>
           <p>Pagamento único.</p>
-          <CTAButton className="w-full" variant="orange">COMEÇAR AGORA</CTAButton>
+          <CTAButton className="w-full" variant="orange">QUERO O LAND-IA AGORA</CTAButton>
           <div className="forge-price-safe"><Lock aria-hidden="true" /><span>Compra processada pela Hotmart</span></div>
         </Reveal>
       </div>
@@ -817,9 +853,9 @@ function Offer() {
    08 — COMPARAÇÃO
    ================================================================ */
 const PATHS = [
-  ["01", "DESCOBRIR SOZINHO", "Pesquisar → testar → errar → refazer", "TEMPO ALTO"],
-  ["02", "TERCEIRIZAR TUDO", "Designer → copywriter → dev → manutenção", "CUSTO + DEPENDÊNCIA"],
-  ["03", "APRENDER O PROCESSO", "Estratégia → IA → domínio próprio", "AUTONOMIA", "active"],
+  ["01", "TENTAR NO ESCURO", "Prompt genérico → créditos queimados → retrabalho", "TEMPO PERDIDO"],
+  ["02", "TERCEIRIZAR TODA VEZ", "Novo projeto → novo orçamento → nova dependência", "CUSTO RECORRENTE"],
+  ["03", "DOMINAR O PROCESSO", "Estratégia → IA → domínio próprio", "HABILIDADE + AUTONOMIA", "active"],
 ];
 
 function Comparison() {
@@ -828,7 +864,7 @@ function Comparison() {
       <div className="forge-shell">
         <Reveal className="forge-comparison-head">
           <SectionTag index="08" light>TRÊS CAMINHOS</SectionTag>
-          <h2>A LANDING VAI EXISTIR DE UM JEITO OU DE OUTRO.<br /><span>A QUESTÃO É COMO VOCÊ CHEGA ATÉ ELA.</span></h2>
+          <h2>VOCÊ VAI PAGAR PELA PRÓXIMA LANDING.<br /><span>COM DINHEIRO, TEMPO OU HABILIDADE.</span></h2>
         </Reveal>
 
         <RevealGroup className="forge-paths">
@@ -855,6 +891,8 @@ const OBJECTIONS = [
   ["VOU PRECISAR PAGAR FERRAMENTAS PARA SEMPRE?", "A proposta é aproveitar as opções gratuitas para começar e levar o projeto para GitHub, Vercel e seu próprio domínio."],
   ["EU NÃO SOU DESIGNER.", "Você não precisa desenhar pixels. Precisa aprender a definir hierarquia, intenção e direção visual para a IA executar."],
   ["ENTÃO A IA FAZ TUDO?", "Não. E esse é o ponto: você toma as decisões que importam. A IA acelera a execução."],
+  ["POSSO VENDER LANDING PAGES COMO SERVIÇO?", "Você aprende um processo aplicável a ofertas e nichos diferentes. A conquista de clientes e os resultados financeiros dependem da sua prospecção, execução e mercado."],
+  ["ISSO GARANTE QUE TODA PÁGINA VAI CONVERTER?", "Não existe garantia honesta de conversão. O LAND-IA ajuda você a estruturar promessa, argumentos, provas, oferta e CTA com intenção — em vez de depender apenas de beleza."],
 ];
 
 function Objections() {
@@ -889,15 +927,15 @@ function Decision() {
       <div className="forge-shell forge-decision-grid">
         <Reveal>
           <SectionTag index="10" light>SUA PRÓXIMA PÁGINA</SectionTag>
-          <h2>VOCÊ PODE CONTINUAR PEDINDO PARA A IA “FAZER UMA LANDING”.</h2>
+          <h2>VOCÊ PODE CONTINUAR PAGANDO TODA VEZ QUE PRECISAR DE UMA PÁGINA.</h2>
         </Reveal>
         <Reveal delay={0.08} className="forge-decision-answer">
           <span>OU</span>
-          <h3>PODE COMEÇAR A ENTREGAR PARA ELA DECISÕES QUE JÁ FORAM TOMADAS.</h3>
+          <h3>PODE APRENDER O PROCESSO, PUBLICAR NO SEU DOMÍNIO E DECIDIR POR VOCÊ.</h3>
           <p>
-            Essa é a diferença entre usar IA como roleta e usar IA como executora.
+            Use nas suas ofertas, economize terceirização ou transforme a habilidade em um serviço que você pode oferecer.
           </p>
-          <CTAButton href="#oferta" variant="ink">QUERO APRENDER O PROCESSO</CTAButton>
+          <CTAButton href="#oferta" variant="ink">QUERO PARAR DE DEPENDER DE TERCEIROS</CTAButton>
         </Reveal>
       </div>
     </section>
@@ -914,9 +952,9 @@ function FinalCTA() {
       <div className="forge-shell forge-final-inner">
         <Reveal>
           <span className="forge-final-code">LAND-IA / READY TO BUILD</span>
-          <h2>DECIDA A PÁGINA.<br /><span>DEIXE A IA CONSTRUIR.</span></h2>
-          <p>Da estratégia ao seu próprio domínio. Sem programação.</p>
-          <CTAButton variant="orange">COMEÇAR COM O LAND-IA — R$ 47</CTAButton>
+          <h2>PARE DE TERCEIRIZAR SUA PRÓXIMA LANDING.<br /><span>CRIE, PUBLIQUE E DECIDA POR VOCÊ.</span></h2>
+          <p>Para suas ofertas ou para vender como serviço. Sem programação.</p>
+          <CTAButton variant="orange">QUERO COMEÇAR AGORA — R$ 47</CTAButton>
           <small>Acesso imediato • pagamento único</small>
         </Reveal>
       </div>

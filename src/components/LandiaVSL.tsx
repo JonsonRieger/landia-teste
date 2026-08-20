@@ -441,9 +441,9 @@ export default function LandiaVSL() {
         .landia-vsl-checkout-cta {
           position: relative;
           isolation: isolate;
-          min-height: 58px;
+          min-height: 66px;
           border: 1px solid rgba(199, 255, 61, .68);
-          border-radius: 2px;
+          border-radius: 15px;
           background: #c7ff3d;
           color: #0a0c0d;
           box-shadow: 0 18px 50px -25px rgba(199, 255, 61, .88);
@@ -453,9 +453,10 @@ export default function LandiaVSL() {
         .landia-vsl-checkout-cta::before {
           content: "";
           position: absolute;
-          inset: 5px;
+          inset: 4px;
           z-index: -1;
           border: 1px solid rgba(10, 12, 13, .15);
+          border-radius: 11px;
           pointer-events: none;
         }
 
@@ -467,12 +468,13 @@ export default function LandiaVSL() {
 
         .landia-vsl-checkout-cta-arrow {
           display: grid;
-          width: 32px;
-          height: 32px;
-          flex: 0 0 32px;
+          width: 38px;
+          height: 38px;
+          flex: 0 0 38px;
           place-items: center;
-          border-left: 1px solid rgba(10, 12, 13, .18);
-          font-size: 18px;
+          border-radius: 50%;
+          background: rgba(10, 12, 13, .1);
+          font-size: 20px;
           line-height: 1;
           transition: transform .25s ease;
         }
@@ -671,7 +673,7 @@ export default function LandiaVSL() {
                 saveCurrentPosition(true);
                 sendCheckoutEvent();
               }}
-              className="landia-vsl-checkout-cta inline-flex w-full max-w-[520px] items-center justify-between gap-5 px-5 py-3.5 text-left font-display text-[12px] font-bold uppercase tracking-[0.09em] sm:px-6 sm:text-[13px]"
+              className="landia-vsl-checkout-cta inline-flex w-full max-w-[560px] items-center justify-between gap-5 px-5 py-4 text-left font-display text-[14px] font-extrabold uppercase tracking-[0.025em] sm:px-7 sm:text-[15px]"
             >
               <span>QUERO CRIAR MINHA LANDING</span>
               <span aria-hidden="true" className="landia-vsl-checkout-cta-arrow">→</span>
