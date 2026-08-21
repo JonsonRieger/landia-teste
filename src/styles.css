@@ -883,7 +883,7 @@
   color: var(--forge-carbon);
   box-shadow: 0 28px 60px -44px rgba(11,13,16,.65);
 }
-.forge-turnaround-copy > span { font: 850 13px/1.2 var(--font-display); letter-spacing: .08em; }
+.forge-turnaround-copy > span { font: 850 18px/1.2 var(--font-display); letter-spacing: .07em; }
 .forge-turnaround-copy h3 { margin-top: 16px; font-size: clamp(2rem, 3.4vw, 3.6rem); font-weight: 850; line-height: .91; letter-spacing: -.055em; }
 .forge-turnaround-copy p { max-width: 500px; margin-top: 17px; color: rgba(11,13,16,.72); font-size: 18px; line-height: 1.56; }
 .forge-turnaround-wins { display: grid; gap: 10px; }
