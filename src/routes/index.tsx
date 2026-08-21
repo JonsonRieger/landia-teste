@@ -29,13 +29,9 @@ import atlasWebp from "@/assets/proof/example-atlas.webp";
 import frameAvif from "@/assets/proof/example-frame24.avif";
 import frameWebp from "@/assets/proof/example-frame24.webp";
 import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
-import phoneAiSmallWebp from "@/assets/hero/landia-phone-ai-saas-320.webp";
 import phoneArchitectureWebp from "@/assets/hero/landia-phone-architecture.webp";
-import phoneArchitectureSmallWebp from "@/assets/hero/landia-phone-architecture-320.webp";
 import phoneEcommerceWebp from "@/assets/hero/landia-phone-ecommerce.webp";
-import phoneEcommerceSmallWebp from "@/assets/hero/landia-phone-ecommerce-320.webp";
 import phoneWellnessWebp from "@/assets/hero/landia-phone-wellness.webp";
-import phoneWellnessSmallWebp from "@/assets/hero/landia-phone-wellness-320.webp";
 
 declare global {
   interface Window {
@@ -336,10 +332,10 @@ function OfferRail() {
    01 — HERO / BUILD STAGE
    ================================================================ */
 const HERO_PAGES = [
-  [phoneAiWebp, phoneAiSmallWebp, "IA / SAAS", "Landing futurista para tecnologia"],
-  [phoneArchitectureWebp, phoneArchitectureSmallWebp, "ARQUITETURA", "Landing editorial premium"],
-  [phoneEcommerceWebp, phoneEcommerceSmallWebp, "E-COMMERCE", "Landing comercial para produto"],
-  [phoneWellnessWebp, phoneWellnessSmallWebp, "WELLNESS", "Landing clean de alta percepção"],
+  [phoneAiWebp, "IA / SAAS", "Landing futurista para tecnologia"],
+  [phoneArchitectureWebp, "ARQUITETURA", "Landing editorial premium"],
+  [phoneEcommerceWebp, "E-COMMERCE", "Landing comercial para produto"],
+  [phoneWellnessWebp, "WELLNESS", "Landing clean de alta percepção"],
 ];
 
 function HeroBuildVisual() {
@@ -350,7 +346,7 @@ function HeroBuildVisual() {
         <b>DIREÇÕES INFINITAS</b>
       </div>
 
-      {HERO_PAGES.map(([src, smallSrc, label, alt], i) => {
+      {HERO_PAGES.map(([src, label, alt], i) => {
         const isLcpImage = i === 1;
 
         return (
@@ -360,8 +356,6 @@ function HeroBuildVisual() {
           >
             <img
               src={String(src)}
-              srcSet={`${String(smallSrc)} 320w, ${String(src)} 512w`}
-              sizes="(max-width: 760px) 42vw, (max-width: 1020px) 272px, 235px"
               alt={String(alt)}
               width={512}
               height={768}
