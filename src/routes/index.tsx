@@ -4,30 +4,26 @@ import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
-import briefingAvif from "@/assets/proof/briefing.avif";
-import briefingWebp from "@/assets/proof/briefing.webp";
-import promptAvif from "@/assets/proof/prompt-master.avif";
-import promptWebp from "@/assets/proof/prompt-master.webp";
-import lovablePromptAvif from "@/assets/proof/lovable-prompt.avif";
-import lovablePromptWebp from "@/assets/proof/lovable-prompt.webp";
-import lovableBuildAvif from "@/assets/proof/lovable-build.avif";
-import lovableBuildWebp from "@/assets/proof/lovable-build.webp";
-import heroDesktopAvif from "@/assets/proof/example-hero-desktop.avif";
-import heroDesktopWebp from "@/assets/proof/example-hero-desktop.webp";
-import heroMobileAvif from "@/assets/proof/example-hero-mobile.avif";
-import heroMobileWebp from "@/assets/proof/example-hero-mobile.webp";
-import sectionTwoAvif from "@/assets/proof/example-section-2.avif";
-import sectionTwoWebp from "@/assets/proof/example-section-2.webp";
-import sectionThreeAvif from "@/assets/proof/example-section-3.avif";
-import sectionThreeWebp from "@/assets/proof/example-section-3.webp";
-import pageSpeedAvif from "@/assets/proof/pagespeed.avif";
-import pageSpeedWebp from "@/assets/proof/pagespeed.webp";
-import nouraAvif from "@/assets/proof/example-noura.avif";
-import nouraWebp from "@/assets/proof/example-noura.webp";
-import atlasAvif from "@/assets/proof/example-atlas.avif";
-import atlasWebp from "@/assets/proof/example-atlas.webp";
-import frameAvif from "@/assets/proof/example-frame24.avif";
-import frameWebp from "@/assets/proof/example-frame24.webp";
+import almaLeveAvif from "@/assets/showcase/alma-leve.avif";
+import almaLeveWebp from "@/assets/showcase/alma-leve.webp";
+import brasaAvif from "@/assets/showcase/brasa-47.avif";
+import brasaWebp from "@/assets/showcase/brasa-47.webp";
+import formaLabAvif from "@/assets/showcase/forma-lab.avif";
+import formaLabWebp from "@/assets/showcase/forma-lab.webp";
+import luminaAvif from "@/assets/showcase/lumina-prime.avif";
+import luminaWebp from "@/assets/showcase/lumina-prime.webp";
+import nexoAvif from "@/assets/showcase/nexo-crm.avif";
+import nexoWebp from "@/assets/showcase/nexo-crm.webp";
+import norteCapitalAvif from "@/assets/showcase/norte-capital.avif";
+import norteCapitalWebp from "@/assets/showcase/norte-capital.webp";
+import raizBotanicaAvif from "@/assets/showcase/raiz-botanica.avif";
+import raizBotanicaWebp from "@/assets/showcase/raiz-botanica.webp";
+import ramosValeAvif from "@/assets/showcase/ramos-vale.avif";
+import ramosValeWebp from "@/assets/showcase/ramos-vale.webp";
+import verticeAvif from "@/assets/showcase/vertice.avif";
+import verticeWebp from "@/assets/showcase/vertice.webp";
+import vozDeMarcaAvif from "@/assets/showcase/voz-de-marca.avif";
+import vozDeMarcaWebp from "@/assets/showcase/voz-de-marca.webp";
 import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
 import phoneArchitectureWebp from "@/assets/hero/landia-phone-architecture.webp";
 import phoneEcommerceWebp from "@/assets/hero/landia-phone-ecommerce.webp";
@@ -525,140 +521,83 @@ function Reality() {
 }
 
 /* ================================================================
-   04 — EVIDÊNCIA / PROCESSO REAL
+   04 — PROVAS / RESULTADO FINAL
    ================================================================ */
+const SHOWCASE_PAGES = [
+  { avif: luminaAvif, webp: luminaWebp, brand: "LUMINA PRIME", niche: "Estética premium", goal: "Agendamento", height: 1518 },
+  { avif: nexoAvif, webp: nexoWebp, brand: "NEXO CRM", niche: "SaaS B2B", goal: "Demonstração", height: 1518 },
+  { avif: brasaAvif, webp: brasaWebp, brand: "BRASA 47", niche: "Gastronomia", goal: "Reserva", height: 1518 },
+  { avif: verticeAvif, webp: verticeWebp, brand: "VÉRTICE", niche: "Imóveis de luxo", goal: "Contato", height: 1518 },
+  { avif: raizBotanicaAvif, webp: raizBotanicaWebp, brand: "RAIZ BOTÂNICA", niche: "Cosméticos", goal: "Compra", height: 1518 },
+  { avif: ramosValeAvif, webp: ramosValeWebp, brand: "RAMOS & VALE", niche: "Advocacia", goal: "Consulta", height: 1518 },
+  { avif: formaLabAvif, webp: formaLabWebp, brand: "FORMA LAB", niche: "Fitness", goal: "Avaliação", height: 1518 },
+  { avif: almaLeveAvif, webp: almaLeveWebp, brand: "ALMA LEVE", niche: "Psicoterapia", goal: "Conversa", height: 1800 },
+  { avif: vozDeMarcaAvif, webp: vozDeMarcaWebp, brand: "VOZ DE MARCA", niche: "Infoproduto", goal: "Inscrição", height: 1518 },
+  { avif: norteCapitalAvif, webp: norteCapitalWebp, brand: "NORTE CAPITAL", niche: "Planejamento financeiro", goal: "Consultoria", height: 1518 },
+];
+
 function Proofs() {
   return (
-    <section className="forge-proofs landia-cv-proofs">
+    <section className="forge-showcase landia-cv-proofs">
       <div className="forge-shell">
-        <Reveal className="forge-proofs-head">
-          <SectionTag index="04">VEJA O PROCESSO ACONTECER</SectionTag>
-          <h2>VOCÊ NÃO PRECISA IMAGINAR O RESULTADO.</h2>
+        <Reveal className="forge-showcase-head">
+          <SectionTag index="04">O RESULTADO FINAL</SectionTag>
+          <h2>
+            NÃO É SOBRE APRENDER A USAR IA.
+            <span>É SOBRE PUBLICAR PÁGINAS NESSE NÍVEL.</span>
+          </h2>
+          <p>Algumas páginas criadas com o método Land-IA</p>
+        </Reveal>
+      </div>
+
+      <div className="forge-showcase-stage">
+        <div className="forge-showcase-ambient forge-showcase-ambient-a" aria-hidden="true" />
+        <div className="forge-showcase-ambient forge-showcase-ambient-b" aria-hidden="true" />
+        <RevealGroup className="forge-showcase-grid">
+          {SHOWCASE_PAGES.map((page, index) => (
+            <article
+              data-reveal=""
+              style={stepDelay(index % 5)}
+              className="forge-showcase-card"
+              key={page.brand}
+            >
+              <div className="forge-showcase-phone">
+                <div className="forge-showcase-speaker" aria-hidden="true" />
+                <div className="forge-showcase-screen">
+                  <Picture
+                    avif={page.avif}
+                    webp={page.webp}
+                    alt={`Landing page mobile da ${page.brand}, criada com o método Land-IA`}
+                    width={720}
+                    height={page.height}
+                  />
+                  <span className="forge-showcase-glass" aria-hidden="true" />
+                </div>
+              </div>
+              <div className="forge-showcase-meta">
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <div>
+                  <strong>{page.brand}</strong>
+                  <p>{page.niche} <i /> {page.goal}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </RevealGroup>
+      </div>
+
+      <div className="forge-shell">
+        <Reveal className="forge-showcase-close">
+          <span>10 MERCADOS. 10 DIREÇÕES VISUAIS.</span>
+          <h3>UMA HABILIDADE.<br /><strong>INÚMERAS POSSIBILIDADES.</strong></h3>
           <p>
-            Veja a estratégia virar Prompt Mestre, o Prompt virar página e a página chegar ao domínio — com menos tentativas, menos créditos gastos e <mark className="forge-mark forge-mark-lime">mais controle sobre o resultado</mark>.
+            Para vender sua própria oferta ou transformar landing pages em uma nova fonte de renda — sem ficar refém de designer, código ou créditos desperdiçados.
           </p>
         </Reveal>
 
-        <div className="forge-proof-stage forge-proof-stage-strategy">
-          <Reveal className="forge-proof-copy">
-            <span className="forge-proof-index">01</span>
-            <h3>DA ESTRATÉGIA AO PROMPT MESTRE</h3>
-            <p>
-              Antes de gastar créditos, você define oferta, persona, promessa, mecanismo e direção. Depois transforma tudo em uma instrução que a IA consegue executar.
-            </p>
-          </Reveal>
-          <RevealGroup className="forge-proof-twin">
-            <figure data-reveal="" className="forge-shot forge-shot-paper">
-              <Picture avif={briefingAvif} webp={briefingWebp} alt="Briefing estratégico usado antes da construção da landing" width={700} height={771} />
-              <figcaption><b>BRIEFING ESTRATÉGICO</b><span>As decisões que vêm antes da tela.</span></figcaption>
-            </figure>
-            <figure data-reveal="" style={stepDelay(1)} className="forge-shot forge-shot-paper forge-shot-offset">
-              <Picture avif={promptAvif} webp={promptWebp} alt="Prompt Mestre criado a partir do briefing estratégico" width={700} height={781} />
-              <figcaption><b>PROMPT MESTRE</b><span>Contexto suficiente para a IA executar.</span></figcaption>
-            </figure>
-          </RevealGroup>
-        </div>
-
-        <div className="forge-proof-stage forge-proof-stage-build">
-          <Reveal className="forge-proof-copy forge-proof-copy-light">
-            <span className="forge-proof-index">02</span>
-            <h3>DO PROMPT À CONSTRUÇÃO</h3>
-            <p>
-              O Lovable deixa de receber um pedido vago. Ele recebe uma arquitetura comercial completa — e a primeira geração começa muito mais perto da página pronta.
-            </p>
-          </Reveal>
-          <RevealGroup className="forge-build-collage">
-            <figure data-reveal="" className="forge-shot forge-shot-dark forge-build-shot-a">
-              <Picture avif={lovablePromptAvif} webp={lovablePromptWebp} alt="Prompt Mestre inserido no Lovable" width={760} height={544} />
-              <figcaption><b>01 / INSTRUÇÃO</b><span>O Prompt Mestre entra inteiro.</span></figcaption>
-            </figure>
-            <figure data-reveal="" style={stepDelay(1)} className="forge-shot forge-shot-dark forge-build-shot-b">
-              <Picture avif={lovableBuildAvif} webp={lovableBuildWebp} alt="Lovable construindo a landing após receber o Prompt Mestre" width={691} height={563} />
-              <figcaption><b>02 / EXECUÇÃO</b><span>A IA constrói a partir das decisões.</span></figcaption>
-            </figure>
-          </RevealGroup>
-        </div>
-
-        <div className="forge-proof-stage forge-proof-stage-result">
-          <Reveal className="forge-proof-copy">
-            <span className="forge-proof-index">03</span>
-            <h3>DA CONSTRUÇÃO À LANDING</h3>
-            <p>
-              Uma direção visual forte não precisa consumir dezenas de tentativas. Desktop, mobile, copy e CTA continuam falando a mesma língua.
-            </p>
-          </Reveal>
-
-          <Reveal className="forge-result-canvas">
-            <div className="forge-result-browser">
-              <div className="forge-result-browser-top"><i/><i/><i/><span>social-os.example</span></div>
-              <Picture avif={heroDesktopAvif} webp={heroDesktopWebp} alt="Hero de uma landing exemplo criada com o processo Land-IA" width={1280} height={610} />
-            </div>
-            <div className="forge-result-phone">
-              <Picture avif={heroMobileAvif} webp={heroMobileWebp} alt="Versão mobile da landing exemplo" width={480} height={903} />
-            </div>
-            <div className="forge-result-stamp"><span>DESKTOP + MOBILE</span><strong>MESMA DIREÇÃO</strong></div>
-          </Reveal>
-
-          <RevealGroup className="forge-result-strip">
-            <figure data-reveal="" className="forge-mini-shot">
-              <Picture avif={sectionTwoAvif} webp={sectionTwoWebp} alt="Segunda seção da landing exemplo" width={1280} height={610} />
-              <figcaption>DIAGNÓSTICO</figcaption>
-            </figure>
-            <figure data-reveal="" style={stepDelay(1)} className="forge-mini-shot">
-              <Picture avif={sectionThreeAvif} webp={sectionThreeWebp} alt="Terceira seção da landing exemplo" width={1280} height={610} />
-              <figcaption>MECANISMO</figcaption>
-            </figure>
-          </RevealGroup>
-        </div>
-
-        <div className="forge-proof-stage forge-proof-stage-world">
-          <Reveal className="forge-proof-copy forge-proof-copy-light">
-            <span className="forge-proof-index">04</span>
-            <h3>DA LANDING AO MUNDO REAL</h3>
-            <p>
-              Página presa no construtor não é ativo. Você aprende a publicar no próprio domínio, revisar o mobile e preservar a velocidade.
-            </p>
-          </Reveal>
-
-          <div className="forge-speed-proof">
-            <Reveal className="forge-speed-card">
-              <div className="forge-speed-copy">
-                <span>PERFORMANCE MOBILE</span>
-                <strong>100</strong>
-                <p>Teste separado de uma página demonstrativa após a publicação.</p>
-              </div>
-              <Picture avif={pageSpeedAvif} webp={pageSpeedWebp} alt="Teste PageSpeed da landing exemplo com desempenho 100" width={900} height={698} />
-            </Reveal>
-          </div>
-
-          <Reveal className="forge-gallery-head">
-            <span>GALERIA DE RESULTADOS</span>
-            <h4>UMA HABILIDADE. DIREÇÕES VISUAIS COMPLETAMENTE DIFERENTES.</h4>
-            <p>Crie para suas próprias ofertas ou construa um portfólio para oferecer landing pages como serviço.</p>
-          </Reveal>
-
-          <RevealGroup className="forge-repertoire">
-              {[
-                [nouraAvif, nouraWebp, "NOURA", "Lifestyle / nutrição"],
-                [atlasAvif, atlasWebp, "ATLAS", "Finanças / sistema"],
-                [frameAvif, frameWebp, "FRAME 24", "Filmmaking / criativo"],
-              ].map(([avif, webp, title, label], i) => (
-                <figure data-reveal="" style={stepDelay(i)} className="forge-repertoire-item" key={String(title)}>
-                  <Picture avif={String(avif)} webp={String(webp)} alt={`Landing exemplo ${title}`} width={1280} height={612} />
-                  <figcaption><strong>{title}</strong><span>{label}</span></figcaption>
-                </figure>
-              ))}
-          </RevealGroup>
-
-          <Reveal className="forge-proof-close">
-            <span>Não é um template engessado.</span>
-            <strong>É uma habilidade que pode economizar terceirização e abrir uma nova possibilidade de serviço.</strong>
-          </Reveal>
-
-          <SectionCTA eyebrow="VOCÊ ACABOU DE VER O RESULTADO" button="QUERO CRIAR PÁGINAS ASSIM" variant="lime">
-            Agora aprenda o processo que transforma decisões em páginas profissionais.
-          </SectionCTA>
-        </div>
+        <SectionCTA eyebrow="O RESULTADO ESTÁ NA TELA" button="QUERO CRIAR PÁGINAS NESSE NÍVEL" variant="lime">
+          Aprenda o método que transforma sua ideia em uma página profissional, pronta para vender no mobile.
+        </SectionCTA>
       </div>
     </section>
   );
