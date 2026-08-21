@@ -424,6 +424,9 @@
 .forge-btn-lime svg { background: rgba(10,12,13,.1); }
 .forge-btn-ink { background: #0b0d10; color: white; }
 .forge-btn-ink:hover { background: #171a1f; }
+.forge-btn-white { background: white; color: #0b0d10; border-color: rgba(255,255,255,.82); box-shadow: 0 18px 48px -24px rgba(255,255,255,.7); }
+.forge-btn-white:hover { background: var(--forge-lime); border-color: var(--forge-lime); }
+.forge-btn-white svg { background: rgba(11,13,16,.1); }
 
 .forge-brand-mark {
   display: inline-grid;
@@ -812,36 +815,84 @@
 .forge-reality-head h2 { font-size: clamp(2.3rem, 4.4vw, 4.7rem); font-weight: 800; line-height: .92; letter-spacing: -.062em; text-transform: uppercase; }
 .forge-reality-head h2 span { display: block; margin-top: 7px; color: var(--forge-red); text-shadow: 0 10px 30px rgba(201,47,47,.08); }
 .forge-reality-head > p { padding-top: 38px; color: rgba(11,13,16,.7); font-size: 17px; line-height: 1.65; }
-.forge-reality-board {
+.forge-click-story {
   display: grid;
-  grid-template-columns: 1fr 86px 1fr;
-  gap: 0;
+  grid-template-columns: 1.16fr .84fr;
+  gap: 18px;
   margin-top: 68px;
-  border: 1px solid rgba(11,13,16,.16);
-  background: rgba(255,255,255,.35);
 }
-.forge-reality-column { min-width: 0; }
-.forge-reality-column-wrong { background: rgba(11,13,16,.035); }
-.forge-reality-column-right { background: #0c0f12; color: white; }
-.forge-reality-label { display: flex; justify-content: space-between; gap: 10px; padding: 16px 18px; border-bottom: 1px solid rgba(11,13,16,.12); color: rgba(11,13,16,.58); font: 700 11px/1 var(--font-display); letter-spacing: .08em; }
-.forge-reality-column-right .forge-reality-label { border-color: rgba(255,255,255,.09); color: rgba(255,255,255,.34); }
-.forge-reality-label b { color: var(--forge-orange); }
-.forge-reality-column-right .forge-reality-label b { color: var(--forge-lime); }
-.forge-reality-row { display: grid; grid-template-columns: 34px 1fr 22px; gap: 14px; min-height: 126px; align-items: center; padding: 18px; border-bottom: 1px solid rgba(11,13,16,.11); }
-.forge-reality-column-right .forge-reality-row { border-color: rgba(255,255,255,.08); }
-.forge-reality-row:last-child { border-bottom: 0; }
-.forge-reality-row > span { color: rgba(11,13,16,.34); font: 500 9px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-.forge-reality-column-right .forge-reality-row > span { color: var(--forge-lime); }
-.forge-reality-row strong { display: block; font: 780 16px/1.15 var(--font-display); letter-spacing: .015em; }
-.forge-reality-row p { margin-top: 8px; color: rgba(11,13,16,.68); font-size: 15px; line-height: 1.55; }
-.forge-reality-column-right .forge-reality-row p { color: rgba(255,255,255,.68); }
-.forge-reality-row svg { width: 17px; height: 17px; color: var(--forge-orange); }
-.forge-reality-column-right .forge-reality-row svg { color: var(--forge-lime); }
-.forge-reality-turn { display: grid; place-items: center; align-content: center; gap: 9px; border-inline: 1px solid rgba(11,13,16,.13); background: var(--forge-orange); color: white; }
-.forge-reality-turn span { writing-mode: vertical-rl; transform: rotate(180deg); font: 700 8px/1 var(--font-display); letter-spacing: .16em; }
-.forge-reality-turn svg { width: 17px; height: 17px; transform: rotate(0deg); }
-.forge-reality-mantra { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin-top: 34px; text-align: center; font-size: 15px; color: rgba(11,13,16,.55); }
-.forge-reality-mantra strong { color: var(--forge-carbon); font-family: var(--font-display); font-size: 17px; }
+.forge-story-list {
+  padding: 34px 36px 22px;
+  border: 1px solid rgba(11,13,16,.14);
+  background: rgba(255,255,255,.58);
+  box-shadow: 0 26px 64px -48px rgba(11,13,16,.55);
+}
+.forge-story-eyebrow {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--forge-red);
+  font: 800 12px/1.35 var(--font-display);
+  letter-spacing: .1em;
+}
+.forge-story-card {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 18px;
+  align-items: start;
+  padding: 25px 0;
+  border-bottom: 1px solid rgba(11,13,16,.12);
+}
+.forge-story-card:last-child { border-bottom: 0; }
+.forge-story-card > span { font-size: 2.3rem; line-height: 1; filter: saturate(.95); }
+.forge-story-card strong { display: block; font: 800 21px/1.12 var(--font-display); letter-spacing: -.015em; }
+.forge-story-card p { max-width: 590px; margin-top: 9px; color: rgba(11,13,16,.7); font-size: 18px; line-height: 1.58; }
+.forge-story-pivot {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 38px;
+  background: #0c0f12;
+  color: white;
+  box-shadow: 0 30px 65px -42px rgba(0,0,0,.85);
+}
+.forge-story-pivot::before {
+  content: "CLIQUE";
+  position: absolute;
+  z-index: -1;
+  top: 22px;
+  right: -18px;
+  color: rgba(255,255,255,.045);
+  font: 900 clamp(4.2rem, 8vw, 7.8rem)/.8 var(--font-display);
+  letter-spacing: -.09em;
+}
+.forge-story-pivot > span { color: var(--forge-orange); font: 800 13px/1.2 var(--font-display); letter-spacing: .1em; }
+.forge-story-pivot > strong { display: block; max-width: 420px; margin-top: 18px; font: 800 clamp(2.2rem, 3.7vw, 4rem)/.9 var(--font-display); letter-spacing: -.055em; }
+.forge-story-pivot p { max-width: 440px; margin-top: 22px; color: rgba(255,255,255,.74); font-size: 18px; line-height: 1.62; }
+.forge-landia-turnaround {
+  display: grid;
+  grid-template-columns: .88fr 1.12fr;
+  gap: 32px;
+  align-items: center;
+  margin-top: 18px;
+  padding: 38px;
+  background: var(--forge-lime);
+  color: var(--forge-carbon);
+  box-shadow: 0 28px 60px -44px rgba(11,13,16,.65);
+}
+.forge-turnaround-copy > span { font: 850 13px/1.2 var(--font-display); letter-spacing: .08em; }
+.forge-turnaround-copy h3 { margin-top: 16px; font-size: clamp(2rem, 3.4vw, 3.6rem); font-weight: 850; line-height: .91; letter-spacing: -.055em; }
+.forge-turnaround-copy p { max-width: 500px; margin-top: 17px; color: rgba(11,13,16,.72); font-size: 18px; line-height: 1.56; }
+.forge-turnaround-wins { display: grid; gap: 10px; }
+.forge-turnaround-win { display: grid; grid-template-columns: 42px 1fr; gap: 15px; align-items: center; min-height: 88px; padding: 16px 18px; background: var(--forge-ivory); border: 1px solid rgba(11,13,16,.12); }
+.forge-turnaround-win > span { color: var(--forge-orange); font: 800 12px/1 var(--font-display); }
+.forge-turnaround-win strong { display: block; font: 800 18px/1.15 var(--font-display); }
+.forge-turnaround-win p { margin-top: 5px; color: rgba(11,13,16,.66); font-size: 17px; line-height: 1.45; }
+.forge-reality-mantra { display: flex; align-items: baseline; justify-content: center; gap: 11px; margin-top: 36px; text-align: center; font-size: 18px; color: rgba(11,13,16,.58); }
+.forge-reality-mantra strong { color: var(--forge-carbon); font-family: var(--font-display); font-size: 21px; }
 
 /* proofs */
 .forge-proofs { padding: 108px 0 0; background: #0a0c0f; overflow: hidden; }
@@ -1183,13 +1234,17 @@
 
   .forge-reality, .forge-mechanism, .forge-product, .forge-comparison, .forge-objections, .forge-final, .forge-faq { padding-block: 82px; }
   .forge-reality-head h2, .forge-mechanism-head h2 { font-size: clamp(2.3rem, 11vw, 3.4rem); }
-  .forge-reality-board { grid-template-columns: 1fr; }
-  .forge-reality-turn { min-height: 62px; border: 0; border-block: 1px solid rgba(11,13,16,.13); grid-auto-flow: column; }
-  .forge-reality-turn span { writing-mode: initial; transform: none; }
-  .forge-reality-turn svg { transform: rotate(90deg); }
-  .forge-reality-row { min-height: 126px; grid-template-columns: 28px 1fr 20px; gap: 10px; padding: 17px 13px; }
-  .forge-reality-row strong { font-size: 15px; }
-  .forge-reality-row p { font-size: 15px; }
+  .forge-click-story, .forge-landia-turnaround { grid-template-columns: 1fr; }
+  .forge-story-list { padding: 26px 22px 12px; }
+  .forge-story-card { grid-template-columns: 52px 1fr; gap: 13px; padding: 22px 0; }
+  .forge-story-card > span { font-size: 2rem; }
+  .forge-story-card strong { font-size: 18px; line-height: 1.18; }
+  .forge-story-card p { font-size: 17px; line-height: 1.56; }
+  .forge-story-pivot { min-height: 440px; padding: 28px 24px; }
+  .forge-story-pivot > strong { font-size: clamp(2.6rem, 12vw, 4rem); }
+  .forge-landia-turnaround { gap: 25px; padding: 28px 22px; }
+  .forge-turnaround-copy h3 { font-size: clamp(2.4rem, 11vw, 3.5rem); }
+  .forge-turnaround-win { grid-template-columns: 34px 1fr; padding: 16px 14px; }
   .forge-reality-mantra { display: grid; gap: 4px; }
 
   .forge-proofs { padding-top: 82px; }
@@ -1357,13 +1412,13 @@
   transition-duration: .9s;
   transition-timing-function: cubic-bezier(.16,1,.3,1);
 }
-.forge-reality-column-wrong .forge-reality-row[data-reveal],
+.forge-story-list .forge-story-card[data-reveal],
 .forge-proof-twin [data-reveal]:nth-child(odd),
 .forge-build-collage [data-reveal]:nth-child(odd),
 .forge-bonus-grid [data-reveal]:nth-child(odd) {
   transform: translate3d(-34px,18px,0) scale(.98);
 }
-.forge-reality-column-right .forge-reality-row[data-reveal],
+.forge-story-pivot[data-reveal],
 .forge-proof-twin [data-reveal]:nth-child(even),
 .forge-build-collage [data-reveal]:nth-child(even),
 .forge-bonus-grid [data-reveal]:nth-child(even) {
@@ -1394,7 +1449,6 @@
 
 /* Movimento contínuo nos pontos visuais de maior atenção. */
 .forge-hero-orbit { animation: forge-orbit-drift 12s ease-in-out infinite; will-change: transform; }
-.forge-reality-turn svg { animation: forge-arrow-nudge 1.8s ease-in-out infinite; }
 .forge-result-phone { animation: forge-result-phone-float 5.8s ease-in-out infinite; will-change: transform; }
 .forge-result-stamp { animation: forge-stamp-wobble 4.6s ease-in-out infinite; will-change: transform; }
 .forge-speed-copy strong { animation: forge-number-glow 3.4s ease-in-out infinite; }
@@ -1418,7 +1472,8 @@
 .forge-decision-answer,
 .forge-price-block,
 .forge-lesson,
-.forge-reality-row {
+.forge-story-card,
+.forge-turnaround-win {
   transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .35s ease, background-color .35s ease;
 }
 .forge-section-cta { position: relative; overflow: hidden; }
@@ -1453,7 +1508,8 @@
   .forge-section-cta:hover { transform: translate3d(0,-5px,0); box-shadow: 0 32px 70px -38px rgba(0,0,0,.82); border-color: rgba(199,255,61,.34); }
   .forge-section-cta:hover::before { transform: translateX(125%); }
   .forge-btn:hover::after { transform: translateX(125%) skewX(-18deg); }
-  .forge-reality-row:hover { transform: translate3d(0,-4px,0); box-shadow: 0 18px 30px -25px rgba(0,0,0,.35); }
+  .forge-story-card:hover { transform: translate3d(7px,0,0); }
+  .forge-turnaround-win:hover { transform: translate3d(-6px,0,0); box-shadow: 0 18px 30px -25px rgba(0,0,0,.35); }
   .forge-shot:hover,
   .forge-speed-card:hover,
   .forge-repertoire-item:hover { transform: translate3d(0,-8px,0); box-shadow: 0 34px 70px -34px rgba(0,0,0,.65); }
@@ -1518,7 +1574,6 @@
     transition: none !important;
   }
   .forge-hero-orbit,
-  .forge-reality-turn svg,
   .forge-result-phone,
   .forge-result-stamp,
   .forge-speed-copy strong,
@@ -1531,4 +1586,96 @@
     animation: none !important;
     will-change: auto;
   }
+}
+
+/* ======================================================================
+   LAND-IA / LEGIBILITY PASS
+   Conteúdo comercial com leitura confortável em desktop e mobile.
+   ====================================================================== */
+.forge-page { font-size: 18px; }
+.forge-tag { font-size: 12px; line-height: 1.35; letter-spacing: .12em; }
+.forge-tag > span { font-size: 11px; }
+.forge-hero-kicker { font-size: 12px; line-height: 1.35; }
+.forge-hero-lead { max-width: 720px; font-size: 19px; line-height: 1.62; }
+.forge-hero-note { font-size: 12px; line-height: 1.35; }
+.forge-section-cta > div > span { font-size: 12px; line-height: 1.35; }
+.forge-section-cta p { font-size: 18px; line-height: 1.58; }
+.forge-vsl-title-row p,
+.forge-reality-head > p,
+.forge-proofs-head > p,
+.forge-mechanism-head > p,
+.forge-product-head p,
+.forge-offer-copy > p { font-size: 18px; line-height: 1.68; }
+.forge-proof-copy p,
+.forge-gallery-head p,
+.forge-lesson p,
+.forge-bonus p,
+.forge-path p,
+.forge-objection-list p,
+.forge-decision-answer p,
+.forge-final p,
+.forge-faq-answer { font-size: 17px; }
+.forge-proof-index,
+.forge-reverse-number,
+.forge-lesson > span,
+.forge-path > span,
+.forge-objection-list article > span,
+.forge-faq-item summary > span:first-child { font-size: 11px; }
+.forge-reverse-row strong,
+.forge-lesson strong,
+.forge-objection-list h3 { font-size: 18px; }
+.forge-reverse-row p { font-size: 17px; }
+.forge-shot figcaption b,
+.forge-shot figcaption span,
+.forge-repertoire-item figcaption strong,
+.forge-repertoire-item figcaption span { font-size: 14px; line-height: 1.35; }
+.forge-gallery-head > span,
+.forge-speed-copy span,
+.forge-product-vertical,
+.forge-product-screen-top,
+.forge-product-screen-body small,
+.forge-product-screen-meta,
+.forge-bonus > span,
+.forge-final-code { font-size: 11px; line-height: 1.35; }
+.forge-bonus > strong { font-size: 16px; }
+.forge-stack-list strong { font-size: 16px; }
+.forge-stack-list small { font-size: 15px; line-height: 1.4; }
+.forge-price-top,
+.forge-price-reference span { font-size: 12px; }
+.forge-price-main > span { font-size: 11px; }
+.forge-price-block > p { font-size: 17px; }
+.forge-price-safe { font-size: 14px; }
+.forge-path > strong { font-size: 13px; line-height: 1.35; }
+.forge-faq-item summary { min-height: 82px; }
+.forge-faq-item summary strong { font-size: 17px; line-height: 1.35; }
+.forge-final small { font-size: 14px; }
+.forge-footer-inner { font-size: 13px; line-height: 1.45; }
+.forge-footer-inner > div strong { font-size: 13px; }
+
+@media (max-width: 760px) {
+  .forge-hero-kicker { font-size: 11px; }
+  .forge-hero-lead { font-size: 18px; line-height: 1.58; }
+  .forge-hero-note { font-size: 11px; }
+  .forge-vsl-title-row p,
+  .forge-reality-head > p,
+  .forge-proofs-head > p,
+  .forge-mechanism-head > p,
+  .forge-product-head p,
+  .forge-offer-copy > p,
+  .forge-section-cta p { font-size: 17px; }
+  .forge-reverse-row strong,
+  .forge-lesson strong,
+  .forge-objection-list h3,
+  .forge-faq-item summary strong { font-size: 17px; }
+  .forge-proof-copy p,
+  .forge-gallery-head p,
+  .forge-lesson p,
+  .forge-bonus p,
+  .forge-path p,
+  .forge-objection-list p,
+  .forge-decision-answer p,
+  .forge-final p,
+  .forge-faq-answer { font-size: 17px; line-height: 1.62; }
+  .forge-faq-item summary { min-height: 88px; }
+  .forge-footer-inner { font-size: 13px; }
 }
