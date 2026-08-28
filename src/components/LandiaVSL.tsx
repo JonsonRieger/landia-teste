@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import vslPoster from "@/assets/proof/example-hero-desktop.webp";
 
-const VSL_URL =
-  "https://metamove-vsl.hebrithan.workers.dev/vsl-landia.mp4?v=2";
+const VSL_URL = "https://metamove-vsl.hebrithan.workers.dev/vsl-landia.mp4?v=2";
 
 const VSL_EVENT_ENDPOINT = "https://metamove-capi.hebrithan.workers.dev";
 
-const CHECKOUT_URL =
-  "https://pay.hotmart.com/Y107168906J?checkoutMode=10&bid=1786752624031";
+const CHECKOUT_URL = "https://pay.hotmart.com/Y107168906J?checkoutMode=10&bid=1786752624031";
 
 const VSL_TIME_STORAGE_KEY = "landia-vsl-current-time";
 const VSL_RETURN_STORAGE_KEY = "landia-vsl-return-from-checkout";
@@ -25,12 +24,7 @@ const BRAKE_START = HALF_PROGRESS_TIME - BRAKE_BEFORE_HALF;
 const BRAKE_END = HALF_PROGRESS_TIME + BRAKE_AFTER_HALF;
 const BRAKE_DURATION = BRAKE_BEFORE_HALF + BRAKE_AFTER_HALF;
 
-type VslEventName =
-  | "VSL_Play"
-  | "VSL_25"
-  | "VSL_50"
-  | "VSL_75"
-  | "VSL_Complete";
+type VslEventName = "VSL_Play" | "VSL_25" | "VSL_50" | "VSL_75" | "VSL_Complete";
 
 function getCookie(name: string) {
   return document.cookie
@@ -83,6 +77,13 @@ function sendCheckoutEvent() {
     const eventId = crypto.randomUUID();
     const fbp = getCookie("_fbp");
     const fbc = getCookie("_fbc");
+    const customData = {
+      content_name: "Land-IA",
+      content_type: "product",
+      cta_position: "vsl_delayed",
+      value: 47,
+      currency: "BRL",
+    };
 
     void fetch(VSL_EVENT_ENDPOINT, {
       method: "POST",
@@ -98,13 +99,14 @@ function sendCheckoutEvent() {
         user_agent: navigator.userAgent,
         fbp,
         fbc,
+        custom_data: customData,
       }),
     }).catch((error) => {
       console.error("Erro ao enviar InitiateCheckout via CAPI:", error);
     });
 
     if (typeof window.fbq === "function") {
-      window.fbq("track", "InitiateCheckout", {}, { eventID: eventId });
+      window.fbq("track", "InitiateCheckout", customData, { eventID: eventId });
     }
   } catch (error) {
     console.error("Erro ao rastrear InitiateCheckout:", error);
@@ -137,22 +139,17 @@ function getDisplayProgress(currentTime: number, duration: number) {
   const integralHalf = xHalf ** 3 - 0.5 * xHalf ** 4;
 
   // Coeficientes lineares da posição em 50% e no fim do vídeo.
-  const halfFastCoefficient =
-    HALF_PROGRESS_TIME - BRAKE_DURATION * integralHalf;
+  const halfFastCoefficient = HALF_PROGRESS_TIME - BRAKE_DURATION * integralHalf;
   const halfSlowCoefficient = BRAKE_DURATION * integralHalf;
 
   const endFastCoefficient = BRAKE_START + BRAKE_DURATION / 2;
-  const endSlowCoefficient =
-    duration - BRAKE_END + BRAKE_DURATION / 2;
+  const endSlowCoefficient = duration - BRAKE_END + BRAKE_DURATION / 2;
 
   const determinant =
-    halfFastCoefficient * endSlowCoefficient -
-    halfSlowCoefficient * endFastCoefficient;
+    halfFastCoefficient * endSlowCoefficient - halfSlowCoefficient * endFastCoefficient;
 
-  const fastSpeed =
-    (50 * endSlowCoefficient - 100 * halfSlowCoefficient) / determinant;
-  const slowSpeed =
-    (100 * halfFastCoefficient - 50 * endFastCoefficient) / determinant;
+  const fastSpeed = (50 * endSlowCoefficient - 100 * halfSlowCoefficient) / determinant;
+  const slowSpeed = (100 * halfFastCoefficient - 50 * endFastCoefficient) / determinant;
 
   if (time <= BRAKE_START) {
     return Math.min(100, fastSpeed * time);
@@ -166,22 +163,16 @@ function getDisplayProgress(currentTime: number, duration: number) {
     // Integral do smoothstep (3x² - 2x³): x³ - 0,5x⁴.
     const integratedSmoothstep = x ** 3 - 0.5 * x ** 4;
     const transitionDistance =
-      BRAKE_DURATION *
-      (fastSpeed * x +
-        (slowSpeed - fastSpeed) * integratedSmoothstep);
+      BRAKE_DURATION * (fastSpeed * x + (slowSpeed - fastSpeed) * integratedSmoothstep);
 
     return Math.min(100, progressAtBrakeStart + transitionDistance);
   }
 
   // Em x=1, a integral do smoothstep vale 0,5.
   const progressAtBrakeEnd =
-    progressAtBrakeStart +
-    BRAKE_DURATION * (fastSpeed + (slowSpeed - fastSpeed) * 0.5);
+    progressAtBrakeStart + BRAKE_DURATION * (fastSpeed + (slowSpeed - fastSpeed) * 0.5);
 
-  return Math.min(
-    100,
-    progressAtBrakeEnd + slowSpeed * (time - BRAKE_END)
-  );
+  return Math.min(100, progressAtBrakeEnd + slowSpeed * (time - BRAKE_END));
 }
 
 export default function LandiaVSL() {
@@ -204,10 +195,8 @@ export default function LandiaVSL() {
   useEffect(() => {
     try {
       const saved = Number(window.sessionStorage.getItem(VSL_TIME_STORAGE_KEY));
-      const returningFromCheckout =
-        window.sessionStorage.getItem(VSL_RETURN_STORAGE_KEY) === "1";
-      const playAlreadyTracked =
-        window.sessionStorage.getItem(VSL_PLAY_TRACKED_KEY) === "1";
+      const returningFromCheckout = window.sessionStorage.getItem(VSL_RETURN_STORAGE_KEY) === "1";
+      const playAlreadyTracked = window.sessionStorage.getItem(VSL_PLAY_TRACKED_KEY) === "1";
 
       if (playAlreadyTracked) {
         playTrackedRef.current = true;
@@ -294,10 +283,7 @@ export default function LandiaVSL() {
       const currentTime = video?.currentTime ?? maxWatchedRef.current;
 
       if (Number.isFinite(currentTime) && currentTime > 0) {
-        window.sessionStorage.setItem(
-          VSL_TIME_STORAGE_KEY,
-          String(currentTime)
-        );
+        window.sessionStorage.setItem(VSL_TIME_STORAGE_KEY, String(currentTime));
       }
 
       if (returningFromCheckout) {
@@ -350,10 +336,7 @@ export default function LandiaVSL() {
     // Atualiza o ponto salvo enquanto a pessoa assiste. sessionStorage é local
     // à aba e não cria nenhuma requisição de rede.
     try {
-      window.sessionStorage.setItem(
-        VSL_TIME_STORAGE_KEY,
-        String(video.currentTime)
-      );
+      window.sessionStorage.setItem(VSL_TIME_STORAGE_KEY, String(video.currentTime));
     } catch {
       // O vídeo continua normalmente mesmo se storage estiver indisponível.
     }
@@ -395,16 +378,8 @@ export default function LandiaVSL() {
       const video = videoRef.current;
       const bar = progressBarRef.current;
 
-      if (
-        video &&
-        bar &&
-        Number.isFinite(video.duration) &&
-        video.duration > 0
-      ) {
-        const visualProgress = getDisplayProgress(
-          video.currentTime,
-          video.duration
-        );
+      if (video && bar && Number.isFinite(video.duration) && video.duration > 0) {
+        const visualProgress = getDisplayProgress(video.currentTime, video.duration);
         bar.style.width = `${Math.min(Math.max(visualProgress, 0), 100)}%`;
       }
 
@@ -499,11 +474,7 @@ export default function LandiaVSL() {
           role="button"
           tabIndex={0}
           aria-label={
-            !started
-              ? "Clique para assistir"
-              : paused
-                ? "Continuar vídeo"
-                : "Pausar vídeo"
+            !started ? "Clique para assistir" : paused ? "Continuar vídeo" : "Pausar vídeo"
           }
           onClick={() => void togglePlayback()}
           onKeyDown={(event) => {
@@ -516,29 +487,31 @@ export default function LandiaVSL() {
           {!started && (
             <div className="absolute inset-0">
               <img
-                src="/vsl-poster.webp"
+                src={vslPoster}
                 alt=""
+                width={1280}
+                height={640}
                 loading="lazy"
                 decoding="async"
                 draggable={false}
-                className="landia-vsl-poster-motion absolute inset-0 h-full w-full object-cover blur-[1px] brightness-[0.68]"
+                className="landia-vsl-poster-motion absolute inset-0 h-full w-full object-cover brightness-[0.58]"
                 style={{
-                  animation:
-                    "landia-vsl-poster-motion 9s ease-in-out infinite alternate",
+                  animation: "landia-vsl-poster-motion 9s ease-in-out infinite alternate",
                 }}
               />
 
-              <div
-                className="pointer-events-none absolute inset-0 bg-black/30"
-                style={{
-                  backdropFilter: "blur(12px) saturate(0.72)",
-                  WebkitBackdropFilter: "blur(12px) saturate(0.72)",
-                }}
-              />
-              <div className="pointer-events-none absolute inset-0 bg-white/[0.035]" />
-              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(199,255,61,0.08),transparent_42%)]" />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(4,6,7,.72),rgba(4,6,7,.18)_54%,rgba(4,6,7,.58))]" />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_45%,rgba(199,255,61,0.09),transparent_46%)]" />
 
-              <div className="absolute inset-0 flex items-center justify-center px-4">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-4 text-center">
+                <div className="pointer-events-none max-w-2xl">
+                  <span className="font-display text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--lime)] sm:text-xs">
+                    Demonstração prática • 5:17
+                  </span>
+                  <strong className="mt-2 block font-display text-xl font-extrabold uppercase leading-[1.02] tracking-[-0.04em] text-white sm:text-3xl md:text-4xl">
+                    Do briefing à página publicada
+                  </strong>
+                </div>
                 <div
                   className="landia-vsl-play-pulse rounded-full border border-[var(--lime)]/35 bg-black/60 px-6 py-4 text-center font-display text-sm font-bold uppercase tracking-[0.08em] text-white backdrop-blur-md sm:px-8 sm:text-base md:text-lg"
                   style={{ animation: "landia-vsl-play-pulse 2.4s ease-in-out infinite" }}
@@ -584,15 +557,9 @@ export default function LandiaVSL() {
               const saved = pendingResumeTimeRef.current;
               if (!video || saved == null) return;
 
-              const restoredTime = Math.min(
-                saved,
-                Math.max(0, video.duration - 0.1)
-              );
+              const restoredTime = Math.min(saved, Math.max(0, video.duration - 0.1));
               video.currentTime = restoredTime;
-              maxWatchedRef.current = Math.max(
-                maxWatchedRef.current,
-                restoredTime
-              );
+              maxWatchedRef.current = Math.max(maxWatchedRef.current, restoredTime);
               pendingResumeTimeRef.current = null;
               setLoading(false);
 
@@ -675,8 +642,10 @@ export default function LandiaVSL() {
               }}
               className="landia-vsl-checkout-cta inline-flex w-full max-w-[560px] items-center justify-between gap-5 px-5 py-4 text-left font-display text-[14px] font-extrabold uppercase tracking-[0.025em] sm:px-7 sm:text-[15px]"
             >
-              <span>QUERO CRIAR MINHA LANDING</span>
-              <span aria-hidden="true" className="landia-vsl-checkout-cta-arrow">→</span>
+              <span>QUERO ACESSAR O LAND-IA — R$ 47</span>
+              <span aria-hidden="true" className="landia-vsl-checkout-cta-arrow">
+                →
+              </span>
             </a>
           </div>
         )}
