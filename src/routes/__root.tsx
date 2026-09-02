@@ -131,34 +131,14 @@ function RootShell({ children }: { children: ReactNode }) {
               n.loaded=!0;
               n.version='2.0';
               n.queue=[];
-              // O stub acima enfileira TODOS os eventos (fbq('init'), 'track', ...).
-              // O fbevents.js processa a fila depois de carregado. Mantemos o stub
-              // imediatamente disponível, mas adiamos o download do script pesado para
-              // depois da janela crítica do LCP. Interação real continua carregando na hora.
-              var loaded=!1;
-              function load(){
-                if(loaded)return;loaded=!0;
-                if(fallbackTimer)f.clearTimeout(fallbackTimer);
-                t=b.createElement(e);
-                t.async=!0;
-                t.src='https://connect.facebook.net/en_US/fbevents.js';
-                s=b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t,s);
-              }
-              // Fora de interação, o script pesado da Meta só entra depois de 8s.
-              // Isso preserva a fila do fbq e tira o fbevents.js da janela crítica
-              // de LCP/TBT. Qualquer interação real continua carregando imediatamente.
-              var fallbackTimer=f.setTimeout(function(){
-                if(f.requestIdleCallback){f.requestIdleCallback(load,{timeout:2000});}
-                else{load();}
-              },8000);
-              ['pointerdown','touchstart','keydown','scroll'].forEach(function(ev){
-                f.addEventListener(ev,load,{once:!0,passive:!0});
-              });
-            }(window, document,'script');
+              t=b.createElement(e);
+              t.async=!0;
+              t.src=v;
+              s=b.getElementsByTagName(e)[0];
+              s.parentNode.insertBefore(t,s)
+            }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
             fbq('init', '2148386099070117');
-            console.log("Facebook Pixel inicializado");
             `,
           }}
         />

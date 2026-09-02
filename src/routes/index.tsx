@@ -28,6 +28,12 @@ import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
 import phoneArchitectureWebp from "@/assets/hero/landia-phone-architecture.webp";
 import phoneEcommerceWebp from "@/assets/hero/landia-phone-ecommerce.webp";
 import phoneWellnessWebp from "@/assets/hero/landia-phone-wellness.webp";
+import authorPhotoAvif from "@/assets/author-photo-720.avif";
+import authorPhotoWebp from "@/assets/author-photo-720.webp";
+import authorResultAvif from "@/assets/author-result-720.avif";
+import authorResultWebp from "@/assets/author-result-720.webp";
+import serviceProofAvif from "@/assets/prova_social_6.avif";
+import serviceProofWebp from "@/assets/prova_social_6.webp";
 
 declare global {
   interface Window {
@@ -79,9 +85,27 @@ export const Route = createFileRoute("/")({
 /* ================================================================
    TRACKING — preservado da raiz otimizada
    ================================================================ */
-async function sendFacebookEvent(eventName: string) {
+type FacebookCustomData = Record<string, string | number | boolean>;
+
+const META_STANDARD_EVENTS = new Set([
+  "PageView",
+  "ViewContent",
+  "InitiateCheckout",
+  "Purchase",
+]);
+
+function createEventId() {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+
+function sendFacebookEvent(
+  eventName: string,
+  customData: FacebookCustomData = {},
+) {
   try {
-    const eventId = crypto.randomUUID();
+    const eventId = createEventId();
 
     const fbp = document.cookie
       .split("; ")
@@ -93,11 +117,23 @@ async function sendFacebookEvent(eventName: string) {
       .find((c) => c.startsWith("_fbc="))
       ?.split("=")[1];
 
-    await fetch("https://metamove-capi.hebrithan.workers.dev", {
+    // O navegador recebe o evento imediatamente. A mesma identificação segue
+    // para a CAPI, permitindo que a Meta deduplique as duas cópias.
+    if (typeof window.fbq === "function") {
+      window.fbq(
+        META_STANDARD_EVENTS.has(eventName) ? "track" : "trackCustom",
+        eventName,
+        customData,
+        { eventID: eventId },
+      );
+    }
+
+    void fetch("https://metamove-capi.hebrithan.workers.dev", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      keepalive: true,
       body: JSON.stringify({
         event_name: eventName,
         event_time: Math.floor(Date.now() / 1000),
@@ -106,14 +142,15 @@ async function sendFacebookEvent(eventName: string) {
         user_agent: navigator.userAgent,
         fbp,
         fbc,
+        ...(Object.keys(customData).length > 0
+          ? { custom_data: customData }
+          : {}),
       }),
+    }).catch((error) => {
+      console.error(`Erro ao enviar ${eventName} via CAPI:`, error);
     });
-
-    if (typeof window.fbq === "function") {
-      window.fbq("track", eventName, {}, { eventID: eventId });
-    }
   } catch (error) {
-    console.error("Erro ao enviar evento:", error);
+    console.error(`Erro ao rastrear ${eventName}:`, error);
   }
 }
 
@@ -141,7 +178,12 @@ function CTAButton({
       rel={isExternal ? "noopener noreferrer" : undefined}
       onClick={(e) => {
         if (isCheckout) {
-          sendFacebookEvent("InitiateCheckout");
+          sendFacebookEvent("InitiateCheckout", {
+            content_name: "LAND-IA",
+            content_type: "product",
+            value: 47,
+            currency: "BRL",
+          });
           return;
         }
         if (href.startsWith("#")) {
@@ -265,6 +307,7 @@ function DeferredFAQ() {
 
 let pageViewSent = false;
 let timeOnPageSent = false;
+let viewContentSent = false;
 
 function Landing() {
   useEffect(() => {
@@ -290,6 +333,7 @@ function Landing() {
       <LandiaVSL />
       <Reality />
       <Proofs />
+      <Authority />
       <Mechanism />
       <Product />
       <Offer />
@@ -595,9 +639,94 @@ function Proofs() {
           </p>
         </Reveal>
 
-        <SectionCTA eyebrow="O RESULTADO ESTÁ NA TELA" button="QUERO CRIAR PÁGINAS NESSE NÍVEL" variant="lime">
+        <SectionCTA eyebrow="10 RESULTADOS. UM PROCESSO REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
           Aprenda o método que transforma sua ideia em uma página profissional, pronta para vender no mobile.
         </SectionCTA>
+      </div>
+    </section>
+  );
+}
+
+/* ================================================================
+   04.1 — AUTORIDADE / PROVA HUMANA
+   ================================================================ */
+function Authority() {
+  return (
+    <section className="forge-authority landia-cv-authority">
+      <div className="forge-shell">
+        <Reveal className="forge-authority-head">
+          <SectionTag index="04.1" light>POR TRÁS DO MÉTODO</SectionTag>
+          <h2>
+            NÃO NASCEU DE UM PROMPT BONITO.
+            <span>NASCEU DA NECESSIDADE DE FAZER A PÁGINA VENDER.</span>
+          </h2>
+        </Reveal>
+
+        <div className="forge-authority-grid">
+          <Reveal as="figure" className="forge-authority-portrait">
+            <Picture
+              avif={authorPhotoAvif}
+              webp={authorPhotoWebp}
+              alt="Hebrithan Rieger, criador do método Land-IA"
+              width={720}
+              height={1013}
+            />
+            <figcaption>
+              <strong>HEBRITHAN RIEGER</strong>
+              <span>CRIADOR DO LAND-IA</span>
+            </figcaption>
+          </Reveal>
+
+          <Reveal delay={0.06} className="forge-authority-copy">
+            <span>ARQUITETURA • COPY • IA • PUBLICAÇÃO</span>
+            <h3>O PROCESSO FOI ORGANIZADO POR QUEM PRECISAVA USÁ-LO NA PRÁTICA.</h3>
+            <p>
+              O LAND-IA reúne estratégia, construção com IA, domínio próprio e mensuração em uma execução guiada. O objetivo não é ensinar você a apertar botões: é ajudar a transformar uma oferta em uma página que conduz o lead até a decisão.
+            </p>
+            <p>
+              É o raciocínio aplicado nas páginas que você acabou de ver — traduzido para quem quer criar para o próprio negócio ou começar a entregar landing pages como serviço.
+            </p>
+            <ul>
+              <li><Check aria-hidden="true" /> Estratégia antes do layout</li>
+              <li><Check aria-hidden="true" /> Execução sem depender de código</li>
+              <li><Check aria-hidden="true" /> Página, checkout e tracking no mesmo caminho</li>
+            </ul>
+          </Reveal>
+
+          <Reveal delay={0.12} className="forge-authority-evidence">
+            <figure className="forge-evidence-card forge-evidence-result">
+              <Picture
+                avif={authorResultAvif}
+                webp={authorResultWebp}
+                alt="Registro de campanha do criador com 14 compras e ROAS de 3,72"
+                width={720}
+                height={642}
+              />
+              <figcaption>
+                <span>APLICAÇÃO PRÓPRIA</span>
+                <strong>14 compras registradas • ROAS 3,72</strong>
+              </figcaption>
+            </figure>
+
+            <figure className="forge-evidence-card forge-evidence-message">
+              <Picture
+                avif={serviceProofAvif}
+                webp={serviceProofWebp}
+                alt="Relato recebido sobre a transformação do aprendizado com IA em serviço"
+                width={640}
+                height={912}
+              />
+              <figcaption>
+                <span>APLICAÇÃO EM SERVIÇO</span>
+                <strong>Da teoria para uma oportunidade real com IA.</strong>
+              </figcaption>
+            </figure>
+          </Reveal>
+        </div>
+
+        <Reveal className="forge-authority-disclaimer">
+          Registros reais do criador e de aplicação de materiais com IA. Resultados individuais variam conforme oferta, execução, mercado e aquisição de clientes.
+        </Reveal>
       </div>
     </section>
   );
@@ -701,6 +830,14 @@ function Product() {
           </RevealGroup>
         </div>
 
+        <Reveal className="forge-execution-note">
+          <span>COMECE EXECUTANDO, NÃO “TERMINANDO UM CURSO”</span>
+          <div>
+            <strong>UMA AULA. UMA ETAPA. SUA PÁGINA AVANÇA.</strong>
+            <p>Abra a aula, aplique no seu projeto e siga para a próxima decisão — da arquitetura até a publicação.</p>
+          </div>
+        </Reveal>
+
         <RevealGroup className="forge-bonus-grid">
           <article data-reveal="" className="forge-bonus forge-bonus-light">
             <span>BÔNUS 01 / PDF</span>
@@ -716,7 +853,7 @@ function Product() {
           </article>
         </RevealGroup>
 
-        <SectionCTA eyebrow="TREINAMENTO + 2 BÔNUS" button="VER A OFERTA COMPLETA" variant="lime">
+        <SectionCTA eyebrow="TREINAMENTO + 2 BÔNUS" button="VER A OFERTA COMPLETA — R$ 47" variant="lime">
           Abra, assista, execute e avance até a página publicada no seu domínio.
         </SectionCTA>
       </div>
@@ -728,38 +865,42 @@ function Product() {
    07 — OFERTA / VIEWCONTENT
    ================================================================ */
 function Offer() {
-  const offerRef = useRef<HTMLElement | null>(null);
-  const hasTrackedViewContent = useRef(false);
+  const offerViewTriggerRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
-    const section = offerRef.current;
+    const trigger = offerViewTriggerRef.current;
 
-    if (!section) return;
+    if (!trigger || viewContentSent) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (
-          entry.isIntersecting &&
-          !hasTrackedViewContent.current &&
-          typeof window !== "undefined" &&
-          typeof window.fbq === "function"
-        ) {
-          hasTrackedViewContent.current = true;
-          sendFacebookEvent("ViewContent");
-        }
+        if (!entry.isIntersecting || viewContentSent) return;
+
+        viewContentSent = true;
+        observer.disconnect();
+        sendFacebookEvent("ViewContent", {
+          content_name: "LAND-IA",
+          content_type: "product",
+          value: 47,
+          currency: "BRL",
+        });
       },
       {
-        threshold: 0.5,
+        // O marcador precisa entrar nos 80% superiores da viewport. Assim o
+        // evento só acontece quando a oferta realmente começa a ser vista.
+        rootMargin: "0px 0px -20% 0px",
+        threshold: 0,
       },
     );
 
-    observer.observe(section);
+    observer.observe(trigger);
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section ref={offerRef} id="oferta" className="forge-offer landia-cv-offer">
+    <section id="oferta" className="forge-offer landia-cv-offer">
+      <span ref={offerViewTriggerRef} className="forge-offer-view-trigger" aria-hidden="true" />
       <div className="forge-offer-signal" aria-hidden="true">47</div>
       <div className="forge-shell forge-offer-grid">
         <Reveal className="forge-offer-copy">
@@ -790,6 +931,10 @@ function Offer() {
           <div className="forge-price-main"><span>HOJE</span><strong><small>R$</small>47</strong></div>
           <p>Pagamento único.</p>
           <CTAButton className="w-full" variant="orange">QUERO O LAND-IA AGORA</CTAButton>
+          <div className="forge-guarantee">
+            <strong>7 DIAS</strong>
+            <span>para acessar, conhecer o método e solicitar reembolso pela Hotmart caso não faça sentido para você.</span>
+          </div>
           <div className="forge-price-safe"><Lock aria-hidden="true" /><span>Compra processada pela Hotmart</span></div>
         </Reveal>
       </div>
@@ -826,7 +971,7 @@ function Comparison() {
           ))}
         </RevealGroup>
 
-        <SectionCTA eyebrow="ESCOLHA O TERCEIRO CAMINHO" button="QUERO DOMINAR O PROCESSO" variant="ink">
+        <SectionCTA eyebrow="ESCOLHA O TERCEIRO CAMINHO" button="QUERO DOMINAR O PROCESSO — R$ 47" variant="ink">
           Tenha o método completo para construir, revisar e publicar suas próprias landing pages.
         </SectionCTA>
       </div>
@@ -866,6 +1011,18 @@ function Objections() {
           ))}
         </RevealGroup>
 
+        <Reveal className="forge-not-for">
+          <div>
+            <span>ANTES DE ENTRAR</span>
+            <h3>O LAND-IA NÃO É PARA QUEM PROCURA UM BOTÃO MÁGICO.</h3>
+          </div>
+          <ul>
+            <li><span>01</span>Não quer tomar decisões sobre a própria oferta.</li>
+            <li><span>02</span>Espera conversão garantida sem testar, revisar ou executar.</li>
+            <li><span>03</span>Busca uma página pronta sem aprender um processo reutilizável.</li>
+          </ul>
+        </Reveal>
+
         <SectionCTA eyebrow="SEM PROGRAMAÇÃO. SEM MENSALIDADE." button="QUERO ACESSO IMEDIATO — R$ 47" variant="lime">
           Comece com as ferramentas gratuitas e avance com o processo completo do LAND-IA.
         </SectionCTA>
@@ -891,7 +1048,7 @@ function Decision() {
           <p>
             Use nas suas ofertas, economize terceirização ou transforme a habilidade em um serviço que você pode oferecer.
           </p>
-          <CTAButton variant="ink">QUERO PARAR DE DEPENDER DE TERCEIROS</CTAButton>
+          <CTAButton variant="ink">QUERO PARAR DE DEPENDER — R$ 47</CTAButton>
         </Reveal>
       </div>
     </section>
@@ -911,7 +1068,7 @@ function FinalCTA() {
           <h2>SUA PRÓXIMA LANDING NÃO PRECISA SER OUTRA CONTA.<br /><span>PODE SER UMA HABILIDADE QUE TRABALHA PARA VOCÊ.</span></h2>
           <p>Crie para suas ofertas, economize terceirização ou venda como serviço. Sem programação e começando com IA gratuita.</p>
           <CTAButton variant="orange">QUERO COMEÇAR AGORA — R$ 47</CTAButton>
-          <small>Acesso imediato • pagamento único</small>
+          <small>Acesso imediato • pagamento único • garantia de 7 dias</small>
         </Reveal>
       </div>
     </section>
