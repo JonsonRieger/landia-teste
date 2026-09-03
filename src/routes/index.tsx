@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
@@ -438,7 +438,7 @@ function Hero() {
           </p>
 
           <div className="forge-hero-actions">
-            <CTAButton variant="lime">QUERO CRIAR MINHA LANDING — R$ 47</CTAButton>
+            <CTAButton href="#resultado-final" variant="lime">QUERO CRIAR MINHA LANDING — R$ 47</CTAButton>
           </div>
           <div className="forge-hero-note">
               <span>USE NAS SUAS OFERTAS</span>
@@ -568,21 +568,23 @@ function Reality() {
    04 — PROVAS / RESULTADO FINAL
    ================================================================ */
 const SHOWCASE_PAGES = [
-  { avif: luminaAvif, webp: luminaWebp, brand: "LUMINA PRIME", niche: "Estética premium", goal: "Agendamento", height: 1518 },
-  { avif: nexoAvif, webp: nexoWebp, brand: "NEXO CRM", niche: "SaaS B2B", goal: "Demonstração", height: 1518 },
-  { avif: brasaAvif, webp: brasaWebp, brand: "BRASA 47", niche: "Gastronomia", goal: "Reserva", height: 1518 },
-  { avif: verticeAvif, webp: verticeWebp, brand: "VÉRTICE", niche: "Imóveis de luxo", goal: "Contato", height: 1518 },
-  { avif: raizBotanicaAvif, webp: raizBotanicaWebp, brand: "RAIZ BOTÂNICA", niche: "Cosméticos", goal: "Compra", height: 1518 },
-  { avif: ramosValeAvif, webp: ramosValeWebp, brand: "RAMOS & VALE", niche: "Advocacia", goal: "Consulta", height: 1518 },
-  { avif: formaLabAvif, webp: formaLabWebp, brand: "FORMA LAB", niche: "Fitness", goal: "Avaliação", height: 1518 },
-  { avif: almaLeveAvif, webp: almaLeveWebp, brand: "ALMA LEVE", niche: "Psicoterapia", goal: "Conversa", height: 1518 },
-  { avif: vozDeMarcaAvif, webp: vozDeMarcaWebp, brand: "VOZ DE MARCA", niche: "Infoproduto", goal: "Inscrição", height: 1518 },
-  { avif: norteCapitalAvif, webp: norteCapitalWebp, brand: "NORTE CAPITAL", niche: "Planejamento financeiro", goal: "Consultoria", height: 1518 },
+  { avif: luminaAvif, webp: luminaWebp, brand: "LUMINA PRIME", niche: "Estética premium", goal: "Agendamento", height: 1518, mobileOrder: 10 },
+  { avif: nexoAvif, webp: nexoWebp, brand: "NEXO CRM", niche: "SaaS B2B", goal: "Demonstração", height: 1518, mobileOrder: 3 },
+  { avif: brasaAvif, webp: brasaWebp, brand: "BRASA 47", niche: "Gastronomia", goal: "Reserva", height: 1518, mobileOrder: 4 },
+  { avif: verticeAvif, webp: verticeWebp, brand: "VÉRTICE", niche: "Imóveis de luxo", goal: "Contato", height: 1518, mobileOrder: 9 },
+  { avif: raizBotanicaAvif, webp: raizBotanicaWebp, brand: "RAIZ BOTÂNICA", niche: "Cosméticos", goal: "Compra", height: 1518, mobileOrder: 8 },
+  { avif: ramosValeAvif, webp: ramosValeWebp, brand: "RAMOS & VALE", niche: "Advocacia", goal: "Consulta", height: 1518, mobileOrder: 6 },
+  { avif: formaLabAvif, webp: formaLabWebp, brand: "FORMA LAB", niche: "Fitness", goal: "Avaliação", height: 1518, mobileOrder: 2 },
+  { avif: almaLeveAvif, webp: almaLeveWebp, brand: "ALMA LEVE", niche: "Psicoterapia", goal: "Conversa", height: 1518, mobileOrder: 5 },
+  { avif: vozDeMarcaAvif, webp: vozDeMarcaWebp, brand: "VOZ DE MARCA", niche: "Infoproduto", goal: "Inscrição", height: 1518, mobileOrder: 1 },
+  { avif: norteCapitalAvif, webp: norteCapitalWebp, brand: "NORTE CAPITAL", niche: "Planejamento financeiro", goal: "Consultoria", height: 1518, mobileOrder: 7 },
 ];
+
+type ShowcaseCardStyle = CSSProperties & { "--mobile-order": number };
 
 function Proofs() {
   return (
-    <section className="forge-showcase landia-cv-proofs">
+    <section id="resultado-final" className="forge-showcase landia-cv-proofs">
       <div className="forge-shell">
         <Reveal className="forge-showcase-head">
           <SectionTag index="04">O RESULTADO FINAL</SectionTag>
@@ -601,7 +603,7 @@ function Proofs() {
           {SHOWCASE_PAGES.map((page, index) => (
             <article
               data-reveal=""
-              style={stepDelay(index % 5)}
+              style={{ ...stepDelay(index % 5), "--mobile-order": page.mobileOrder } as ShowcaseCardStyle}
               className="forge-showcase-card"
               key={page.brand}
             >
@@ -619,7 +621,8 @@ function Proofs() {
                 </div>
               </div>
               <div className="forge-showcase-meta">
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span className="forge-showcase-index-desktop">{String(index + 1).padStart(2, "0")}</span>
+                <span className="forge-showcase-index-mobile">{String(page.mobileOrder).padStart(2, "0")}</span>
                 <div>
                   <strong>{page.brand}</strong>
                   <p>{page.niche} <i /> {page.goal}</p>
