@@ -82,6 +82,11 @@ export const Route = createRootRoute({
         name: "facebook-domain-verification",
         content: "dkyznkmnnojobrubyjf8w8jmk62dse",
       },
+
+      {
+        name: "landia-tracking-version",
+        content: "vsl-single-authority-2026-09-03",
+      },
     ],
     links: [
       { rel: "icon", href: "/favicon-landia.ico", type: "image/x-icon" },
@@ -117,8 +122,21 @@ function RootShell({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+              {if(f.fbq)return;n=f.fbq=function(){
+              var a=arguments,c=a[0],d=c==='trackSingleCustom'?a[2]:a[1],
+              p=c==='trackSingleCustom'?a[3]:a[2];
+
+              // VSL_Play possui uma única autoridade: o player Land-IA.
+              // Qualquer evento criado por clique automático, Event Setup ou
+              // uma segunda execução do bundle é descartado antes de chegar
+              // à fila do Pixel.
+              if((c==='trackCustom'||c==='trackSingleCustom')&&d==='VSL_Play'){
+                if(!p||p.tracking_source!=='landia_vsl_player_v4')return;
+                if(f.__landiaMetaVslPlaySent)return;
+                f.__landiaMetaVslPlaySent=!0;
+              }
+
+              n.callMethod?n.callMethod.apply(n,a):n.queue.push(a)};
               if(!f._fbq)f._fbq=n;
               n.push=n;
               n.loaded=!0;

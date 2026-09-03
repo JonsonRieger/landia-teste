@@ -5,6 +5,10 @@ const VSL_URL =
 
 const VSL_EVENT_ENDPOINT = "https://metamove-capi.hebrithan.workers.dev";
 
+const META_PIXEL_ID = "2148386099070117";
+const VSL_TRACKING_SOURCE = "landia_vsl_player_v4";
+const VSL_PLAY_CONFIRMATION_TIME = 0.25;
+
 const CHECKOUT_URL =
   "https://pay.hotmart.com/Y107168906J?checkoutMode=10&bid=1786752624031";
 
@@ -89,6 +93,7 @@ function sendVslEvent(eventName: VslEventName, progress: number) {
       content_name: "Land-IA VSL",
       content_type: "video",
       progress,
+      tracking_source: VSL_TRACKING_SOURCE,
     };
 
     void fetch(VSL_EVENT_ENDPOINT, {
@@ -112,7 +117,15 @@ function sendVslEvent(eventName: VslEventName, progress: number) {
     });
 
     if (typeof window.fbq === "function") {
-      window.fbq("trackCustom", eventName, customData, { eventID: eventId });
+      // Envia somente para o Pixel oficial da landing. O mesmo event_id segue
+      // para navegador e CAPI, permitindo a deduplicação feita pela Meta.
+      window.fbq(
+        "trackSingleCustom",
+        META_PIXEL_ID,
+        eventName,
+        customData,
+        { eventID: eventId }
+      );
     }
   } catch (error) {
     console.error(`Erro ao rastrear ${eventName}:`, error);
@@ -171,7 +184,7 @@ function getDisplayProgress(currentTime: number, duration: number) {
    *   progress(10s) = 50%
    *   progress(duration) = 100%
    *
-   * A frenagem começa em 2,5s e termina em 5,5s, portanto somente 0,5s dela
+   * A frenagem começa em 4,5s e termina em 10,5s, portanto somente 0,5s dela
    * acontece depois de a barra cruzar os 50%.
    */
   const xHalf = (HALF_PROGRESS_TIME - BRAKE_START) / BRAKE_DURATION;
@@ -387,7 +400,10 @@ export default function LandiaVSL() {
 
     // O play só conta depois que o vídeo realmente avançou. O clique e o
     // primeiro callback `playing` podem acontecer ainda durante o carregamento.
-    if (video.currentTime >= 0.25 && !playTrackedRef.current) {
+    if (
+      video.currentTime >= VSL_PLAY_CONFIRMATION_TIME &&
+      !playTrackedRef.current
+    ) {
       playTrackedRef.current = true;
       sendVslEvent("VSL_Play", 0);
     }
