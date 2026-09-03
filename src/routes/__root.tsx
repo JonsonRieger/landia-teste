@@ -131,6 +131,10 @@ function RootShell({ children }: { children: ReactNode }) {
               s.parentNode.insertBefore(t,s)
             }(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
+            // Desativa os eventos automáticos de clique da Meta. Todos os
+            // eventos importantes desta landing são enviados manualmente com
+            // event_id compartilhado entre navegador e CAPI.
+            fbq('set', 'autoConfig', false, '2148386099070117');
             fbq('init', '2148386099070117');
             `,
           }}

@@ -32,10 +32,11 @@ type VslEventName =
   | "VSL_75"
   | "VSL_Complete";
 
-// Trava compartilhada por todas as instâncias do componente durante a visita.
-// Ela impede que remounts do React ou callbacks repetidos do player enviem o
-// mesmo marco mais de uma vez antes que a Meta consiga deduplicá-lo.
-const sentVslEventsThisPage = new Set<VslEventName>();
+declare global {
+  interface Window {
+    __landiaVslTrackedEvents?: Partial<Record<VslEventName, true>>;
+  }
+}
 
 function getCookie(name: string) {
   return document.cookie
@@ -45,7 +46,13 @@ function getCookie(name: string) {
 }
 
 function claimVslEvent(eventName: VslEventName) {
-  if (sentVslEventsThisPage.has(eventName)) return false;
+  // A trava fica no window, e não apenas dentro do componente. Isso cobre
+  // remounts do React e até uma eventual segunda instância do bundle/player.
+  const trackedEvents =
+    window.__landiaVslTrackedEvents ??
+    (window.__landiaVslTrackedEvents = {});
+
+  if (trackedEvents[eventName]) return false;
 
   if (eventName === "VSL_Play") {
     try {
@@ -56,19 +63,18 @@ function claimVslEvent(eventName: VslEventName) {
         returningFromCheckout &&
         window.sessionStorage.getItem(VSL_PLAY_TRACKED_KEY) === "1"
       ) {
-        sentVslEventsThisPage.add(eventName);
+        trackedEvents[eventName] = true;
         return false;
       }
 
-      // A reserva acontece antes de qualquer chamada de rede. Assim dois
-      // callbacks onPlaying consecutivos não conseguem criar dois event_id.
+      // A reserva acontece antes de qualquer chamada de rede.
       window.sessionStorage.setItem(VSL_PLAY_TRACKED_KEY, "1");
     } catch {
-      // A trava em memória continua funcionando se o storage estiver bloqueado.
+      // A trava global continua funcionando se o storage estiver bloqueado.
     }
   }
 
-  sentVslEventsThisPage.add(eventName);
+  trackedEvents[eventName] = true;
   return true;
 }
 
@@ -379,6 +385,13 @@ export default function LandiaVSL() {
     const video = videoRef.current;
     if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return;
 
+    // O play só conta depois que o vídeo realmente avançou. O clique e o
+    // primeiro callback `playing` podem acontecer ainda durante o carregamento.
+    if (video.currentTime >= 0.25 && !playTrackedRef.current) {
+      playTrackedRef.current = true;
+      sendVslEvent("VSL_Play", 0);
+    }
+
     if (video.currentTime > maxWatchedRef.current) {
       maxWatchedRef.current = video.currentTime;
     }
@@ -600,10 +613,6 @@ export default function LandiaVSL() {
             onPlaying={() => {
               setLoading(false);
               setPaused(false);
-              if (!playTrackedRef.current) {
-                playTrackedRef.current = true;
-                sendVslEvent("VSL_Play", 0);
-              }
             }}
             onPause={() => {
               if (started && !ended) setPaused(true);
