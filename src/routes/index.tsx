@@ -333,11 +333,11 @@ function Landing() {
       <LandiaVSL />
       <Reality />
       <Proofs />
-      <Authority />
       <Mechanism />
       <Product />
       <Offer />
       <Comparison />
+      <Authority />
       <Objections />
       <Decision />
       <DeferredFAQ />
