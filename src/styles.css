@@ -579,6 +579,9 @@
 }
 .forge-hero-lead strong { color: white; font-weight: 600; }
 .forge-hero-actions { display: flex; align-items: center; gap: 22px; margin-top: 26px; }
+.forge-hero-visual { min-width: 0; }
+.forge-hero-visual-cta { justify-content: center; width: min(100%, 520px); margin: 20px auto 0; }
+.forge-hero-visual-cta .forge-btn { width: 100%; }
 .forge-hero-note { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; color: rgba(255,255,255,.76); font: 700 11px/1.25 var(--font-display); letter-spacing: .045em; }
 .forge-hero-note span { padding: 7px 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; background: rgba(255,255,255,.04); }
 .forge-tool-line {
@@ -1375,6 +1378,7 @@
   .forge-hero h1 { font-size: clamp(2.32rem, 11.7vw, 3.55rem); line-height: .89; }
   .forge-hero-lead { margin-top: 21px; font-size: 17px; line-height: 1.5; }
   .forge-hero-actions { display: grid; gap: 14px; margin-top: 21px; }
+  .forge-hero-visual-cta { margin-top: 18px; }
   .forge-btn { width: 100%; min-height: 62px; padding-inline: 20px; font-size: 14px; }
   .forge-hero-actions .forge-btn { gap: 10px; padding-inline: 14px 10px; }
   .forge-hero-actions .forge-btn > span {

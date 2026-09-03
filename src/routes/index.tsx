@@ -4,8 +4,8 @@ import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
-import almaLeveAvif from "@/assets/showcase/alma-leve.avif";
-import almaLeveWebp from "@/assets/showcase/alma-leve.webp";
+import almaLeveAvif from "@/assets/showcase/alma-leve-premium.avif";
+import almaLeveWebp from "@/assets/showcase/alma-leve-premium.webp";
 import brasaAvif from "@/assets/showcase/brasa-47.avif";
 import brasaWebp from "@/assets/showcase/brasa-47.webp";
 import formaLabAvif from "@/assets/showcase/forma-lab.avif";
@@ -437,9 +437,6 @@ function Hero() {
             Crie uma landing page que <strong>CONVERTE</strong> com <strong>ChatGPT + Lovable</strong>, publique no seu próprio domínio e pare de pagar por cada nova página — começando com IA&apos;s gratuitas.
           </p>
 
-          <div className="forge-hero-actions">
-            <CTAButton href="#resultado-final" variant="lime">QUERO CRIAR MINHA LANDING — R$ 47</CTAButton>
-          </div>
           <div className="forge-hero-note">
               <span>USE NAS SUAS OFERTAS</span>
               <span>VENDA COMO SERVIÇO</span>
@@ -455,7 +452,12 @@ function Hero() {
           </div>
         </div>
 
-        <HeroBuildVisual />
+        <div className="forge-hero-visual">
+          <HeroBuildVisual />
+          <div className="forge-hero-actions forge-hero-visual-cta">
+            <CTAButton href="#resultado-final" variant="lime">SÓ ACREDITO VENDO</CTAButton>
+          </div>
+        </div>
       </div>
 
       <div className="forge-hero-footer">
@@ -634,6 +636,10 @@ function Proofs() {
       </div>
 
       <div className="forge-shell">
+        <SectionCTA eyebrow="10 RESULTADOS. UM PROCESSO REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
+          Aprenda o método que transforma sua ideia em uma página profissional, pronta para vender no mobile.
+        </SectionCTA>
+
         <Reveal className="forge-showcase-close">
           <span>10 MERCADOS. 10 DIREÇÕES VISUAIS.</span>
           <h3>UMA HABILIDADE.<br /><strong>INÚMERAS POSSIBILIDADES.</strong></h3>
@@ -641,10 +647,6 @@ function Proofs() {
             Para vender sua própria oferta ou transformar landing pages em uma nova fonte de renda — sem ficar refém de designer, código ou créditos desperdiçados.
           </p>
         </Reveal>
-
-        <SectionCTA eyebrow="10 RESULTADOS. UM PROCESSO REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
-          Aprenda o método que transforma sua ideia em uma página profissional, pronta para vender no mobile.
-        </SectionCTA>
       </div>
     </section>
   );
