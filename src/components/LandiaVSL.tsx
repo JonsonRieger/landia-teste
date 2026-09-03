@@ -32,6 +32,11 @@ type VslEventName =
   | "VSL_75"
   | "VSL_Complete";
 
+// Trava compartilhada por todas as instâncias do componente durante a visita.
+// Ela impede que remounts do React ou callbacks repetidos do player enviem o
+// mesmo marco mais de uma vez antes que a Meta consiga deduplicá-lo.
+const sentVslEventsThisPage = new Set<VslEventName>();
+
 function getCookie(name: string) {
   return document.cookie
     .split("; ")
@@ -39,7 +44,37 @@ function getCookie(name: string) {
     ?.split("=")[1];
 }
 
+function claimVslEvent(eventName: VslEventName) {
+  if (sentVslEventsThisPage.has(eventName)) return false;
+
+  if (eventName === "VSL_Play") {
+    try {
+      const returningFromCheckout =
+        window.sessionStorage.getItem(VSL_RETURN_STORAGE_KEY) === "1";
+
+      if (
+        returningFromCheckout &&
+        window.sessionStorage.getItem(VSL_PLAY_TRACKED_KEY) === "1"
+      ) {
+        sentVslEventsThisPage.add(eventName);
+        return false;
+      }
+
+      // A reserva acontece antes de qualquer chamada de rede. Assim dois
+      // callbacks onPlaying consecutivos não conseguem criar dois event_id.
+      window.sessionStorage.setItem(VSL_PLAY_TRACKED_KEY, "1");
+    } catch {
+      // A trava em memória continua funcionando se o storage estiver bloqueado.
+    }
+  }
+
+  sentVslEventsThisPage.add(eventName);
+  return true;
+}
+
 function sendVslEvent(eventName: VslEventName, progress: number) {
+  if (!claimVslEvent(eventName)) return;
+
   try {
     const eventId = crypto.randomUUID();
     const fbp = getCookie("_fbp");
@@ -207,6 +242,7 @@ export default function LandiaVSL() {
       const returningFromCheckout =
         window.sessionStorage.getItem(VSL_RETURN_STORAGE_KEY) === "1";
       const playAlreadyTracked =
+        returningFromCheckout &&
         window.sessionStorage.getItem(VSL_PLAY_TRACKED_KEY) === "1";
 
       if (playAlreadyTracked) {
@@ -566,11 +602,6 @@ export default function LandiaVSL() {
               setPaused(false);
               if (!playTrackedRef.current) {
                 playTrackedRef.current = true;
-                try {
-                  window.sessionStorage.setItem(VSL_PLAY_TRACKED_KEY, "1");
-                } catch {
-                  // Sem impacto na reprodução.
-                }
                 sendVslEvent("VSL_Play", 0);
               }
             }}
