@@ -208,20 +208,25 @@ function StickyCheckoutCTA() {
   useEffect(() => {
     if (isVisible) return;
 
-    if (window.scrollY > 0) {
-      setIsVisible(true);
-      return;
-    }
+    const problemSection = document.getElementById("problema-real");
+    if (!problemSection) return;
 
-    const revealAfterFirstScroll = () => {
-      if (window.scrollY <= 0) return;
+    let hasRevealed = false;
+
+    const revealAfterProblemSection = () => {
+      if (hasRevealed || problemSection.getBoundingClientRect().top > 0) return;
+
+      hasRevealed = true;
 
       setIsVisible(true);
-      window.removeEventListener("scroll", revealAfterFirstScroll);
+      window.removeEventListener("scroll", revealAfterProblemSection);
     };
 
-    window.addEventListener("scroll", revealAfterFirstScroll, { passive: true });
-    return () => window.removeEventListener("scroll", revealAfterFirstScroll);
+    revealAfterProblemSection();
+    if (hasRevealed) return;
+
+    window.addEventListener("scroll", revealAfterProblemSection, { passive: true });
+    return () => window.removeEventListener("scroll", revealAfterProblemSection);
   }, [isVisible]);
 
   if (!isVisible) return null;
@@ -540,7 +545,7 @@ const LANDIA_WINS = [
 
 function Reality() {
   return (
-    <section className="forge-reality">
+    <section id="problema-real" className="forge-reality">
       <div className="forge-shell">
         <Reveal className="forge-reality-head">
           <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
