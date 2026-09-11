@@ -202,6 +202,39 @@ function CTAButton({
   );
 }
 
+function StickyCheckoutCTA() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (isVisible) return;
+
+    if (window.scrollY > 0) {
+      setIsVisible(true);
+      return;
+    }
+
+    const revealAfterFirstScroll = () => {
+      if (window.scrollY <= 0) return;
+
+      setIsVisible(true);
+      window.removeEventListener("scroll", revealAfterFirstScroll);
+    };
+
+    window.addEventListener("scroll", revealAfterFirstScroll, { passive: true });
+    return () => window.removeEventListener("scroll", revealAfterFirstScroll);
+  }, [isVisible]);
+
+  if (!isVisible) return null;
+
+  return (
+    <div className="forge-sticky-checkout" data-sticky-checkout="">
+      <CTAButton className="forge-sticky-checkout-button" variant="lime">
+        QUERO O LAND-IA — R$ 47
+      </CTAButton>
+    </div>
+  );
+}
+
 function Picture({
   avif,
   webp,
@@ -328,6 +361,7 @@ function Landing() {
   return (
     <main className="forge-page min-h-screen bg-[var(--carbon)] text-white antialiased">
       <OfferRail />
+      <StickyCheckoutCTA />
       <Hero />
       <VslLeadIn />
       <LandiaVSL />
