@@ -541,14 +541,13 @@ function Reality() {
           <Reveal className="forge-brief-copy">
             <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
             <h2>O CRÉDITO ACABA.<span>A PÁGINA NÃO CONVENCE.</span></h2>
-            <blockquote>“Crie uma página bonita e de alta conversão.”</blockquote>
-            <p>Você pede. A IA improvisa. <mark className="forge-mark forge-mark-orange">Os ajustes comem o saldo.</mark> E você continua sem gostar do resultado.</p>
+            <blockquote>Não adianta pedir pra IA criar uma página "bonita e de alta conversão"</blockquote>
+            <p>Quando você entrega uma estratégia de criação para a IA, <mark className="forge-mark forge-mark-orange">ela não perde tempo e créditos</mark> inventando o que você não passou pra ela.</p>
             <ul className="forge-brief-losses" aria-label="O custo da tentativa e erro">
               <li><span aria-hidden="true">×</span><strong>Créditos<br />gastos.</strong></li>
               <li><span aria-hidden="true">×</span><strong>Horas<br />perdidas.</strong></li>
               <li><span aria-hidden="true">×</span><strong>Página<br />genérica.</strong></li>
             </ul>
-            <p className="forge-brief-point"><strong>Bonito não é estratégia.</strong><br />E a IA não adivinha a sua oferta.</p>
           </Reveal>
 
           <Reveal as="figure" delay={0.08} className="forge-brief-evidence">
@@ -560,7 +559,7 @@ function Reality() {
               width={480}
               height={423}
             />
-            <figcaption>Sem crédito para corrigir.<strong>Sem orgulho de publicar.</strong></figcaption>
+            <figcaption>Sem crédito para corrigir.<strong>0 vendas pingando.</strong></figcaption>
           </Reveal>
         </div>
 
