@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
+import CreditLoop from "@/components/CreditLoop";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
 import almaLeveAvif from "@/assets/showcase/alma-leve-premium.avif";
@@ -34,6 +35,8 @@ import authorResultAvif from "@/assets/author-result-720.avif";
 import authorResultWebp from "@/assets/author-result-720.webp";
 import serviceProofAvif from "@/assets/prova_social_6.avif";
 import serviceProofWebp from "@/assets/prova_social_6.webp";
+import lovableCreditsAvif from "@/assets/reality/lovable-creditos.avif";
+import lovableCreditsWebp from "@/assets/reality/lovable-creditos.webp";
 
 declare global {
   interface Window {
@@ -531,59 +534,64 @@ function VslLeadIn() {
 /* ================================================================
    03 — REALIDADE DA PERSONA
    ================================================================ */
-const CLICK_STORY = [
-  ["👀", "ELE CLICOU PORQUE SE INTERESSOU", "Seu anúncio fez o trabalho: parou a pessoa, despertou desejo e trouxe o lead até você."],
-  ["😕", "A PÁGINA ESFRIOU A VONTADE", "Texto apertado, promessa vaga e informação demais. Em vez de avançar, ele começa a ter dúvidas."],
-  ["💸", "ELE VOLTOU PARA O FEED", "O checkout não aconteceu. Você pagou pelo clique — e ficou apenas com a conta do anúncio."],
-];
-
-const LANDIA_WINS = [
-  ["01", "ENTENDE EM SEGUNDOS", "“Isso é exatamente para mim.”"],
-  ["02", "SENTE SEGURANÇA", "“Agora entendi por que funciona.”"],
-  ["03", "AVANÇA AO CHECKOUT", "“Faz sentido comprar agora.”"],
+const LANDIA_CREDIT_WINS = [
+  ["01", "ESTRATÉGIA ANTES DO LAYOUT", "Para quem é, qual dor resolve e por que escolher a sua oferta."],
+  ["02", "UM PEDIDO COM DIREÇÃO", "Prompts organizados a partir da oferta, não de um “faz ficar bonito”."],
+  ["03", "AJUSTES COM UM MOTIVO", "Você sabe o que corrigir e para quê, em vez de refazer tudo no escuro."],
 ];
 
 function Reality() {
   return (
-    <section id="problema-real" className="forge-reality">
+    <section id="problema-real" className="forge-reality forge-credit-reality">
       <div className="forge-shell">
         <Reveal className="forge-reality-head">
           <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
           <h2>
-            SEU ANÚNCIO CONSEGUE O CLIQUE.
-            <span>MAS SUA PÁGINA DEIXA O CHECKOUT ESCAPAR?</span>
+            OS CRÉDITOS ACABARAM.
+            <span>A PÁGINA CONTINUA NO “QUASE”.</span>
           </h2>
           <p>
-            Se o lead clicou, ele já levantou a mão. O problema começa quando encontra uma página bonita, porém confusa, que não responde rápido: <mark className="forge-mark forge-mark-orange">“por que eu deveria comprar isso agora?”</mark>
+            Você pediu uma página incrível. Recebeu algo genérico. Tentou arrumar, gastou o saldo… e terminou com a aba aberta e a sensação de <mark className="forge-mark forge-mark-orange">ter perdido o dia.</mark>
           </p>
         </Reveal>
 
-        <RevealGroup className="forge-click-story">
-          <div className="forge-story-list">
-            <span className="forge-story-eyebrow">O FILME QUE SE REPETE TODOS OS DIAS</span>
-            {CLICK_STORY.map(([emoji, title, text], i) => (
-              <article data-reveal="" style={stepDelay(i)} className="forge-story-card" key={title}>
-                <span aria-hidden="true">{emoji}</span>
-                <div><strong>{title}</strong><p>{text}</p></div>
-              </article>
-            ))}
-          </div>
+        <div className="forge-credit-story">
+          <Reveal className="forge-credit-interaction">
+            <p className="forge-credit-invitation"><span aria-hidden="true">↘</span> Parece familiar? Toque no botão e veja o ciclo.</p>
+            <CreditLoop />
+          </Reveal>
 
-          <div data-reveal="" style={stepDelay(2)} className="forge-story-pivot">
-            <span>O CLIQUE NÃO É A VENDA.</span>
-            <strong>É ONDE A CONVERSA COMEÇA.</strong>
-            <p>Se a página não assume essa conversa com clareza, o dinheiro colocado no anúncio termina financiando mais uma visita sem checkout.</p>
-          </div>
-        </RevealGroup>
+          <Reveal as="aside" delay={0.08} className="forge-credit-frustration">
+            <span className="forge-credit-eyebrow">JÁ FECHOU ESSA ABA COM RAIVA?</span>
+            <h3>Você queria publicar.<br /><em>Terminou duvidando de si.</em></h3>
+            <p>A ideia era tirar sua oferta do papel. O que sobrou foi mais uma versão que você nem tem vontade de mostrar.</p>
+            <figure className="forge-credit-evidence">
+              <Picture
+                avif={lovableCreditsAvif}
+                webp={lovableCreditsWebp}
+                alt="Painel do Lovable no plano Free com a área de créditos e o aviso de renovação diária do saldo."
+                width={480}
+                height={423}
+              />
+              <figcaption>Um ajuste pendente.<br /><strong>E o projeto inteiro em espera.</strong></figcaption>
+            </figure>
+            <p className="forge-credit-afterthought">Não dói só gastar crédito.<br /><strong>Dói sentir que tentou tudo e não saiu do lugar.</strong></p>
+          </Reveal>
+        </div>
+
+        <Reveal className="forge-credit-diagnosis">
+          <strong>“ALTA CONVERSÃO”<br />NÃO É UM BRIEFING.</strong>
+          <p>A IA pode executar uma estratégia. Mas não adivinha sua oferta, as objeções do cliente e o motivo da compra só porque você pediu uma <b>“página bonita que vende”.</b></p>
+        </Reveal>
 
         <Reveal className="forge-landia-turnaround">
           <div className="forge-turnaround-copy">
             <span>🎯 COM LAND-IA</span>
-            <h3>O LEAD NÃO PRECISA DECIFRAR SUA OFERTA.</h3>
-            <p>Ele bate o olho, entende o valor e encontra um caminho natural até a compra.</p>
+            <h3>A IA EXECUTA.<br />VOCÊ DÁ A DIREÇÃO.</h3>
+            <p>Você chega ao Lovable com a oferta, a copy e o caminho até a compra pensados antes. O prompt deixa de ser um pedido de socorro e vira uma instrução.</p>
           </div>
           <div className="forge-turnaround-wins">
-            {LANDIA_WINS.map(([number, title, text]) => (
+            {LANDIA_CREDIT_WINS.map(([number, title, text]) => (
               <article className="forge-turnaround-win" key={title}>
                 <span>{number}</span>
                 <div><strong>{title}</strong><p>{text}</p></div>
@@ -593,12 +601,12 @@ function Reality() {
         </Reveal>
 
         <Reveal className="forge-reality-mantra">
-          <span>Você já pagou para o lead chegar.</span>
-          <strong>Agora faça a página merecer esse clique.</strong>
+          <span>Mais crédito permite tentar de novo.</span>
+          <strong>Mais direção muda a próxima tentativa.</strong>
         </Reveal>
 
-        <SectionCTA eyebrow="SE O GARGALO ESTÁ DEPOIS DO CLIQUE" button="QUERO PARAR DE PERDER CLIQUES" variant="white">
-          Construa uma página que explica, convence e conduz ao checkout — sem depender de improviso.
+        <SectionCTA eyebrow="SAIA DO CICLO DO “SÓ MAIS UM AJUSTE”" button="QUERO CRIAR COM DIREÇÃO — R$ 47" variant="white">
+          Troque a tentativa no escuro por um método para estruturar, construir e publicar uma página feita para apresentar sua oferta e conduzir à compra.
         </SectionCTA>
       </div>
     </section>
