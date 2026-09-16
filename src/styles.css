@@ -1901,146 +1901,69 @@
   .forge-sticky-checkout { animation: none; }
 }
 
-/* O PROBLEMA REAL — experiência local, sem timers ou eventos de marketing. */
-.forge-credit-reality .forge-reality-head {
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, .8fr);
-  gap: 24px 48px;
-  align-items: end;
-}
-.forge-credit-reality .forge-reality-head > .forge-tag { grid-column: 1 / -1; }
-.forge-credit-reality .forge-tag > span { color: #a72626; border-color: rgba(167,38,38,.25); }
-.forge-credit-reality .forge-reality-head h2 { font-size: clamp(2.3rem, 4.5vw, 4.3rem); line-height: 1.04; letter-spacing: -.055em; }
-.forge-credit-reality .forge-reality-head > p { padding: 0 0 3px; font-size: 19px; line-height: 1.65; }
-.forge-credit-story { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 40px; margin-top: 44px; align-items: start; }
-.forge-credit-interaction { min-width: 0; }
-.forge-credit-invitation { display: flex; gap: 11px; align-items: center; margin-bottom: 16px; color: #5f5145; font-size: 16px; line-height: 1.5; font-weight: 600; }
-.forge-credit-invitation > span { color: var(--forge-red); font-size: 28px; line-height: 1; }
-.forge-credit-lab { overflow: hidden; border: 1px solid #34383c; border-radius: 20px; color: #f6f5ef; background: #111518; box-shadow: 0 30px 60px -35px rgba(11,13,16,.6); }
-.forge-credit-lab-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 24px; border-bottom: 1px solid #34383c; background: #1b2025; }
-.forge-credit-lab-top > div { display: flex; align-items: center; gap: 14px; min-width: 0; }
-.forge-credit-lab-top h3 { font-size: 13px; font-weight: 700; line-height: 1.45; letter-spacing: .055em; }
-.forge-credit-dots { display: flex; gap: 4px; flex-shrink: 0; }
-.forge-credit-dots i { width: 6px; height: 6px; border-radius: 50%; background: #6f7780; }
-.forge-credit-dots i:first-child { background: #ff8068; }
-.forge-credit-step-count { flex-shrink: 0; color: #aeb8c2; font: 600 13px/1.4 ui-monospace, monospace; }
-.forge-credit-lab-body { padding: 22px 24px 20px; }
-.forge-credit-balance { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding-bottom: 21px; }
-.forge-credit-balance > div:first-child { flex: 1; max-width: 250px; }
-.forge-credit-balance > div > span { color: #bfc6cc; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
-.forge-credit-meter { display: flex; gap: 6px; margin-top: 12px; }
-.forge-credit-meter i { flex: 1; height: 7px; border-radius: 2px; background: var(--forge-lime); transform-origin: left; transition: opacity .3s ease, transform .3s ease; }
-.forge-credit-meter i[data-spent="true"] { opacity: .12; transform: scaleX(.88); }
-.forge-credit-counter { display: flex; align-items: baseline; gap: 9px; }
-.forge-credit-counter strong { color: var(--forge-lime); font: 700 48px/1 var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -.06em; }
-.forge-credit-counter > span { letter-spacing: 0 !important; font-size: 14px !important; font-weight: 400 !important; }
-.forge-credit-lab[data-depleted="true"] .forge-credit-counter strong { color: #ff8973; }
-.forge-credit-prompt { min-height: 116px; padding: 15px 18px; border: 1px solid #414b55; border-radius: 12px 12px 3px 12px; background: #262d35; }
-.forge-credit-prompt > span { display: block; margin-bottom: 7px; color: #bec8d4; font-size: 12px; font-weight: 700; letter-spacing: .08em; }
-.forge-credit-prompt p { color: #fff; font-size: 18px; font-weight: 600; line-height: 1.5; }
-.forge-credit-thought { min-height: 154px; padding: 20px 0 18px; }
-.forge-credit-thought > strong { display: block; color: #fff; font: 700 21px/1.3 var(--font-display); letter-spacing: -.02em; }
-.forge-credit-thought > p { margin-top: 9px; color: #b9c3cc; font-size: 17px; line-height: 1.55; }
-.forge-credit-preview { overflow: hidden; border: 1px solid #bab5d0; border-radius: 9px; background: #f3f0fb; color: #3f365e; }
-.forge-credit-preview-bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 13px; border-bottom: 1px solid rgba(63,54,94,.14); background: rgba(255,255,255,.6); font-size: 10px; font-weight: 750; line-height: 1.4; letter-spacing: .04em; }
-.forge-credit-preview-bar > span:last-child { flex-shrink: 0; padding: 3px 5px; border: 1px solid currentColor; border-radius: 3px; }
-.forge-credit-mini-hero { padding: 20px; text-align: center; }
-.forge-credit-mini-brand { display: block; font-size: 11px; font-weight: 800; letter-spacing: .12em; }
-.forge-credit-mini-headline { display: grid; place-items: center; min-height: 89px; max-width: 365px; margin: 6px auto 9px; font: 700 25px/1.16 var(--font-display); letter-spacing: -.035em; text-wrap: balance; }
-.forge-credit-mini-button { display: inline-flex; justify-content: center; align-items: center; gap: 10px; max-width: 100%; padding: 12px 17px; border-radius: 24px; color: #fff; background: #655397; font-size: 12px; font-weight: 800; line-height: 1.4; }
-.forge-credit-mini-button svg { width: 15px; height: 15px; flex-shrink: 0; }
-.forge-credit-preview[data-satire="true"] { border-color: #ff8973; background: #eeef80; color: #17112a; }
-.forge-credit-preview[data-satire="true"] .forge-credit-preview-bar { color: #5c1c1c; }
-.forge-credit-preview[data-satire="true"] .forge-credit-mini-headline { color: #ab245e; }
-.forge-credit-preview[data-satire="true"] .forge-credit-mini-button { background: #ff55af; color: #28102b; border: 2px solid #28102b; border-radius: 3px; padding-block: 10px; box-shadow: 3px 3px 0 #28102b; }
-.forge-credit-try { display: flex; width: 100%; min-height: 58px; align-items: center; justify-content: center; gap: 15px; margin-top: 20px; padding: 15px 18px; border: 1px solid #d7ff78; border-radius: 10px; background: var(--forge-lime); color: #12190a; font: 800 14px/1.4 var(--font-display); cursor: pointer; transition: transform .2s ease; }
-.forge-credit-try svg { width: 20px; height: 20px; flex-shrink: 0; }
-.forge-credit-try:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-.forge-credit-try:active { transform: translateY(1px); }
-.forge-credit-lab[data-depleted="true"] .forge-credit-try { background: #262d35; border-color: #626f79; color: #fff; }
-.forge-credit-lab-note { margin-top: 13px; color: #aab5bf; font-size: 14px; line-height: 1.5; text-align: center; }
-.forge-credit-frustration { padding-top: 55px; }
-.forge-credit-eyebrow { display: block; color: #a72626; font: 800 13px/1.45 var(--font-display); letter-spacing: .07em; }
-.forge-credit-frustration > h3 { margin-top: 17px; font-size: clamp(1.7rem, 2.8vw, 2.8rem); line-height: 1.13; font-weight: 800; letter-spacing: -.05em; }
-.forge-credit-frustration > h3 em { color: #a72626; font-style: normal; }
-.forge-credit-frustration > p { margin-top: 19px; color: #635b54; font-size: 18px; line-height: 1.65; }
-.forge-credit-evidence { margin: 26px 0; }
-.forge-credit-evidence picture { display: block; overflow: hidden; max-width: 400px; border: 1px solid #d9d2c6; border-radius: 14px; background: #fff; box-shadow: 0 18px 40px -26px rgba(54,43,28,.38); }
-.forge-credit-evidence img { display: block; width: 100%; height: auto; aspect-ratio: 480 / 423; }
-.forge-credit-evidence figcaption { margin-top: 15px; color: #635b54; font-size: 16px; line-height: 1.5; }
-.forge-credit-evidence figcaption strong { color: #29251f; }
-.forge-credit-frustration .forge-credit-afterthought { padding-left: 19px; border-left: 3px solid var(--forge-orange); color: #635b54; font-size: 18px; }
-.forge-credit-afterthought strong { color: #29251f; }
-.forge-credit-diagnosis { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 35px; align-items: center; margin: 38px 0 26px; padding: 28px 0; border-top: 1px solid #d6d0c4; border-bottom: 1px solid #d6d0c4; }
-.forge-credit-diagnosis > strong { color: #a72626; font: 800 clamp(1.5rem, 2.5vw, 2rem)/1.16 var(--font-display); letter-spacing: -.04em; }
-.forge-credit-diagnosis p { color: #514b44; font-size: 18px; line-height: 1.65; }
-.forge-credit-diagnosis b { color: #1c1b17; }
-.forge-credit-reality .forge-turnaround-copy h3 { line-height: 1.06; }
-.forge-credit-reality .forge-turnaround-win { min-height: 110px; }
-.forge-credit-reality .forge-section-cta > div { min-width: 0; }
-.forge-credit-reality .forge-section-cta .forge-btn { max-width: 100%; text-align: center; line-height: 1.35; }
-.forge-credit-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-@keyframes forge-credit-stage-enter {
-  from { opacity: .35; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.forge-credit-stage { animation: forge-credit-stage-enter .28s ease both; }
-@media (hover: hover) {
-  .forge-credit-try:hover { transform: translateY(-2px); }
-}
+/* O PROBLEMA REAL — mensagem breve, evidência visual e direção. */
+.forge-brief-reality { padding-block: 86px; }
+.forge-brief-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); gap: 54px; align-items: center; }
+.forge-brief-copy { min-width: 0; }
+.forge-brief-copy .forge-tag > span { color: #a72626; border-color: rgba(167,38,38,.25); }
+.forge-brief-copy h2 { margin-top: 22px; font-size: clamp(2.3rem, 4.4vw, 3.8rem); font-weight: 800; line-height: 1.04; letter-spacing: -.055em; }
+.forge-brief-copy h2 > span { display: block; margin-top: 6px; color: var(--forge-red); }
+.forge-brief-copy blockquote { margin-top: 24px; padding: 13px 18px; border-left: 3px solid var(--forge-orange); background: rgba(255,255,255,.6); color: #554c44; font-size: 20px; font-weight: 600; line-height: 1.45; }
+.forge-brief-copy > p { margin-top: 18px; color: #5c554e; font-size: 19px; line-height: 1.6; }
+.forge-brief-losses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding: 0; margin: 24px 0 0; list-style: none; }
+.forge-brief-losses li { display: flex; align-items: center; gap: 10px; padding: 16px 12px; border: 1px solid #dcd4c8; border-radius: 10px; background: #faf8f2; }
+.forge-brief-losses li > span { flex-shrink: 0; color: #c92f2f; font: 500 30px/1 var(--font-sans); }
+.forge-brief-losses strong { color: #27241f; font: 700 16px/1.35 var(--font-display); letter-spacing: -.02em; }
+.forge-brief-copy .forge-brief-point { margin-top: 22px; font-size: 18px; line-height: 1.5; }
+.forge-brief-point > strong { color: #111519; font-weight: 800; }
+.forge-brief-evidence { min-width: 0; margin: 0; padding: 25px; border: 1px solid #2f3335; border-radius: 18px; background: #15191c; box-shadow: 0 28px 55px -38px rgba(11,13,16,.65); }
+.forge-brief-evidence-label { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #ffad99; font: 700 13px/1.4 var(--font-display); letter-spacing: .06em; }
+.forge-brief-evidence-label > i { flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #ff805d; }
+.forge-brief-evidence picture { display: block; overflow: hidden; border-radius: 10px; background: #fff; }
+.forge-brief-evidence img { display: block; width: 100%; height: auto; aspect-ratio: 480 / 423; }
+.forge-brief-evidence figcaption { margin-top: 20px; color: #d1d3d5; font-size: 18px; line-height: 1.5; }
+.forge-brief-evidence figcaption > strong { display: block; color: #ffad99; font-size: 20px; font-weight: 700; }
+.forge-brief-solution { margin-top: 36px; padding: 28px 32px; gap: 24px; }
+.forge-brief-solution > div { min-width: 0; }
+.forge-brief-solution > div > span { display: block; font-size: 16px; letter-spacing: .06em; }
+.forge-brief-solution h3 { margin-top: 12px; font-size: clamp(1.5rem, 2.6vw, 2.1rem); font-weight: 800; line-height: 1.15; letter-spacing: -.04em; }
+.forge-brief-solution p { max-width: 520px; margin-top: 12px; font-size: 18px; line-height: 1.5; }
+.forge-brief-solution .forge-btn { max-width: 100%; text-align: center; font-size: 14px; line-height: 1.4; padding: 15px 23px; }
 @media (max-width: 1000px) {
-  .forge-credit-reality .forge-reality-head { grid-template-columns: 1fr; gap: 22px; }
-  .forge-credit-reality .forge-reality-head h2 { max-width: 800px; font-size: clamp(2.3rem, 6vw, 3.7rem); }
-  .forge-credit-reality .forge-reality-head > p { max-width: 720px; }
-  .forge-credit-story { gap: 26px; }
-  .forge-credit-lab-top, .forge-credit-lab-body { padding-inline: 18px; }
-  .forge-credit-dots { display: none; }
-  .forge-credit-prompt { min-height: 143px; }
-  .forge-credit-thought { min-height: 192px; }
-  .forge-credit-mini-headline { min-height: 105px; font-size: 23px; }
-  .forge-credit-reality .forge-section-cta { display: grid; justify-items: start; }
+  .forge-brief-grid { gap: 28px; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
+  .forge-brief-copy h2 { font-size: clamp(2rem, 4.6vw, 2.8rem); }
+  .forge-brief-copy blockquote { font-size: 18px; padding-inline: 14px; }
+  .forge-brief-copy > p { font-size: 18px; }
+  .forge-brief-losses { gap: 7px; }
+  .forge-brief-losses li { flex-direction: column; align-items: flex-start; gap: 4px; padding: 10px; }
+  .forge-brief-losses li > span { font-size: 24px; }
+  .forge-brief-losses strong { font-size: 15px; }
+  .forge-brief-evidence { padding: 20px; }
+  .forge-brief-solution { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .forge-brief-solution .forge-btn { width: 100%; }
 }
 @media (max-width: 760px) {
-  .forge-credit-story { grid-template-columns: 1fr; gap: 34px; margin-top: 30px; }
-  .forge-credit-reality .forge-reality-head h2 { font-size: clamp(2.15rem, 10.6vw, 3.4rem); }
-  .forge-credit-reality .forge-reality-head > p { font-size: 18px; line-height: 1.6; }
-  .forge-credit-invitation { font-size: 15px; align-items: start; }
-  .forge-credit-lab-top { padding-block: 17px; }
-  .forge-credit-lab-top h3 { max-width: 230px; font-size: 12px; }
-  .forge-credit-prompt { min-height: 125px; padding: 15px; }
-  .forge-credit-thought { min-height: 178px; }
-  .forge-credit-thought > strong { font-size: 20px; }
-  .forge-credit-balance { gap: 14px; }
-  .forge-credit-counter { gap: 7px; }
-  .forge-credit-counter strong { font-size: 43px; }
-  .forge-credit-balance > div:first-child { max-width: 200px; }
-  .forge-credit-mini-headline { min-height: 107px; }
-  .forge-credit-frustration { padding: 10px 6px 0; }
-  .forge-credit-frustration > h3 { max-width: 510px; font-size: clamp(1.9rem, 7.8vw, 2.6rem); }
-  .forge-credit-frustration > p { font-size: 18px; }
-  .forge-credit-evidence picture { max-width: 420px; }
-  .forge-credit-diagnosis { grid-template-columns: 1fr; gap: 16px; margin-top: 32px; }
-  .forge-credit-diagnosis > strong { font-size: clamp(1.65rem, 7.2vw, 2.1rem); }
-  .forge-credit-reality .forge-turnaround-copy h3 { font-size: clamp(2rem, 9vw, 3.3rem); }
-  .forge-credit-reality .forge-turnaround-win { grid-template-columns: 26px 1fr; gap: 10px; min-height: 115px; }
-  .forge-credit-reality .forge-turnaround-win strong { font-size: 17px; }
-  .forge-credit-reality .forge-reality-mantra { line-height: 1.45; }
-  .forge-credit-reality .forge-section-cta { justify-items: stretch; }
-  .forge-credit-reality .forge-section-cta .forge-btn { width: 100%; padding: 15px 20px; font-size: 14px; }
+  .forge-brief-reality { padding-block: 62px; }
+  .forge-brief-grid { grid-template-columns: 1fr; gap: 26px; }
+  .forge-brief-copy h2 { max-width: 580px; margin-top: 20px; font-size: clamp(2rem, 9.3vw, 3.15rem); }
+  .forge-brief-copy blockquote { margin-top: 20px; font-size: 19px; }
+  .forge-brief-copy > p { margin-top: 16px; font-size: 18px; line-height: 1.55; }
+  .forge-brief-losses { margin-top: 20px; gap: 8px; }
+  .forge-brief-losses li { padding: 11px 12px; }
+  .forge-brief-losses strong { font-size: 15px; }
+  .forge-brief-copy .forge-brief-point { margin-top: 18px; font-size: 18px; }
+  .forge-brief-evidence { width: 100%; max-width: 430px; margin-inline: auto; padding: 20px; }
+  .forge-brief-evidence-label { margin-bottom: 16px; }
+  .forge-brief-evidence figcaption { margin-top: 17px; }
+  .forge-brief-solution { grid-template-columns: 1fr; margin-top: 26px; padding: 24px 22px; gap: 20px; }
+  .forge-brief-solution h3 { font-size: clamp(1.45rem, 6.4vw, 2rem); }
+  .forge-brief-solution .forge-btn { padding-inline: 18px; }
 }
 @media (max-width: 380px) {
-  .forge-credit-prompt { min-height: 152px; }
-  .forge-credit-thought { min-height: 207px; }
-  .forge-credit-lab-top, .forge-credit-lab-body { padding-inline: 15px; }
-  .forge-credit-mini-headline { font-size: 21px; }
-  .forge-credit-mini-hero { padding-inline: 12px; }
-  .forge-credit-preview-bar { padding-inline: 9px; font-size: 9px; }
-  .forge-credit-mini-button { padding-inline: 12px; font-size: 11px; }
-  .forge-credit-try { font-size: 12px; gap: 9px; padding-inline: 12px; }
-  .forge-credit-counter > span { font-size: 12px !important; }
-  .forge-credit-balance > div > span { font-size: 11px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .forge-credit-stage { animation: none; }
-  .forge-credit-meter i, .forge-credit-try { transition: none; }
-  .forge-credit-try:hover, .forge-credit-try:active { transform: none; }
+  .forge-brief-losses li { padding: 10px 9px; }
+  .forge-brief-losses strong { font-size: 14px; }
+  .forge-brief-evidence { padding: 17px; }
+  .forge-brief-evidence figcaption { font-size: 17px; }
+  .forge-brief-evidence figcaption > strong { font-size: 18px; }
+  .forge-brief-solution { padding-inline: 19px; }
 }

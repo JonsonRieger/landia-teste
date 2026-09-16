@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
-import CreditLoop from "@/components/CreditLoop";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
 import almaLeveAvif from "@/assets/showcase/alma-leve-premium.avif";
@@ -534,80 +533,45 @@ function VslLeadIn() {
 /* ================================================================
    03 — REALIDADE DA PERSONA
    ================================================================ */
-const LANDIA_CREDIT_WINS = [
-  ["01", "ESTRATÉGIA ANTES DO LAYOUT", "Para quem é, qual dor resolve e por que escolher a sua oferta."],
-  ["02", "UM PEDIDO COM DIREÇÃO", "Prompts organizados a partir da oferta, não de um “faz ficar bonito”."],
-  ["03", "AJUSTES COM UM MOTIVO", "Você sabe o que corrigir e para quê, em vez de refazer tudo no escuro."],
-];
-
 function Reality() {
   return (
-    <section id="problema-real" className="forge-reality forge-credit-reality">
+    <section id="problema-real" className="forge-reality forge-brief-reality">
       <div className="forge-shell">
-        <Reveal className="forge-reality-head">
-          <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
-          <h2>
-            OS CRÉDITOS ACABARAM.
-            <span>A PÁGINA CONTINUA NO “QUASE”.</span>
-          </h2>
-          <p>
-            Você pediu uma página incrível. Recebeu algo genérico. Tentou arrumar, gastou o saldo… e terminou com a aba aberta e a sensação de <mark className="forge-mark forge-mark-orange">ter perdido o dia.</mark>
-          </p>
-        </Reveal>
-
-        <div className="forge-credit-story">
-          <Reveal className="forge-credit-interaction">
-            <p className="forge-credit-invitation"><span aria-hidden="true">↘</span> Parece familiar? Toque no botão e veja o ciclo.</p>
-            <CreditLoop />
+        <div className="forge-brief-grid">
+          <Reveal className="forge-brief-copy">
+            <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
+            <h2>O CRÉDITO ACABA.<span>A PÁGINA NÃO CONVENCE.</span></h2>
+            <blockquote>“Crie uma página bonita e de alta conversão.”</blockquote>
+            <p>Você pede. A IA improvisa. <mark className="forge-mark forge-mark-orange">Os ajustes comem o saldo.</mark> E você continua sem gostar do resultado.</p>
+            <ul className="forge-brief-losses" aria-label="O custo da tentativa e erro">
+              <li><span aria-hidden="true">×</span><strong>Créditos<br />gastos.</strong></li>
+              <li><span aria-hidden="true">×</span><strong>Horas<br />perdidas.</strong></li>
+              <li><span aria-hidden="true">×</span><strong>Página<br />genérica.</strong></li>
+            </ul>
+            <p className="forge-brief-point"><strong>Bonito não é estratégia.</strong><br />E a IA não adivinha a sua oferta.</p>
           </Reveal>
 
-          <Reveal as="aside" delay={0.08} className="forge-credit-frustration">
-            <span className="forge-credit-eyebrow">JÁ FECHOU ESSA ABA COM RAIVA?</span>
-            <h3>Você queria publicar.<br /><em>Terminou duvidando de si.</em></h3>
-            <p>A ideia era tirar sua oferta do papel. O que sobrou foi mais uma versão que você nem tem vontade de mostrar.</p>
-            <figure className="forge-credit-evidence">
-              <Picture
-                avif={lovableCreditsAvif}
-                webp={lovableCreditsWebp}
-                alt="Painel do Lovable no plano Free com a área de créditos e o aviso de renovação diária do saldo."
-                width={480}
-                height={423}
-              />
-              <figcaption>Um ajuste pendente.<br /><strong>E o projeto inteiro em espera.</strong></figcaption>
-            </figure>
-            <p className="forge-credit-afterthought">Não dói só gastar crédito.<br /><strong>Dói sentir que tentou tudo e não saiu do lugar.</strong></p>
+          <Reveal as="figure" delay={0.08} className="forge-brief-evidence">
+            <span className="forge-brief-evidence-label"><i aria-hidden="true" />RECONHECE ESSA TELA?</span>
+            <Picture
+              avif={lovableCreditsAvif}
+              webp={lovableCreditsWebp}
+              alt="Painel do Lovable no plano Free com a área de créditos e o aviso de renovação diária do saldo."
+              width={480}
+              height={423}
+            />
+            <figcaption>Sem crédito para corrigir.<strong>Sem orgulho de publicar.</strong></figcaption>
           </Reveal>
         </div>
 
-        <Reveal className="forge-credit-diagnosis">
-          <strong>“ALTA CONVERSÃO”<br />NÃO É UM BRIEFING.</strong>
-          <p>A IA pode executar uma estratégia. Mas não adivinha sua oferta, as objeções do cliente e o motivo da compra só porque você pediu uma <b>“página bonita que vende”.</b></p>
-        </Reveal>
-
-        <Reveal className="forge-landia-turnaround">
-          <div className="forge-turnaround-copy">
-            <span>🎯 COM LAND-IA</span>
-            <h3>A IA EXECUTA.<br />VOCÊ DÁ A DIREÇÃO.</h3>
-            <p>Você chega ao Lovable com a oferta, a copy e o caminho até a compra pensados antes. O prompt deixa de ser um pedido de socorro e vira uma instrução.</p>
+        <Reveal className="forge-section-cta forge-brief-solution">
+          <div>
+            <span>COM LAND-IA</span>
+            <h3>ESTRATÉGIA PRIMEIRO.<br />LOVABLE DEPOIS.</h3>
+            <p>Defina oferta, copy e direção antes de gastar créditos construindo.</p>
           </div>
-          <div className="forge-turnaround-wins">
-            {LANDIA_CREDIT_WINS.map(([number, title, text]) => (
-              <article className="forge-turnaround-win" key={title}>
-                <span>{number}</span>
-                <div><strong>{title}</strong><p>{text}</p></div>
-              </article>
-            ))}
-          </div>
+          <CTAButton variant="white">QUERO CRIAR COM DIREÇÃO — R$ 47</CTAButton>
         </Reveal>
-
-        <Reveal className="forge-reality-mantra">
-          <span>Mais crédito permite tentar de novo.</span>
-          <strong>Mais direção muda a próxima tentativa.</strong>
-        </Reveal>
-
-        <SectionCTA eyebrow="SAIA DO CICLO DO “SÓ MAIS UM AJUSTE”" button="QUERO CRIAR COM DIREÇÃO — R$ 47" variant="white">
-          Troque a tentativa no escuro por um método para estruturar, construir e publicar uma página feita para apresentar sua oferta e conduzir à compra.
-        </SectionCTA>
       </div>
     </section>
   );
