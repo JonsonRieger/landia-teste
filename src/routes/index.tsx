@@ -34,8 +34,6 @@ import authorResultAvif from "@/assets/author-result-720.avif";
 import authorResultWebp from "@/assets/author-result-720.webp";
 import serviceProofAvif from "@/assets/prova_social_6.avif";
 import serviceProofWebp from "@/assets/prova_social_6.webp";
-import lovableCreditsAvif from "@/assets/reality/lovable-creditos.avif";
-import lovableCreditsWebp from "@/assets/reality/lovable-creditos.webp";
 
 declare global {
   interface Window {
@@ -372,7 +370,8 @@ function Landing() {
       <Hero />
       <VslLeadIn />
       <LandiaVSL />
-      <Reality />
+      {/* Mantém o ponto de ativação do CTA fixo sem conteúdo ou espaço visual. */}
+      <div id="problema-real" aria-hidden="true" />
       <Proofs />
       <Mechanism />
       <Product />
@@ -524,52 +523,6 @@ function VslLeadIn() {
             <p>Vou te mostrar como transformar IA gratuita em uma página comercial — sem depender de designer nem queimar créditos em tentativa e erro.</p>
           </div>
           <span className="forge-play-index">05:17</span>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ================================================================
-   03 — REALIDADE DA PERSONA
-   ================================================================ */
-function Reality() {
-  return (
-    <section id="problema-real" className="forge-reality forge-brief-reality">
-      <div className="forge-shell">
-        <div className="forge-brief-grid">
-          <Reveal className="forge-brief-copy">
-            <SectionTag index="03" light>O PROBLEMA REAL</SectionTag>
-            <h2>O CRÉDITO ACABA.<span>A PÁGINA NÃO CONVENCE.</span></h2>
-            <blockquote>Não adianta pedir pra IA criar uma página "bonita e de alta conversão"</blockquote>
-            <p>Quando você entrega uma estratégia de criação para a IA, <mark className="forge-mark forge-mark-orange">ela não perde tempo e créditos</mark> inventando o que você não passou pra ela.</p>
-            <ul className="forge-brief-losses" aria-label="O custo da tentativa e erro">
-              <li><span aria-hidden="true">×</span><strong>Créditos<br />gastos.</strong></li>
-              <li><span aria-hidden="true">×</span><strong>Horas<br />perdidas.</strong></li>
-              <li><span aria-hidden="true">×</span><strong>Página<br />genérica.</strong></li>
-            </ul>
-          </Reveal>
-
-          <Reveal as="figure" delay={0.08} className="forge-brief-evidence">
-            <span className="forge-brief-evidence-label"><i aria-hidden="true" />RECONHECE ESSA TELA?</span>
-            <Picture
-              avif={lovableCreditsAvif}
-              webp={lovableCreditsWebp}
-              alt="Painel do Lovable no plano Free com a área de créditos e o aviso de renovação diária do saldo."
-              width={480}
-              height={423}
-            />
-            <figcaption>Sem crédito para corrigir.<strong>0 vendas pingando.</strong></figcaption>
-          </Reveal>
-        </div>
-
-        <Reveal className="forge-section-cta forge-brief-solution">
-          <div>
-            <span>COM LAND-IA</span>
-            <h3>ESTRATÉGIA PRIMEIRO.<br />LOVABLE DEPOIS.</h3>
-            <p>Defina oferta, copy e direção antes de gastar créditos construindo.</p>
-          </div>
-          <CTAButton variant="white">QUERO CRIAR COM DIREÇÃO — R$ 47</CTAButton>
         </Reveal>
       </div>
     </section>
