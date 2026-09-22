@@ -666,13 +666,13 @@ function Authority() {
               <Picture
                 avif={authorResultAvif}
                 webp={authorResultWebp}
-                alt="Registro de campanha do criador com 14 compras e ROAS de 3,72"
+                alt="Registro de campanha do criador com 761 compras, R$ 42.427,49 em valor de conversão e ROAS de 3,72"
                 width={720}
-                height={642}
+                height={703}
               />
               <figcaption>
                 <span>APLICAÇÃO PRÓPRIA</span>
-                <strong>14 compras registradas • ROAS 3,72</strong>
+                <strong>761 compras registradas • ROAS 3,72</strong>
               </figcaption>
             </figure>
 
@@ -769,7 +769,7 @@ function Product() {
           <SectionTag index="06">O PRODUTO</SectionTag>
           <div>
             <h2>ECONOMIZE NAS SUAS PÁGINAS — E TRANSFORME IA EM UMA POSSÍVEL RENDA EXTRA.</h2>
-            <p>Crie para suas próprias ofertas, <mark className="forge-mark forge-mark-lime">pare de pagar designer a cada nova ideia</mark> ou use o mesmo processo para entregar landing pages a clientes.</p>
+            <p>Uma <mark className="forge-mark forge-mark-lime">sequência de prompts prontos + aulas passo a passo</mark> para transformar sua oferta em uma página profissional. Use nas suas ofertas ou para entregar landing pages a clientes.</p>
           </div>
         </Reveal>
 
@@ -777,12 +777,12 @@ function Product() {
           <Reveal className="forge-product-spine">
             <span className="forge-product-vertical">LAND-IA / IMPLEMENTAÇÃO GUIADA</span>
             <div className="forge-product-screen">
-              <div className="forge-product-screen-top"><span>LESSON 04</span><b>BUILD MODE</b></div>
+              <div className="forge-product-screen-top"><span>PROMPTS + AULAS</span><b>PASSO A PASSO</b></div>
               <div className="forge-product-screen-body">
-                <small>DA ARQUITETURA PARA A TELA</small>
+                <small>DA PRIMEIRA INSTRUÇÃO À PUBLICAÇÃO</small>
                 <h3>CONSTRUA.<br />REVISE.<br /><span>PUBLIQUE.</span></h3>
                 <div className="forge-product-progress"><i /></div>
-                <div className="forge-product-screen-meta"><span>GRAVAÇÃO DE TELA</span><span>EXECUÇÃO REAL</span></div>
+                <div className="forge-product-screen-meta"><span>PROMPTS EM SEQUÊNCIA</span><span>APLICAÇÃO GUIADA</span></div>
               </div>
             </div>
           </Reveal>
@@ -799,10 +799,10 @@ function Product() {
         </div>
 
         <Reveal className="forge-execution-note">
-          <span>COMECE EXECUTANDO, NÃO “TERMINANDO UM CURSO”</span>
+          <span>O MÉTODO COMPLETO, EM UMA SEQUÊNCIA SIMPLES</span>
           <div>
-            <strong>UMA AULA. UMA ETAPA. SUA PÁGINA AVANÇA.</strong>
-            <p>Abra a aula, aplique no seu projeto e siga para a próxima decisão — da arquitetura até a publicação.</p>
+            <strong>PROMPTS PRONTOS. AULAS PRÁTICAS. DO ZERO À PÁGINA PUBLICADA.</strong>
+            <p>Você recebe os prompts na ordem certa e aulas que mostram como usar cada um. Copie, adapte ao seu negócio e aplique: oferta, copy, design, revisão e publicação, com direção em cada etapa.</p>
           </div>
         </Reveal>
 
@@ -821,8 +821,8 @@ function Product() {
           </article>
         </RevealGroup>
 
-        <SectionCTA eyebrow="TREINAMENTO + 2 BÔNUS" button="VER A OFERTA COMPLETA — R$ 47" variant="lime">
-          Abra, assista, execute e avance até a página publicada no seu domínio.
+        <SectionCTA eyebrow="PROMPTS + AULAS + 2 BÔNUS" button="VER A OFERTA COMPLETA — R$ 47" variant="lime">
+          Siga a sequência, aplique com as aulas e publique sua página no seu próprio domínio.
         </SectionCTA>
       </div>
     </section>

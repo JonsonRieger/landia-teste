@@ -85,7 +85,7 @@ export const Route = createRootRoute({
 
       {
         name: "landia-tracking-version",
-        content: "vsl-single-authority-2026-09-03",
+        content: "vsl-est-optout-2026-09-22",
       },
     ],
     links: [
@@ -153,6 +153,12 @@ function RootShell({ children }: { children: ReactNode }) {
             // eventos importantes desta landing são enviados manualmente com
             // event_id compartilhado entre navegador e CAPI.
             fbq('set', 'autoConfig', false, '2148386099070117');
+            // A regra do Event Setup Tool para "clique para assistir" usa
+            // ESTRuleEngine, que não faz parte de autoConfig e envia o evento
+            // internamente, sem passar pelo filtro de fbq acima. Desativamos
+            // esse motor antes do init; o player continua sendo a única origem
+            // do VSL_Play, com o mesmo event_id no Pixel e na CAPI.
+            fbq('optOut', '2148386099070117', 'ESTRuleEngine');
             fbq('init', '2148386099070117');
             `,
           }}
