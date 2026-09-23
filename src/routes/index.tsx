@@ -34,6 +34,10 @@ import authorResultAvif from "@/assets/author-result-720.avif";
 import authorResultWebp from "@/assets/author-result-720.webp";
 import serviceProofAvif from "@/assets/prova_social_6.avif";
 import serviceProofWebp from "@/assets/prova_social_6.webp";
+import kitAvif640 from "@/assets/method/landia-kit-640.avif";
+import kitAvif1280 from "@/assets/method/landia-kit-1280.avif";
+import kitWebp640 from "@/assets/method/landia-kit-640.webp";
+import kitWebp1280 from "@/assets/method/landia-kit-1280.webp";
 
 declare global {
   interface Window {
@@ -701,55 +705,52 @@ function Authority() {
 }
 
 /* ================================================================
-   05 — MECANISMO
+   05 — MECANISMO / DEMONSTRAÇÃO VISUAL
    ================================================================ */
-const REVERSE_CHAIN = [
-  ["06", "DECISÃO", "O que precisa acontecer no fim?"],
-  ["05", "SEGURANÇA", "O que precisa deixar de parecer arriscado?"],
-  ["04", "OFERTA", "O que precisa parecer valioso agora?"],
-  ["03", "EVIDÊNCIA", "O que precisa ser demonstrado?"],
-  ["02", "MECANISMO", "O que torna essa solução diferente?"],
-  ["01", "PROMESSA", "O que precisa prender a primeira atenção?"],
-];
-
 function Mechanism() {
   return (
-    <section className="forge-mechanism landia-cv-mechanism">
+    <section className="forge-mechanism forge-bridge landia-cv-mechanism">
       <div className="forge-shell">
-        <Reveal className="forge-mechanism-head">
-          <SectionTag index="05" light>ENGENHARIA REVERSA DA CONVERSÃO™</SectionTag>
-          <h2>COMECE PELO FIM.<br /><span>CONSTRUA O CAMINHO DE VOLTA.</span></h2>
-          <p>
-            <mark className="forge-mark forge-mark-orange">Página bonita não salva argumento fraco.</mark> Você começa pela decisão final do visitante e trabalha de trás para frente até a promessa que prende a atenção.
-          </p>
-        </Reveal>
+        <div className="forge-bridge-grid">
+          <Reveal className="forge-bridge-heading">
+            <SectionTag index="05" light>ENGENHARIA REVERSA DA CONVERSÃO™</SectionTag>
+            <h2>BONITA POR FORA.<span>ESTRATÉGICA<br />POR DENTRO.</span></h2>
+            <p>O LAND-IA começa pela <strong>decisão de compra</strong> e organiza o caminho até ela. Depois, a IA constrói.</p>
+          </Reveal>
 
-        <RevealGroup className="forge-reverse-chain">
-          {REVERSE_CHAIN.map(([n, title, text], i) => (
-            <div data-reveal="" style={stepDelay(i)} className={`forge-reverse-row forge-reverse-row-${i}`} key={title}>
-              <span className="forge-reverse-number">{n}</span>
-              <strong>{title}</strong>
-              <p>{text}</p>
-              <span className="forge-reverse-arrow">←</span>
+          <Reveal as="figure" className="forge-bridge-art">
+            <div className="forge-bridge-orbit" aria-hidden="true" />
+            <span className="forge-bridge-art-label">O RESULTADO TEM UMA ESTRUTURA.</span>
+            <div className="forge-bridge-phone forge-bridge-phone-back">
+              <Picture avif={vozDeMarcaAvif} webp={vozDeMarcaWebp} width={720} height={1518} alt="Exemplo de landing page da Voz de Marca, com promessa e identidade visual definidas" />
             </div>
-          ))}
-        </RevealGroup>
+            <div className="forge-bridge-phone forge-bridge-phone-front">
+              <Picture avif={nexoAvif} webp={nexoWebp} width={720} height={1518} alt="Exemplo de landing page da Nexo CRM, com apresentação da oferta e chamada para ação" />
+            </div>
+            <span className="forge-bridge-callout forge-bridge-callout-promise"><i aria-hidden="true" />Promessa clara</span>
+            <span className="forge-bridge-callout forge-bridge-callout-proof"><i aria-hidden="true" />Prova visível</span>
+            <span className="forge-bridge-callout forge-bridge-callout-offer"><Check aria-hidden="true" />Oferta com valor</span>
+            <figcaption>O VISUAL CHAMA A ATENÇÃO.<br /><strong>A ESTRATÉGIA DÁ O PRÓXIMO PASSO.</strong></figcaption>
+          </Reveal>
 
-        <Reveal className="forge-mechanism-rule">
-          <span>ARQUITETURA ANTES DA IA.</span>
-          <strong>Você deixa de pedir ideias e começa a entregar direção.</strong>
+          <Reveal as="ol" className="forge-bridge-steps">
+            <li><span>01</span><div><h3>A oferta vem primeiro.</h3><p>Defina por que alguém deveria comprar.</p></div></li>
+            <li><span>02</span><div><h3>Os prompts dão a direção.</h3><p>A IA recebe estratégia, copy e estrutura.</p></div></li>
+            <li><span>03</span><div><h3>Sua página ganha forma.</h3><p>Revise, ajuste e publique com o método.</p></div></li>
+          </Reveal>
+        </div>
+
+        <Reveal className="forge-section-cta forge-bridge-cta">
+          <div><span>DIREÇÃO ANTES DE CONSTRUÇÃO</span><p>Um caminho pronto para a sua próxima página.</p></div>
+          <CTAButton variant="white">QUERO CRIAR COM ESSE MÉTODO</CTAButton>
         </Reveal>
-
-        <SectionCTA eyebrow="A IA NÃO PRECISA SER MAIS CARA" button="QUERO O PROCESSO COMPLETO" variant="white">
-          Ela precisa receber uma instrução melhor — para você parar de comprar créditos só para corrigir o que outro prompt quebrou.
-        </SectionCTA>
       </div>
     </section>
   );
 }
 
 /* ================================================================
-   06 — PRODUTO
+   06 — PRODUTO / KIT DIGITAL
    ================================================================ */
 const LESSONS = [
   ["01", "ANTES DE ABRIR A IA", "Por que páginas bonitas não são necessariamente páginas estrategicamente construídas."],
@@ -763,67 +764,64 @@ const LESSONS = [
 
 function Product() {
   return (
-    <section className="forge-product landia-cv-product">
+    <section className="forge-product forge-kit landia-cv-product">
       <div className="forge-shell">
-        <Reveal className="forge-product-head">
+        <Reveal className="forge-kit-heading">
           <SectionTag index="06">O PRODUTO</SectionTag>
-          <div>
-            <h2>ECONOMIZE NAS SUAS PÁGINAS — E TRANSFORME IA EM UMA POSSÍVEL RENDA EXTRA.</h2>
-            <p>Uma <mark className="forge-mark forge-mark-lime">sequência de prompts prontos + aulas passo a passo</mark> para transformar sua oferta em uma página profissional. Use nas suas ofertas ou para entregar landing pages a clientes.</p>
-          </div>
+          <h2>O MÉTODO COMPLETO.<span>PRONTO PARA VOCÊ APLICAR.</span></h2>
+          <p>Prompts na ordem certa e aulas mostrando cada passo — até a página publicada.</p>
         </Reveal>
 
-        <div className="forge-product-grid">
-          <Reveal className="forge-product-spine">
-            <span className="forge-product-vertical">LAND-IA / IMPLEMENTAÇÃO GUIADA</span>
-            <div className="forge-product-screen">
-              <div className="forge-product-screen-top"><span>PROMPTS + AULAS</span><b>PASSO A PASSO</b></div>
-              <div className="forge-product-screen-body">
-                <small>DA PRIMEIRA INSTRUÇÃO À PUBLICAÇÃO</small>
-                <h3>CONSTRUA.<br />REVISE.<br /><span>PUBLIQUE.</span></h3>
-                <div className="forge-product-progress"><i /></div>
-                <div className="forge-product-screen-meta"><span>PROMPTS EM SEQUÊNCIA</span><span>APLICAÇÃO GUIADA</span></div>
-              </div>
-            </div>
+        <div className="forge-kit-grid">
+          <Reveal as="figure" className="forge-kit-visual">
+            <picture className="forge-kit-image">
+              <source type="image/avif" srcSet={`${kitAvif640} 640w, ${kitAvif1280} 1280w`} sizes="(min-width: 1000px) 650px, (min-width: 761px) 85vw, calc(100vw - 32px)" />
+              <img
+                src={kitWebp640}
+                srcSet={`${kitWebp640} 640w, ${kitWebp1280} 1280w`}
+                sizes="(min-width: 1000px) 650px, (min-width: 761px) 85vw, calc(100vw - 32px)"
+                alt="Mockup do kit digital Land-IA: coleção de prompts, aulas em vídeo e materiais de apoio para criar landing pages"
+                width={1280}
+                height={853}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+              />
+            </picture>
+            <figcaption><span aria-hidden="true" />KIT 100% DIGITAL <i /> PROMPTS + AULAS</figcaption>
           </Reveal>
 
-          <RevealGroup className="forge-curriculum">
-            {LESSONS.map(([n, title, text], i) => (
-              <div data-reveal="" style={stepDelay(i)} className="forge-lesson" key={title}>
-                <span>{n}</span>
-                <div><strong>{title}</strong><p>{text}</p></div>
-                <i />
-              </div>
-            ))}
-          </RevealGroup>
+          <Reveal as="ul" className="forge-kit-includes">
+            <li><span aria-hidden="true">01</span><div><h3>Prompts na ordem certa.</h3><p>Copie, adapte à sua oferta e entregue direção à IA.</p></div></li>
+            <li><span aria-hidden="true">02</span><div><h3>Aulas para ver e aplicar.</h3><p>Veja na tela como transformar cada prompt em execução.</p></div></li>
+            <li><span aria-hidden="true">03</span><div><h3>Da ideia à publicação.</h3><p>Oferta, copy, design, revisão, mobile e domínio próprio.</p></div></li>
+          </Reveal>
         </div>
 
-        <Reveal className="forge-execution-note">
-          <span>O MÉTODO COMPLETO, EM UMA SEQUÊNCIA SIMPLES</span>
-          <div>
-            <strong>PROMPTS PRONTOS. AULAS PRÁTICAS. DO ZERO À PÁGINA PUBLICADA.</strong>
-            <p>Você recebe os prompts na ordem certa e aulas que mostram como usar cada um. Copie, adapte ao seu negócio e aplique: oferta, copy, design, revisão e publicação, com direção em cada etapa.</p>
-          </div>
-        </Reveal>
+        <details className="forge-kit-details">
+          <summary><span>Ver o conteúdo das 7 etapas</span><span className="forge-kit-details-plus" aria-hidden="true">+</span></summary>
+          <ol className="forge-kit-curriculum">
+            {LESSONS.map(([n, title, text]) => (
+              <li key={n}><span>{n}</span><div><h3>{title}</h3><p>{text}</p></div></li>
+            ))}
+          </ol>
+        </details>
 
-        <RevealGroup className="forge-bonus-grid">
-          <article data-reveal="" className="forge-bonus forge-bonus-light">
-            <span>BÔNUS 01 / PDF</span>
-            <h3>BIBLIOTECA LAND-IA</h3>
-            <p>Prompts operacionais para persona, oferta, mecanismo, hero, provas, objeções, FAQ, CTA, auditoria, mobile, CRO e correções cirúrgicas.</p>
-            <strong>Não comece cada página do zero.</strong>
+        <RevealGroup className="forge-kit-bonuses">
+          <article data-reveal="" className="forge-kit-bonus">
+            <div className="forge-kit-cover forge-kit-cover-library" aria-hidden="true"><span>LAND-IA</span><strong>PROMPTS<br />PARA IR<br />ALÉM.</strong><i>01</i></div>
+            <div><span className="forge-kit-bonus-label">BÔNUS 01 · PDF</span><h3>Biblioteca <span>Land-IA</span></h3><p>Prompts extras para adaptar, revisar e refinar suas páginas.</p></div>
           </article>
-          <article data-reveal="" style={stepDelay(1)} className="forge-bonus forge-bonus-dark">
-            <span>BÔNUS 02 / E-BOOK</span>
-            <h3>LANDING INVISÍVEL</h3>
-            <p>Performance, WebP/AVIF, LCP, CLS, tracking, Pixel, CAPI, event_id, deduplicação, metadata, Vercel e troubleshooting.</p>
-            <strong>A parte que o visitante não vê — mas o navegador vê.</strong>
+          <article data-reveal="" style={stepDelay(1)} className="forge-kit-bonus">
+            <div className="forge-kit-cover forge-kit-cover-invisible" aria-hidden="true"><span>LAND-IA</span><strong>LANDING<br />INVISÍVEL.</strong><i>02</i></div>
+            <div><span className="forge-kit-bonus-label">BÔNUS 02 · E-BOOK</span><h3>Landing Invisível</h3><p>O guia de velocidade, rastreamento e publicação.</p></div>
           </article>
         </RevealGroup>
 
-        <SectionCTA eyebrow="PROMPTS + AULAS + 2 BÔNUS" button="VER A OFERTA COMPLETA — R$ 47" variant="lime">
-          Siga a sequência, aplique com as aulas e publique sua página no seu próprio domínio.
-        </SectionCTA>
+        <Reveal className="forge-kit-close">
+          <div><span>UM MÉTODO. NOVAS POSSIBILIDADES.</span><h3>PARA A SUA OFERTA.<br /><strong>OU SEU PRÓXIMO CLIENTE.</strong></h3></div>
+          <CTAButton variant="lime">QUERO O KIT COMPLETO — R$ 47</CTAButton>
+        </Reveal>
       </div>
     </section>
   );
