@@ -558,7 +558,7 @@ function Proofs() {
         <Reveal className="forge-showcase-head">
           <SectionTag index="04">O RESULTADO FINAL</SectionTag>
           <h2>
-            ENTÃO TOMA! COM OS PROMPTS CERTO, 
+            ENTÃO TOMA! COM OS PROMPTS CERTOS, 
             <span>VOCÊ TEM RESULTADOS COMO ESSES:</span>
           </h2>
           <p>Algumas páginas criadas com o método Land-IA</p>
