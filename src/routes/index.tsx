@@ -400,7 +400,7 @@ function OfferRail() {
       <div className="forge-shell forge-offer-rail-inner">
         <div className="forge-urgency-message">
           <span className="forge-urgency-pulse" aria-hidden="true" />
-          <strong>PARE DE SE ESTRESSAR CRIANDO LANDINGPAGES</strong>
+          <strong>COPIE. COLE. PERSONALIZE.</strong>
           <span>ACESSO IMEDIATO</span>
         </div>
         <div className="forge-offer-price">
