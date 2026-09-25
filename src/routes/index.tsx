@@ -400,7 +400,7 @@ function OfferRail() {
       <div className="forge-shell forge-offer-rail-inner">
         <div className="forge-urgency-message">
           <span className="forge-urgency-pulse" aria-hidden="true" />
-          <strong>PARE DE ADIAR SUA PRÓXIMA LANDING</strong>
+          <strong>PARE DE SE ESTRESSAR CRIANDO LANDINGPAGES</strong>
           <span>ACESSO IMEDIATO</span>
         </div>
         <div className="forge-offer-price">
@@ -471,14 +471,14 @@ function Hero() {
           </div>
 
           <h1>
-            <span>UMA LANDING</span>
+            <span>UMA PÁGINA</span>
             <span className="forge-outline-word">VENCEDORA.</span>
             <span className="forge-lime-line">COPIANDO E</span>
             <span className="forge-lime-line">COLANDO PROMPT.</span>
           </h1>
 
           <p className="forge-hero-lead">
-            Crie uma landing page que <strong>CONVERTE</strong> com <strong>ChatGPT + Lovable</strong>, publique no seu próprio domínio e pare de pagar por cada nova página — começando com IA&apos;s gratuitas.
+            Crie uma landing page <strong>ESTRATÉGICA</strong> com <strong>ChatGPT + Lovable</strong>, publique no seu próprio domínio e pare de pagar por cada nova página — começando com IA&apos;s gratuitas.
           </p>
 
           <div className="forge-hero-note">
@@ -558,8 +558,8 @@ function Proofs() {
         <Reveal className="forge-showcase-head">
           <SectionTag index="04">O RESULTADO FINAL</SectionTag>
           <h2>
-            NÃO É SOBRE APRENDER A USAR IA.
-            <span>É SOBRE PUBLICAR PÁGINAS NESSE NÍVEL.</span>
+            ENTÃO TOMA! COM OS PROMPTS CERTO, 
+            <span>VOCÊ TEM RESULTADOS COMO ESSES:</span>
           </h2>
           <p>Algumas páginas criadas com o método Land-IA</p>
         </Reveal>
@@ -603,12 +603,12 @@ function Proofs() {
       </div>
 
       <div className="forge-shell">
-        <SectionCTA eyebrow="10 RESULTADOS. UM PROCESSO REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
-          Aprenda o método que transforma sua ideia em uma página profissional, pronta para vender no mobile.
+        <SectionCTA eyebrow="UM PROCESSO TOTALMENTE REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
+          Aprenda o método que transforma sua ideia em uma página profissional, pronta para começar a vender.
         </SectionCTA>
 
         <Reveal className="forge-showcase-close">
-          <span>10 MERCADOS. 10 DIREÇÕES VISUAIS.</span>
+          <span>REPLIQUE QUANTAS VEZES QUISER.</span>
           <h3>UMA HABILIDADE.<br /><strong>INÚMERAS POSSIBILIDADES.</strong></h3>
           <p>
             Para vender sua própria oferta ou transformar landing pages em uma nova fonte de renda — sem ficar refém de designer, código ou créditos desperdiçados.
@@ -871,7 +871,7 @@ function Offer() {
       <div className="forge-shell forge-offer-grid">
         <Reveal className="forge-offer-copy">
           <SectionTag index="07">A OFERTA</SectionTag>
-          <h2>PARE DE PAGAR POR CADA NOVA LANDING.<br /><span>DOMINE E REUTILIZE O PROCESSO POR R$ 47.</span></h2>
+          <h2>POTENCIALIZE SUA OFERTA NA INTERNET.<br /><span>DOMINE E REUTILIZE O PROCESSO POR R$ 47.</span></h2>
           <p>
             Você recebe o treinamento completo e os dois bônus para estruturar, construir e publicar páginas usando opções gratuitas — ou <mark className="forge-mark forge-mark-lime">transformar essa habilidade em serviço</mark> e criar uma nova fonte de renda com IA.
           </p>
@@ -923,7 +923,7 @@ function Comparison() {
       <div className="forge-shell">
         <Reveal className="forge-comparison-head">
           <SectionTag index="08" light>TRÊS CAMINHOS</SectionTag>
-          <h2>SUA PRÓXIMA LANDING PODE SER OUTRA DESPESA.<br /><span>OU O COMEÇO DE UMA HABILIDADE VENDÁVEL.</span></h2>
+          <h2>SUA PRÓXIMA LANDING PODE SER OUTRO STRESS.<br /><span>OU O COMEÇO DO SEU LUCRO.</span></h2>
         </Reveal>
 
         <RevealGroup className="forge-paths">
@@ -1010,7 +1010,7 @@ function Decision() {
         </Reveal>
         <Reveal delay={0.08} className="forge-decision-answer">
           <span>OU</span>
-          <h3>PODE TRANSFORMAR IA GRATUITA EM PÁGINAS PARA VOCÊ — E EM UM SERVIÇO PARA CLIENTES.</h3>
+          <h3>PODE TRANSFORMAR IA GRATUITA EM PÁGINAS PARA VOCÊ</h3>
           <p>
             Use nas suas ofertas, economize terceirização ou transforme a habilidade em um serviço que você pode oferecer.
           </p>
