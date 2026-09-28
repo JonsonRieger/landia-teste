@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
 import LandiaVSL from "@/components/LandiaVSL";
+import { sendFacebookEvent, trackCheckout, type CtaPosition } from "@/lib/meta-tracking";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
 import almaLeveAvif from "@/assets/showcase/alma-leve-premium.avif";
@@ -86,78 +87,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-/* ================================================================
-   TRACKING — preservado da raiz otimizada
-   ================================================================ */
-type FacebookCustomData = Record<string, string | number | boolean>;
-
-const META_STANDARD_EVENTS = new Set([
-  "PageView",
-  "ViewContent",
-  "InitiateCheckout",
-  "Purchase",
-]);
-
-function createEventId() {
-  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
-
-  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
-}
-
-function sendFacebookEvent(
-  eventName: string,
-  customData: FacebookCustomData = {},
-) {
-  try {
-    const eventId = createEventId();
-
-    const fbp = document.cookie
-      .split("; ")
-      .find((c) => c.startsWith("_fbp="))
-      ?.split("=")[1];
-
-    const fbc = document.cookie
-      .split("; ")
-      .find((c) => c.startsWith("_fbc="))
-      ?.split("=")[1];
-
-    // O navegador recebe o evento imediatamente. A mesma identificação segue
-    // para a CAPI, permitindo que a Meta deduplique as duas cópias.
-    if (typeof window.fbq === "function") {
-      window.fbq(
-        META_STANDARD_EVENTS.has(eventName) ? "track" : "trackCustom",
-        eventName,
-        customData,
-        { eventID: eventId },
-      );
-    }
-
-    void fetch("https://metamove-capi.hebrithan.workers.dev", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      keepalive: true,
-      body: JSON.stringify({
-        event_name: eventName,
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
-        event_source_url: window.location.href,
-        user_agent: navigator.userAgent,
-        fbp,
-        fbc,
-        ...(Object.keys(customData).length > 0
-          ? { custom_data: customData }
-          : {}),
-      }),
-    }).catch((error) => {
-      console.error(`Erro ao enviar ${eventName} via CAPI:`, error);
-    });
-  } catch (error) {
-    console.error(`Erro ao rastrear ${eventName}:`, error);
-  }
-}
-
 const CHECKOUT_URL =
   "https://pay.hotmart.com/Y107168906J?checkoutMode=10&bid=1786752624031";
 
@@ -182,12 +111,11 @@ function CTAButton({
       rel={isExternal ? "noopener noreferrer" : undefined}
       onClick={(e) => {
         if (isCheckout) {
-          sendFacebookEvent("InitiateCheckout", {
-            content_name: "LAND-IA",
-            content_type: "product",
-            value: 47,
-            currency: "BRL",
-          });
+          const section = e.currentTarget.closest("section[id]")?.id;
+          const position: CtaPosition = e.currentTarget.closest("[data-sticky-checkout]")
+            ? "sticky"
+            : section === "oferta" || section === "resultado-final" ? section : "pagina";
+          trackCheckout(position, e.nativeEvent);
           return;
         }
         if (href.startsWith("#")) {
@@ -844,12 +772,7 @@ function Offer() {
 
         viewContentSent = true;
         observer.disconnect();
-        sendFacebookEvent("ViewContent", {
-          content_name: "LAND-IA",
-          content_type: "product",
-          value: 47,
-          currency: "BRL",
-        });
+        sendFacebookEvent("ViewContent");
       },
       {
         // O marcador precisa entrar nos 80% superiores da viewport. Assim o

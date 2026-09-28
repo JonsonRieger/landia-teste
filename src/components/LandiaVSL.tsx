@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { sendFacebookEvent, trackCheckout } from "@/lib/meta-tracking";
 
 const VSL_URL =
   "https://metamove-vsl.hebrithan.workers.dev/vsl-landia.mp4?v=2";
 
-const VSL_EVENT_ENDPOINT = "https://metamove-capi.hebrithan.workers.dev";
-
-const META_PIXEL_ID = "2148386099070117";
-const VSL_TRACKING_SOURCE = "landia_vsl_player_v4";
 const VSL_PLAY_CONFIRMATION_TIME = 0.25;
 
 const CHECKOUT_URL =
@@ -42,13 +39,6 @@ declare global {
   }
 }
 
-function getCookie(name: string) {
-  return document.cookie
-    .split("; ")
-    .find((cookie) => cookie.startsWith(`${name}=`))
-    ?.split("=")[1];
-}
-
 function claimVslEvent(eventName: VslEventName) {
   // A trava fica no window, e não apenas dentro do componente. Isso cobre
   // remounts do React e até uma eventual segunda instância do bundle/player.
@@ -82,87 +72,8 @@ function claimVslEvent(eventName: VslEventName) {
   return true;
 }
 
-function sendVslEvent(eventName: VslEventName, progress: number) {
-  if (!claimVslEvent(eventName)) return;
-
-  try {
-    const eventId = crypto.randomUUID();
-    const fbp = getCookie("_fbp");
-    const fbc = getCookie("_fbc");
-    const customData = {
-      content_name: "Land-IA VSL",
-      content_type: "video",
-      progress,
-      tracking_source: VSL_TRACKING_SOURCE,
-    };
-
-    void fetch(VSL_EVENT_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      keepalive: true,
-      body: JSON.stringify({
-        event_name: eventName,
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
-        event_source_url: window.location.href,
-        user_agent: navigator.userAgent,
-        fbp,
-        fbc,
-        custom_data: customData,
-      }),
-    }).catch((error) => {
-      console.error(`Erro ao enviar ${eventName} via CAPI:`, error);
-    });
-
-    if (typeof window.fbq === "function") {
-      // Envia somente para o Pixel oficial da landing. O mesmo event_id segue
-      // para navegador e CAPI, permitindo a deduplicação feita pela Meta.
-      window.fbq(
-        "trackSingleCustom",
-        META_PIXEL_ID,
-        eventName,
-        customData,
-        { eventID: eventId }
-      );
-    }
-  } catch (error) {
-    console.error(`Erro ao rastrear ${eventName}:`, error);
-  }
-}
-
-function sendCheckoutEvent() {
-  try {
-    const eventId = crypto.randomUUID();
-    const fbp = getCookie("_fbp");
-    const fbc = getCookie("_fbc");
-
-    void fetch(VSL_EVENT_ENDPOINT, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      keepalive: true,
-      body: JSON.stringify({
-        event_name: "InitiateCheckout",
-        event_time: Math.floor(Date.now() / 1000),
-        event_id: eventId,
-        event_source_url: window.location.href,
-        user_agent: navigator.userAgent,
-        fbp,
-        fbc,
-      }),
-    }).catch((error) => {
-      console.error("Erro ao enviar InitiateCheckout via CAPI:", error);
-    });
-
-    if (typeof window.fbq === "function") {
-      window.fbq("track", "InitiateCheckout", {}, { eventID: eventId });
-    }
-  } catch (error) {
-    console.error("Erro ao rastrear InitiateCheckout:", error);
-  }
+function sendVslEvent(eventName: VslEventName) {
+  if (claimVslEvent(eventName)) sendFacebookEvent(eventName);
 }
 
 function getDisplayProgress(currentTime: number, duration: number) {
@@ -242,6 +153,7 @@ export default function LandiaVSL() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const maxWatchedRef = useRef(0);
   const playTrackedRef = useRef(false);
+  const playbackStartedRef = useRef<number | null>(null);
   const sentMilestonesRef = useRef(new Set<number>());
   const progressBarRef = useRef<HTMLDivElement | null>(null);
   const pendingResumeTimeRef = useRef<number | null>(null);
@@ -401,11 +313,13 @@ export default function LandiaVSL() {
     // O play só conta depois que o vídeo realmente avançou. O clique e o
     // primeiro callback `playing` podem acontecer ainda durante o carregamento.
     if (
-      video.currentTime >= VSL_PLAY_CONFIRMATION_TIME &&
+      !video.paused && !video.seeking && video.readyState >= 2 &&
+      playbackStartedRef.current !== null &&
+      video.currentTime - playbackStartedRef.current >= VSL_PLAY_CONFIRMATION_TIME &&
       !playTrackedRef.current
     ) {
       playTrackedRef.current = true;
-      sendVslEvent("VSL_Play", 0);
+      sendVslEvent("VSL_Play");
     }
 
     if (video.currentTime > maxWatchedRef.current) {
@@ -432,9 +346,9 @@ export default function LandiaVSL() {
     }
 
     for (const milestone of [25, 50, 75]) {
-      if (percentage >= milestone && !sentMilestonesRef.current.has(milestone)) {
+      if (!video.paused && !video.seeking && playTrackedRef.current && percentage >= milestone && !sentMilestonesRef.current.has(milestone)) {
         sentMilestonesRef.current.add(milestone);
-        sendVslEvent(`VSL_${milestone}` as VslEventName, milestone);
+        sendVslEvent(`VSL_${milestone}` as VslEventName);
       }
     }
   }
@@ -627,6 +541,7 @@ export default function LandiaVSL() {
             onTimeUpdate={handleTimeUpdate}
             onSeeking={handleSeeking}
             onPlaying={() => {
+              if (!playTrackedRef.current) playbackStartedRef.current = videoRef.current?.currentTime ?? null;
               setLoading(false);
               setPaused(false);
             }}
@@ -671,9 +586,9 @@ export default function LandiaVSL() {
               }
             }}
             onEnded={() => {
-              if (!sentMilestonesRef.current.has(100)) {
+              if (videoRef.current?.ended && playTrackedRef.current && !sentMilestonesRef.current.has(100)) {
                 sentMilestonesRef.current.add(100);
-                sendVslEvent("VSL_Complete", 100);
+                sendVslEvent("VSL_Complete");
               }
               if (progressBarRef.current) {
                 progressBarRef.current.style.width = "100%";
@@ -722,12 +637,12 @@ export default function LandiaVSL() {
           <div className="mt-6 flex justify-center px-2">
             <a
               href={CHECKOUT_URL}
-              onClick={() => {
+              onClick={(event) => {
                 // Congela exatamente o ponto do clique antes de sair para o
                 // Hotmart e salva esse instante na sessão da aba.
                 videoRef.current?.pause();
                 saveCurrentPosition(true);
-                sendCheckoutEvent();
+                trackCheckout("vsl", event.nativeEvent);
               }}
               className="landia-vsl-checkout-cta inline-flex w-full max-w-[560px] items-center justify-between gap-5 px-5 py-4 text-left font-display text-[14px] font-extrabold uppercase tracking-[0.025em] sm:px-7 sm:text-[15px]"
             >

@@ -5,6 +5,7 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
@@ -33,7 +34,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -85,7 +86,7 @@ export const Route = createRootRoute({
 
       {
         name: "landia-tracking-version",
-        content: "vsl-est-optout-2026-09-22",
+        content: "landia-tracking-v5-2026-09-28",
       },
     ],
     links: [
@@ -123,17 +124,26 @@ function RootShell({ children }: { children: ReactNode }) {
             __html: `
               !function(f,b,e,v,n,t,s)
               {if(f.fbq)return;n=f.fbq=function(){
-              var a=arguments,c=a[0],d=c==='trackSingleCustom'?a[2]:a[1],
-              p=c==='trackSingleCustom'?a[3]:a[2];
-
-              // VSL_Play possui uma única autoridade: o player Land-IA.
-              // Qualquer evento criado por clique automático, Event Setup ou
-              // uma segunda execução do bundle é descartado antes de chegar
-              // à fila do Pixel.
-              if((c==='trackCustom'||c==='trackSingleCustom')&&d==='VSL_Play'){
-                if(!p||p.tracking_source!=='landia_vsl_player_v4')return;
-                if(f.__landiaMetaVslPlaySent)return;
-                f.__landiaMetaVslPlaySent=!0;
+              var a=arguments,c=a[0],single=c==='trackSingle'||c==='trackSingleCustom',
+              d=single?a[2]:a[1],p=single?a[3]:a[2],opts=single?a[4]:a[3];
+              // Defesa local contra disparos acidentais/automáticos. O ID público
+              // do Pixel não permite autenticar chamadas externas à Meta.
+              if(c==='track'||c==='trackCustom'||single){
+                var allowed=['PageView','ViewContent','InitiateCheckout','TimeOnPage',
+                  'VSL_Play','VSL_25','VSL_50','VSL_75','VSL_Complete'];
+                if(allowed.indexOf(d)===-1)return;
+                if(single&&a[1]!=='2148386099070117')return;
+                if(!p||p.tracking_source!=='landia_tracking_v5'||'value' in p||'currency' in p)return;
+                if(!opts||typeof opts.eventID!=='string')return;
+                var seen=f.__landiaMetaEventIds||(f.__landiaMetaEventIds=new Set()),key=d+':'+opts.eventID;
+                if(seen.has(key))return;
+                if(d!=='InitiateCheckout'){
+                  var once=f.__landiaMetaOnce||(f.__landiaMetaOnce=new Set());
+                  if(once.has(d))return;
+                  once.add(d);
+                }
+                seen.add(key);
+                if(seen.size>200)seen.delete(seen.values().next().value);
               }
 
               n.callMethod?n.callMethod.apply(n,a):n.queue.push(a)};
