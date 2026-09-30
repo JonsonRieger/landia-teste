@@ -29,6 +29,18 @@ import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
 import phoneArchitectureWebp from "@/assets/hero/landia-phone-architecture.webp";
 import phoneEcommerceWebp from "@/assets/hero/landia-phone-ecommerce.webp";
 import phoneWellnessWebp from "@/assets/hero/landia-phone-wellness.webp";
+import phoneAiSmallWebp from "@/assets/hero/landia-phone-ai-saas-320.webp";
+import phoneArchitectureSmallWebp from "@/assets/hero/landia-phone-architecture-320.webp";
+import phoneEcommerceSmallWebp from "@/assets/hero/landia-phone-ecommerce-320.webp";
+import phoneWellnessSmallWebp from "@/assets/hero/landia-phone-wellness-320.webp";
+import phoneAiAvif from "@/assets/hero/landia-phone-ai-saas.avif";
+import phoneArchitectureAvif from "@/assets/hero/landia-phone-architecture.avif";
+import phoneEcommerceAvif from "@/assets/hero/landia-phone-ecommerce.avif";
+import phoneWellnessAvif from "@/assets/hero/landia-phone-wellness.avif";
+import phoneAiSmallAvif from "@/assets/hero/landia-phone-ai-saas-320.avif";
+import phoneArchitectureSmallAvif from "@/assets/hero/landia-phone-architecture-320.avif";
+import phoneEcommerceSmallAvif from "@/assets/hero/landia-phone-ecommerce-320.avif";
+import phoneWellnessSmallAvif from "@/assets/hero/landia-phone-wellness-320.avif";
 import authorPhotoAvif from "@/assets/author-photo-720.avif";
 import authorPhotoWebp from "@/assets/author-photo-720.webp";
 import authorResultAvif from "@/assets/author-result-720.avif";
@@ -45,6 +57,9 @@ declare global {
     fbq?: (...args: unknown[]) => void;
   }
 }
+
+// Mesmas medidas das cards no CSS; o navegador escolhe a resolução pelo DPR.
+const HERO_PHONE_SIZES = "(max-width: 640px) calc(42vw - 16.8px), (max-width: 720px) calc(40vw - 16px), (max-width: 1020px) 272px, (max-width: 1220px) calc(19.4vw - 18.24px), 219px";
 
 export const Route = createFileRoute("/")({
   component: Landing,
@@ -83,7 +98,18 @@ export const Route = createFileRoute("/")({
       { name: "twitter:image", content: "https://www.metamove.online/og-landia-v2.jpg" },
       { name: "twitter:image:alt", content: "Land-IA — Landing Pages com IA" },
     ],
-    links: [{ rel: "canonical", href: "https://www.metamove.online/" }],
+    links: [
+      { rel: "canonical", href: "https://www.metamove.online/" },
+      {
+        rel: "preload",
+        as: "image",
+        type: "image/avif",
+        href: phoneArchitectureAvif,
+        imageSrcSet: `${phoneArchitectureSmallAvif} 320w, ${phoneArchitectureAvif} 512w`,
+        imageSizes: HERO_PHONE_SIZES,
+        fetchPriority: "high",
+      },
+    ],
   }),
 });
 
@@ -344,10 +370,10 @@ function OfferRail() {
    01 — HERO / BUILD STAGE
    ================================================================ */
 const HERO_PAGES = [
-  [phoneAiWebp, "IA / SAAS", "Landing futurista para tecnologia"],
-  [phoneArchitectureWebp, "ARQUITETURA", "Landing editorial premium"],
-  [phoneEcommerceWebp, "E-COMMERCE", "Landing comercial para produto"],
-  [phoneWellnessWebp, "WELLNESS", "Landing clean de alta percepção"],
+  [phoneAiWebp, phoneAiSmallWebp, phoneAiAvif, phoneAiSmallAvif, "IA / SAAS", "Landing futurista para tecnologia"],
+  [phoneArchitectureWebp, phoneArchitectureSmallWebp, phoneArchitectureAvif, phoneArchitectureSmallAvif, "ARQUITETURA", "Landing editorial premium"],
+  [phoneEcommerceWebp, phoneEcommerceSmallWebp, phoneEcommerceAvif, phoneEcommerceSmallAvif, "E-COMMERCE", "Landing comercial para produto"],
+  [phoneWellnessWebp, phoneWellnessSmallWebp, phoneWellnessAvif, phoneWellnessSmallAvif, "WELLNESS", "Landing clean de alta percepção"],
 ];
 
 function HeroBuildVisual() {
@@ -358,7 +384,7 @@ function HeroBuildVisual() {
         <b>DIREÇÕES INFINITAS</b>
       </div>
 
-      {HERO_PAGES.map(([src, label, alt], i) => {
+      {HERO_PAGES.map(([src, smallWebp, avif, smallAvif, label, alt], i) => {
         const isLcpImage = i === 1;
 
         return (
@@ -366,15 +392,24 @@ function HeroBuildVisual() {
             key={String(label)}
             className={`forge-phone-card forge-phone-card-${i + 1}`}
           >
-            <img
-              src={String(src)}
-              alt={String(alt)}
-              width={512}
-              height={768}
-              loading={isLcpImage ? "eager" : "lazy"}
-              decoding="async"
-              fetchPriority={isLcpImage ? "high" : "low"}
-            />
+            <picture>
+              <source
+                type="image/avif"
+                srcSet={`${smallAvif} 320w, ${avif} 512w`}
+                sizes={HERO_PHONE_SIZES}
+              />
+              <img
+                src={String(src)}
+                srcSet={`${smallWebp} 320w, ${src} 512w`}
+                sizes={HERO_PHONE_SIZES}
+                alt={String(alt)}
+                width={512}
+                height={768}
+                loading={isLcpImage ? "eager" : "lazy"}
+                decoding="async"
+                fetchPriority={isLcpImage ? "high" : "low"}
+              />
+            </picture>
             <figcaption>{label}</figcaption>
           </figure>
         );

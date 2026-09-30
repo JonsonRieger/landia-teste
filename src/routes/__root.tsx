@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
-import appCss from "../styles.css?inline";
+import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -90,12 +90,13 @@ export const Route = createRootRoute({
       },
     ],
     links: [
+      // CSS compilado e cacheável, sem duplicar estilos/fontes no HTML e no JS.
+      { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon-landia.ico", type: "image/x-icon" },
       { rel: "shortcut icon", href: "/favicon-landia.ico", type: "image/x-icon" },
       { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
-      // As fontes do primeiro viewport (Inter 400, Poppins 600/700 — subset latin)
-      // agora vão embutidas em base64 no CSS crítico inline: zero requisição de
-      // rede e nenhum re-render de texto por swap de fonte no caminho do LCP.
+      // Os mesmos subsets de fontes continuam embutidos no CSS, preservando
+      // a tipografia sem criar novas requisições para as fontes da primeira dobra.
     ],
   }),
   shellComponent: RootShell,
@@ -108,8 +109,6 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR">
       <head>
-        {/* CSS crítico inline: elimina a requisição render-blocking do stylesheet. */}
-        <style dangerouslySetInnerHTML={{ __html: appCss }} />
         <HeadContent />
 
         {/* UTMify: captura e propaga as UTMs sem bloquear a renderização. */}
