@@ -1,28 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight, Check, Lock, Sparkles } from "lucide-react";
+import ShowcaseMotion, { prepareShowcaseMotion } from "@/components/ShowcaseMotion";
 import LandiaVSL from "@/components/LandiaVSL";
 import { sendFacebookEvent, trackCheckout, type CtaPosition } from "@/lib/meta-tracking";
 import { Reveal, RevealGroup, stepDelay } from "@/components/Reveal";
 
-import almaLeveAvif from "@/assets/showcase/alma-leve-premium.avif";
-import almaLeveWebp from "@/assets/showcase/alma-leve-premium.webp";
-import brasaAvif from "@/assets/showcase/brasa-47.avif";
-import brasaWebp from "@/assets/showcase/brasa-47.webp";
-import formaLabAvif from "@/assets/showcase/forma-lab.avif";
-import formaLabWebp from "@/assets/showcase/forma-lab.webp";
-import luminaAvif from "@/assets/showcase/lumina-prime.avif";
-import luminaWebp from "@/assets/showcase/lumina-prime.webp";
 import nexoAvif from "@/assets/showcase/nexo-crm.avif";
 import nexoWebp from "@/assets/showcase/nexo-crm.webp";
-import norteCapitalAvif from "@/assets/showcase/norte-capital.avif";
-import norteCapitalWebp from "@/assets/showcase/norte-capital.webp";
-import raizBotanicaAvif from "@/assets/showcase/raiz-botanica.avif";
-import raizBotanicaWebp from "@/assets/showcase/raiz-botanica.webp";
-import ramosValeAvif from "@/assets/showcase/ramos-vale.avif";
-import ramosValeWebp from "@/assets/showcase/ramos-vale.webp";
-import verticeAvif from "@/assets/showcase/vertice.avif";
-import verticeWebp from "@/assets/showcase/vertice.webp";
 import vozDeMarcaAvif from "@/assets/showcase/voz-de-marca.avif";
 import vozDeMarcaWebp from "@/assets/showcase/voz-de-marca.webp";
 import phoneAiWebp from "@/assets/hero/landia-phone-ai-saas.webp";
@@ -122,6 +107,12 @@ function CTAButton({
           const target = document.getElementById(href.slice(1));
           if (target) {
             e.preventDefault();
+            if (href === "#resultado-final") {
+              void prepareShowcaseMotion().then(() => {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+              });
+              return;
+            }
             target.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
@@ -464,71 +455,10 @@ function VslLeadIn() {
 /* ================================================================
    04 — PROVAS / RESULTADO FINAL
    ================================================================ */
-const SHOWCASE_PAGES = [
-  { avif: luminaAvif, webp: luminaWebp, brand: "LUMINA PRIME", niche: "Estética premium", goal: "Agendamento", height: 1518, mobileOrder: 10 },
-  { avif: nexoAvif, webp: nexoWebp, brand: "NEXO CRM", niche: "SaaS B2B", goal: "Demonstração", height: 1518, mobileOrder: 3 },
-  { avif: brasaAvif, webp: brasaWebp, brand: "BRASA 47", niche: "Gastronomia", goal: "Reserva", height: 1518, mobileOrder: 4 },
-  { avif: verticeAvif, webp: verticeWebp, brand: "VÉRTICE", niche: "Imóveis de luxo", goal: "Contato", height: 1518, mobileOrder: 9 },
-  { avif: raizBotanicaAvif, webp: raizBotanicaWebp, brand: "RAIZ BOTÂNICA", niche: "Cosméticos", goal: "Compra", height: 1518, mobileOrder: 8 },
-  { avif: ramosValeAvif, webp: ramosValeWebp, brand: "RAMOS & VALE", niche: "Advocacia", goal: "Consulta", height: 1518, mobileOrder: 6 },
-  { avif: formaLabAvif, webp: formaLabWebp, brand: "FORMA LAB", niche: "Fitness", goal: "Avaliação", height: 1518, mobileOrder: 2 },
-  { avif: almaLeveAvif, webp: almaLeveWebp, brand: "ALMA LEVE", niche: "Psicoterapia", goal: "Conversa", height: 1518, mobileOrder: 5 },
-  { avif: vozDeMarcaAvif, webp: vozDeMarcaWebp, brand: "VOZ DE MARCA", niche: "Infoproduto", goal: "Inscrição", height: 1518, mobileOrder: 1 },
-  { avif: norteCapitalAvif, webp: norteCapitalWebp, brand: "NORTE CAPITAL", niche: "Planejamento financeiro", goal: "Consultoria", height: 1518, mobileOrder: 7 },
-];
-
-type ShowcaseCardStyle = CSSProperties & { "--mobile-order": number };
-
 function Proofs() {
   return (
-    <section id="resultado-final" className="forge-showcase landia-cv-proofs">
-      <div className="forge-shell">
-        <Reveal className="forge-showcase-head">
-          <SectionTag index="04">O RESULTADO FINAL</SectionTag>
-          <h2>
-            ENTÃO TOMA! COM OS PROMPTS CERTOS, 
-            <span>VOCÊ TEM RESULTADOS COMO ESSES:</span>
-          </h2>
-          <p>Algumas páginas criadas com o método Land-IA</p>
-        </Reveal>
-      </div>
-
-      <div className="forge-showcase-stage">
-        <div className="forge-showcase-ambient forge-showcase-ambient-a" aria-hidden="true" />
-        <div className="forge-showcase-ambient forge-showcase-ambient-b" aria-hidden="true" />
-        <RevealGroup className="forge-showcase-grid">
-          {SHOWCASE_PAGES.map((page, index) => (
-            <article
-              data-reveal=""
-              style={{ ...stepDelay(index % 5), "--mobile-order": page.mobileOrder } as ShowcaseCardStyle}
-              className="forge-showcase-card"
-              key={page.brand}
-            >
-              <div className="forge-showcase-phone">
-                <div className="forge-showcase-speaker" aria-hidden="true" />
-                <div className="forge-showcase-screen">
-                  <Picture
-                    avif={page.avif}
-                    webp={page.webp}
-                    alt={`Landing page mobile da ${page.brand}, criada com o método Land-IA`}
-                    width={720}
-                    height={page.height}
-                  />
-                  <span className="forge-showcase-glass" aria-hidden="true" />
-                </div>
-              </div>
-              <div className="forge-showcase-meta">
-                <span className="forge-showcase-index-desktop">{String(index + 1).padStart(2, "0")}</span>
-                <span className="forge-showcase-index-mobile">{String(page.mobileOrder).padStart(2, "0")}</span>
-                <div>
-                  <strong>{page.brand}</strong>
-                  <p>{page.niche} <i /> {page.goal}</p>
-                </div>
-              </div>
-            </article>
-          ))}
-        </RevealGroup>
-      </div>
+    <section id="resultado-final" className="forge-showcase forge-showcase-cinema">
+      <ShowcaseMotion />
 
       <div className="forge-shell">
         <SectionCTA eyebrow="UM PROCESSO TOTALMENTE REPLICÁVEL." button="QUERO CRIAR PÁGINAS NESSE NÍVEL — R$ 47" variant="lime">
