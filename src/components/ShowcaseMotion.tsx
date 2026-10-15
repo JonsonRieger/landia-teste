@@ -39,6 +39,9 @@ export default function ShowcaseMotion() {
     const pending = new Set<number>();
     const failed = new Set<number>();
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const bufferRadius = window.matchMedia("(pointer: coarse), (max-width: 767px)").matches ? 6 : 12;
+    const maxDecodedFrames = bufferRadius * 2;
+    let bitmapSupported = typeof createImageBitmap === "function";
 
     const release = (image: ImageBitmap | HTMLImageElement) => {
       if ("close" in image) image.close();
@@ -60,10 +63,10 @@ export default function ShowcaseMotion() {
       if (!renderRequest && !disposed) renderRequest = requestAnimationFrame(draw);
     };
 
-    // Bound decoded memory to 24 frames (~84 MiB), rather than decoding 240 at once.
+    // Limit decoded frames to 12 on touch/mobile (~42 MiB), 24 on desktop.
     const prune = () => {
       const farthest = [...frames.keys()].sort((a, b) => Math.abs(b - target) - Math.abs(a - target));
-      while (frames.size > 24 && farthest.length) {
+      while (frames.size > maxDecodedFrames && farthest.length) {
         const index = farthest.shift()!;
         release(frames.get(index)!);
         frames.delete(index);
@@ -76,16 +79,25 @@ export default function ShowcaseMotion() {
         const response = await fetch(frameUrl(index), { signal: abort.signal, cache: "force-cache" });
         if (!response.ok) throw new Error("Frame unavailable");
         const blob = await response.blob();
-        let image: ImageBitmap | HTMLImageElement;
-        if (typeof createImageBitmap === "function") {
-          image = await createImageBitmap(blob);
-        } else {
+        let image: ImageBitmap | HTMLImageElement | undefined;
+        if (bitmapSupported) {
+          try {
+            image = await createImageBitmap(blob);
+          } catch {
+            // Some WebViews expose the API but reject WebP bitmap decoding.
+            bitmapSupported = false;
+          }
+        }
+        if (!image) {
           const url = URL.createObjectURL(blob);
           try {
             const element = new Image();
             element.decoding = "async";
-            element.src = url;
-            await element.decode();
+            await new Promise<void>((resolve, reject) => {
+              element.onload = () => resolve();
+              element.onerror = () => reject(new Error("Frame unavailable"));
+              element.src = url;
+            });
             image = element;
           } finally {
             URL.revokeObjectURL(url);
@@ -107,74 +119,92 @@ export default function ShowcaseMotion() {
       if (!active || disposed) return;
       const candidates = [target];
       // Prioritize the scroll direction, with a small reverse buffer.
-      if (!reducedMotion.matches) {
-        for (let offset = 1; offset <= 12; offset++) {
-          candidates.push(target + offset * direction, target - offset * direction);
-        }
+      for (let offset = 1; offset <= bufferRadius; offset++) {
+        candidates.push(target + offset * direction, target - offset * direction);
       }
       for (const index of candidates) {
         if (pending.size >= 3) break;
         if (index < 0 || index >= FRAME_COUNT || frames.has(index) || pending.has(index) || failed.has(index)) continue;
-        // The target plus 23 neighbours fit the decoded cache without eviction loops.
-        if (Math.abs(index - target) === 12 && index !== target + direction * 12) continue;
+        // Keep the candidate window within the decoded-cache capacity.
+        if (Math.abs(index - target) === bufferRadius && index !== target + direction * bufferRadius) continue;
         void load(index);
       }
     }
 
+    const update = (progress: number) => {
+      if (disposed) return;
+      const frame = Math.max(0, Math.min(1, progress)) * (FRAME_COUNT - 1);
+      const next = Math.round(frame);
+      if (next !== target) direction = next > target ? 1 : -1;
+      target = next;
+      const fade = Math.min(1, progress / 0.075);
+      title.style.opacity = String(1 - fade);
+      // Reduced motion removes decorative travel and catch-up animation,
+      // but never skips the user-controlled frame sequence.
+      title.style.transform = reducedMotion.matches ? "" : `translate3d(0, ${-24 * fade}px, 0)`;
+      requestDraw();
+      pump();
+    };
+    const distance = () => Math.max(1, track.offsetHeight - viewport.offsetHeight);
+
+    const startNativeFallback = () => {
+      // Keep scrubbing functional if the optional GSAP chunks cannot load.
+      // Local transforms avoid changing global scroll/viewport settings.
+      let pendingScroll = 0;
+      const sync = () => {
+        pendingScroll = 0;
+        if (disposed) return;
+        const travel = Math.max(0, Math.min(distance(), -track.getBoundingClientRect().top));
+        viewport.style.transform = `translate3d(0, ${travel}px, 0)`;
+        update(travel / distance());
+      };
+      const schedule = () => {
+        if (!pendingScroll) pendingScroll = requestAnimationFrame(sync);
+      };
+      window.addEventListener("scroll", schedule, { passive: true });
+      window.addEventListener("resize", schedule, { passive: true });
+      sync();
+      cleanupAnimation = () => {
+        window.removeEventListener("scroll", schedule);
+        window.removeEventListener("resize", schedule);
+        cancelAnimationFrame(pendingScroll);
+        viewport.style.transform = "";
+      };
+    };
+
     const start = async () => {
       if (started) return;
       started = true;
-      if (reducedMotion.matches) {
-        target = FRAME_COUNT - 1;
-        pump();
-        return;
-      }
       pump();
       try {
-        // Neither GSAP nor ScrollTrigger is part of the initial route download.
         const [{ gsap }, { ScrollTrigger }] = await Promise.all([
           import("gsap"), import("gsap/ScrollTrigger"),
         ]);
         if (disposed) return;
         gsap.registerPlugin(ScrollTrigger);
-        const playhead = { frame: 0 };
-        const update = () => {
-          const next = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(playhead.frame)));
-          if (next !== target) direction = next > target ? 1 : -1;
-          target = next;
-          const fade = Math.min(1, playhead.frame / ((FRAME_COUNT - 1) * 0.075));
-          title.style.opacity = String(1 - fade);
-          title.style.transform = `translate3d(0, ${-24 * fade}px, 0)`;
-          requestDraw();
-          pump();
-        };
-        const tween = gsap.to(playhead, {
-          frame: FRAME_COUNT - 1,
-          ease: "none",
-          onUpdate: update,
-          scrollTrigger: {
-            trigger: track,
-            start: "top top",
-            end: "bottom bottom",
-            pin: viewport,
-            pinSpacing: false,
-            scrub: 0.18,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-            onRefresh: update,
-          },
+        const trigger = ScrollTrigger.create({
+          trigger: track,
+          start: "top top",
+          // Use the actual pinned height: mobile browser chrome can change
+          // innerHeight independently of our stable svh scene.
+          end: () => `+=${distance()}`,
+          pin: viewport,
+          pinSpacing: false,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => update(self.progress),
+          onRefresh: (self) => update(self.progress),
         });
-        cleanupAnimation = () => { tween.scrollTrigger?.kill(); tween.kill(); };
-        // Pin creation queues a refresh and a scroll-position restoration.
-        // Wait for both animation frames before releasing the hero anchor.
+        cleanupAnimation = () => { trigger.kill(); };
+        update(trigger.progress);
+        // Finish the queued pin refresh before the hero's native anchor scroll.
         await new Promise<void>((resolve) => {
           requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
         });
       } catch {
-        // Preserve a usable static section if the optional animation chunk fails.
-        track.dataset.static = "true";
-        target = FRAME_COUNT - 1;
-        pump();
+        if (disposed) return;
+        cleanupAnimation?.();
+        startNativeFallback();
       }
     };
 
@@ -189,26 +219,12 @@ export default function ShowcaseMotion() {
     }, { rootMargin: "700px 0px" });
     observer.observe(track);
 
-    // Rebuild only this component when the accessibility preference changes.
-    const onMotionChange = () => {
-      cleanupAnimation?.();
-      cleanupAnimation = undefined;
-      started = false;
-      initialization = undefined;
-      title.style.opacity = "1";
-      title.style.transform = "";
-      target = 0;
-      if (active) void prepare();
-    };
-    reducedMotion.addEventListener("change", onMotionChange);
-
     return () => {
       disposed = true;
       if (prepareCurrent === prepare) prepareCurrent = undefined;
       observer.disconnect();
       abort.abort();
       cleanupAnimation?.();
-      reducedMotion.removeEventListener("change", onMotionChange);
       cancelAnimationFrame(renderRequest);
       frames.forEach(release);
       frames.clear();

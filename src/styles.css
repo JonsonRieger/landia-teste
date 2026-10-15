@@ -924,15 +924,11 @@
 }
 .forge-cinema-heading h2 span { display: block; color: var(--forge-lime); margin-top: 6px; }
 .forge-cinema-heading p { margin: 18px auto 0; color: #ffffffb8; font-size: clamp(15px, 1.5vw, 18px); line-height: 1.45; }
-.forge-cinema-track[data-static="true"] { height: 100vh; height: 100svh; }
 @media (max-width: 600px) {
   .forge-cinema-heading { padding: 28px 20px 40px; }
   .forge-cinema-heading h2 { font-size: clamp(1.7rem, 7.5vw, 2.5rem); }
   .forge-cinema-kicker { font-size: 11px; margin-bottom: 14px; }
   .forge-cinema-heading p { max-width: 290px; margin-top: 14px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .forge-cinema-track { height: 100vh; height: 100svh; }
 }
 
 /* proofs / result showcase */
